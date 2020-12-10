@@ -4,7 +4,7 @@
     "type": "object",
     "title": "The Lysate",
     "required": [
-        "person_id"
+        "code"
     ],
     "properties": {
         "id": {

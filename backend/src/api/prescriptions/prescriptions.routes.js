@@ -1,6 +1,8 @@
 const express = require('express');
+const { getPrescriptionCode } = require('../../lib/codes');
 const router = express.Router();
 const Prescription = require('./prescriptions.model');
+
 
 router.get('/', async (req, res) => {
   const prescriptions = await Prescription.query()
@@ -21,6 +23,19 @@ router.get('/:id', async (req, res, next) => {
   } catch (error) {
     return next(error);
   };
+});
+
+router.post('/', async (req,res, next) => {
+  try {
+    const prescription = await Prescription.query()
+      .insert({
+        ... req.body,
+        code: getPrescriptionCode(),
+      });
+    return res.json(prescription);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

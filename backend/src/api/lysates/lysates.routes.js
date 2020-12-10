@@ -1,4 +1,5 @@
 const express = require('express');
+const { getLysateCode } = require('../../lib/codes');
 const router = express.Router();
 const Lysate = require('./lysates.model');
 
@@ -21,6 +22,19 @@ router.get('/:id', async (req, res, next) => {
   } catch (error) {
     return next(error);
   };
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const lysate = await Lysate.query()
+      .insert({
+        ... req.body,
+        code: getLysateCode(),
+      });
+    res.json(lysate);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
