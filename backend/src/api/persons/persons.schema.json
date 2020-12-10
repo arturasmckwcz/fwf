@@ -37,7 +37,7 @@
         },
         "code": {
             "$id": "#/properties/code",
-            "type": "integer",
+            "type": "string",
             "title": "The peronal ID"
         },
         "address": {

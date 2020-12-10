@@ -17,10 +17,21 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req,res, next) => {
   try {
+    const person = await Person.query()
+      .insert({
+        first: req.body.first,
+        last: req.body.last,
+        age: req.body.age || 0,
+        gender: req.body.gender || "undefined",
+        code: req.body.code || undefined,
+        email: req.body.email || undefined,
+        phone: req.body.phone || undefined,
+        address: req.body.address || undefined,
+      });
     const doctor = await Doctor.query()
       .insert({
-        'person_id': person.id,
-        'clinic_id': req.body.clinic_id ? req.body.clinic_id : undefined,
+        person_id: person.id,
+        clinic_id: req.body.clinic_id || undefined,
       });
     res.json(doctor)
   } catch (error) {

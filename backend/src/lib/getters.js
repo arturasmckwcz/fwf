@@ -2,7 +2,28 @@ const Patient = require('../api/patients/patients.model');
 const Person = require('../api/persons/persons.model');
 const Clinic = require('../api/clinics/clinics.model');
 const Doctor = require('../api/doctors/doctors.model');
+const Prescription = require('../api/prescriptions/prescriptions.model');
+const Product = require('../api/products/products.model');
 
+const getPrescription = async (id) => {
+  const prescription = await Prescription.query()
+    .where('deleted_at', null)
+    .findById(id);
+  const product = await Product.query()
+    .where('deleted_at', null)
+    .findById(prescription.product_id);
+  const lysate = await Lysate.query()
+    .where('deleted_at', null)
+    .findById(prescription.lysate_id);
+  return {
+    code: prescription.code,
+    blood_source: prescription.blood_source,
+    lysate: `${lysate.code}: ${lysate.name}`,
+    product: product.code,
+    patient: await getPatient(prescription.patient_id),
+    doctor: await getDoctor(prescription.doctor_id),
+  };
+};
 
 
 const getDoctor = async (id) => {
@@ -74,6 +95,7 @@ const getPatient = async (id) => {
 };
 
 module.exports = {
+  getPrescription,
   getDoctor,
   getPatient,
 };
