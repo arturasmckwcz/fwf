@@ -23,4 +23,14 @@ router.get('/:id', async (req, res, next) => {
   };
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    const blood = await Blood.query()
+      .insert(req.body);
+    res.json(blood);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

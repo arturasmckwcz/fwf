@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const queries = require('./doctors.queries');
 const Doctor = require('./doctors.model');
 
 router.get('/', async (req, res) => {
@@ -21,6 +20,16 @@ router.get('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   };
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const doctor = await Doctor.query()
+      .insert(req.body);
+    res.json(doctor);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

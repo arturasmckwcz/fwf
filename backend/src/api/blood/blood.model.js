@@ -14,8 +14,8 @@ class Blood extends Model {
         relation: Model.HasManyRelation,
         modelClass: Production,
         join: {
-          from: `${tableNames.blood}.id`,
-          to: `${tableNames.production}.${tableNames.blood}_id`,
+          from: `${tablenames.blood}.id`,
+          to: `${tablenames.production}.${tablenames.blood}_id`,
         },
       },
     }

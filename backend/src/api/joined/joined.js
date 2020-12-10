@@ -1,19 +1,13 @@
 const express = require('express');
 const joined = express.Router();
 
-const doctors = require('./doctors/doctors.routes');
-// const patients = require('./patients/patients.routes');
-// const persons = require('./persons/persons.routes');
-// const products = require('./products/products.routes');
-// const clinics = require('./clinics/clinics.routes');
-// const joined = require('./joined/joined');
+const doctors = require('./doctors.routes');
+const blood = require('./blood.routes');
+const patients = require('./patients.routes');
 
 joined.use('/doctors', doctors);
-// api.use('/patients', patients);
-// api.use('/persons', persons);
-// api.use('/products', products);
-// api.use('/clinics', clinics);
-// api.use('/joined', joined);
+joined.use('/blood', blood);
+joined.use('/patients', patients);
 
 joined.get('/', (req, res) => {
     res.json({

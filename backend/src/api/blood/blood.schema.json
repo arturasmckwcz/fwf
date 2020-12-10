@@ -4,7 +4,10 @@
     "type": "object",
     "title": "The Blood",
     "required": [
-        "person_id"
+        "person_id",
+        "code",
+        "draw_date",
+        "arrive_date"
     ],
     "properties": {
         "id": {

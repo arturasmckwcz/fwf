@@ -14,8 +14,8 @@ class Product extends Model {
         relation: Model.HasManyRelation,
         modelClass: Prescription,
         join: {
-          from: `${tableNames.product}.id`,
-          to: `${tableNames.prescription}.${tableNames.product}_id`,
+          from: `${tablenames.product}.id`,
+          to: `${tablenames.prescription}.${tablenames.product}_id`,
         },
       },
     }

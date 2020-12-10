@@ -14,8 +14,8 @@ class Lysate extends Model {
         relation: Model.HasManyRelation,
         modelClass: Prescription,
         join: {
-          from: `${tableNames.lysate}.id`,
-          to: `${tableNames.prescription}.${tableNames.lysate}_id`,
+          from: `${tablenames.lysate}.id`,
+          to: `${tablenames.prescription}.${tablenames.lysate}_id`,
         },
       },
     }

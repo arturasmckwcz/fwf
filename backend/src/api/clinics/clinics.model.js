@@ -16,24 +16,24 @@ class Clinic extends Model {
         relation: Model.HasManyRelation,
         modelClass: Doctor,
         join: {
-          from: `${tableNames.clinic}.id`,
-          to: `${tableNames.doctor}.${tableNames.clinic}_id`,
+          from: `${tablenames.clinic}.id`,
+          to: `${tablenames.doctor}.${tablenames.clinic}_id`,
         },
       },
       patients: {
         relation: Model.HasManyRelation,
         modelClass: Patient,
         join: {
-          from: `${tableNames.clinic}.id`,
-          to: `${tableNames.patient}.${tableNames.clinic}_id`,
+          from: `${tablenames.clinic}.id`,
+          to: `${tablenames.patient}.${tablenames.clinic}_id`,
         },
       },
       blood: {
         relation: Model.HasManyRelation,
         modelClass: Blood,
         join: {
-          from: `${tableNames.clinic}.id`,
-          to: `${tableNames.blood}.${tableNames.clinic}_id`,
+          from: `${tablenames.clinic}.id`,
+          to: `${tablenames.blood}.${tablenames.clinic}_id`,
         },
       },
     };

@@ -14,8 +14,8 @@ class Doctor extends Model {
         relation: Model.HasManyRelation,
         modelClass: Prescription,
         join: {
-          from: `${tableNames.doctor}.id`,
-          to: `${tableNames.prescription}.${tableNames.doctor}_id`,
+          from: `${tablenames.doctor}.id`,
+          to: `${tablenames.prescription}.${tablenames.doctor}_id`,
         },
       },
     }

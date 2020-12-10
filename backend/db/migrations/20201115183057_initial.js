@@ -44,7 +44,8 @@ exports.up = async (knex) => {
       'last',
       'gender',
       'age',
-      'code'
+      'code',
+      'deleted_at'
     ]);
   });
   await knex.schema.createTable(tablenames.clinic, (table) => {

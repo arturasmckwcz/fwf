@@ -35,6 +35,11 @@
             "type": "integer",
             "title": "The age"
         },
+        "code": {
+            "$id": "#/properties/code",
+            "type": "integer",
+            "title": "The peronal ID"
+        },
         "address": {
             "$id": "#/properties/address",
             "type": "string",

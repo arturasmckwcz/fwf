@@ -24,4 +24,14 @@ router.get('/:id', async (req, res, next) => {
   };
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    const clinic = await Clinic.query()
+      .insert(req.body);
+    res.json(clinic);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

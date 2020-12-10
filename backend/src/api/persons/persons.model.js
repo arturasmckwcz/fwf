@@ -18,40 +18,40 @@ class Person extends Model {
         relation: Model.HasManyRelation,
         modelClass: Doctor,
         join: {
-          from: `${tableNames.person}.id`,
-          to: `${tableNames.doctor}.${tableNames.person}_id`,
+          from: `${tablenames.person}.id`,
+          to: `${tablenames.doctor}.${tablenames.person}_id`,
         },
       },
       patients: {
         relation: Model.HasManyRelation,
         modelClass: Patient,
         join: {
-          from: `${tableNames.person}.id`,
-          to: `${tableNames.patient}.${tableNames.person}_id`,
+          from: `${tablenames.person}.id`,
+          to: `${tablenames.patient}.${tablenames.person}_id`,
         },
       },
       blood: {
         relation: Model.HasManyRelation,
         modelClass: Blood,
         join: {
-          from: `${tableNames.person}.id`,
-          to: `${tableNames.blood}.${tableNames.person}_id`,
+          from: `${tablenames.person}.id`,
+          to: `${tablenames.blood}.${tablenames.person}_id`,
         },
       },
       lysates: {
         relation: Model.HasManyRelation,
         modelClass: Lysate,
         join: {
-          from: `${tableNames.person}.id`,
-          to: `${tableNames.lysate}.${tableNames.person}_id`,
+          from: `${tablenames.person}.id`,
+          to: `${tablenames.lysate}.${tablenames.person}_id`,
         },  
       },
       users: {
         relation: Model.HasManyRelation,
         modelClass: User,
         join: {
-          from: `${tableNames.person}.id`,
-          to: `${tableNames.user}.${tableNames.person}_id`,
+          from: `${tablenames.person}.id`,
+          to: `${tablenames.user}.${tablenames.person}_id`,
         },
       },
     };
