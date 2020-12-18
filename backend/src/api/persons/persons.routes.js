@@ -37,7 +37,7 @@ router.post('/', async (req, res, next) => {
     res.json(person);
   } catch(error) {
     next(error);
-  }
+  };
 });
 
 router.post('/:id', async (req, res, next) => {

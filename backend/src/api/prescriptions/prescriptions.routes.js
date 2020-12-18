@@ -17,11 +17,11 @@ router.get('/:id', async (req, res, next) => {
       .where('deleted_at', null)
       .findById(parseInt(id, 10) || 0);
     if (prescription) {
-      return res.json(prescription);
+      res.json(prescription);
     }
-    return next();
+    throw new Error("Wrong ID");
   } catch (error) {
-    return next(error);
+    next(error);
   };
 });
 
@@ -32,7 +32,7 @@ router.post('/', async (req,res, next) => {
         ... req.body,
         code: getPrescriptionCode(),
       });
-    return res.json(prescription);
+    res.json(prescription);
   } catch (error) {
     next(error);
   }

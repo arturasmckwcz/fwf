@@ -2,39 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Blood = require('../blood/blood.model');
 const Person = require('../persons/persons.model');
-const Clinic = require('../clinics/clinics.model');
 const { getBloodCode } = require('../../lib/codes');
+const { getBlood } = require('../../lib/getters');
 
 router.get('/:id', async (req, res, next) => {
   try {
     const {id} = req.params;
-    const blood = await Blood.query()
-      .where('deleted_at',  null)
-      .findById(id);
-    let clinic;
-    if (blood.clinic_id) {
-      clinic = await Clinic.query()
-        .where('deleted_at', null)
-        .select('name')
-        .findById(blood.clinic_id);
-    };
-    const person = await Person.query()
-      .where('deleted_at',  null)
-      .select(
-        'first',
-        'last',
-        'email',
-        'phone',
-        'address'
-        )
-      .findById(blood.person_id);
-    res.json({
-      'id': blood.id,
-      ... person,
-      'clinic': blood.clinic_id
-        ? clinic.name
-        : undefined
-    });
+    res.json(await getBlood(id));
   } catch (error) {
     next(error);
   }

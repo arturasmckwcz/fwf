@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Production = require('./productions.model');
+const { getProductionCode } = require('../../lib/codes')
 
 router.get('/', async (req, res) => {
   const productions = await Production.query()
@@ -15,12 +16,26 @@ router.get('/:id', async (req, res, next) => {
       .where('deleted_at', null)
       .findById(parseInt(id, 10) || 0);
     if (production) {
-      return res.json(production);
+      res.json(production);
     }
-    return next();
+    throw new Error("Wrong ID");
   } catch (error) {
-    return next(error);
+    next(error);
   };
 });
+
+router.post('/', async (req,res, next) => {
+  try {
+    const production = await Production.query()
+      .insert({
+        ... req.body,
+        code: getProductionCode(),
+      });
+    res.json(production);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = router;

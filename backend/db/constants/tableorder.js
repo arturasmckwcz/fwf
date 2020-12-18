@@ -11,5 +11,5 @@ module.exports = [
   tablenames.clinic,
   tablenames.lysate,
   tablenames.product,
-  tablenames.person
+  tablenames.person,
 ];

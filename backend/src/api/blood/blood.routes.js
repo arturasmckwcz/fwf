@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { getBloodCode } = require('../../lib/codes');
 const Blood = require('./blood.model');
 
 router.get('/', async (req, res) => {
@@ -26,7 +27,10 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const blood = await Blood.query()
-      .insert(req.body);
+      .insert({
+        ... req.body,
+      code: getBloodCode(),
+      });
     res.json(blood);
   } catch (error) {
     next(error);

@@ -1,8 +1,9 @@
 const { domainToUnicode } = require('url');
-const tablenames = require('../../constants/tablenames');
-const tableorder = require('../../constants/tableorder');
+const tablenames = require('../constants/tablenames');
+const tableorder = require('../constants/tableorder');
 
-const patients = require('../../constants/patients');
+const patients = require('../constants/patients');
+const lysates = require('../constants/lysates');
 
 const doctors = [
   {first: 'Irena', last: 'Pavilonienė'},
@@ -35,12 +36,14 @@ exports.seed = async (knex) => {
     // eslint-disable-next-line camelcase
     tableorder.map((table_name) => knex(table_name).del()),
   );
+  
   await knex(tablenames.product).insert([
     {name: 'DSL'},
     {name: 'CIK'},
     {name: 'TCV'},
     {name: 'MSC'},
   ]);
+
   await knex(tablenames.clinic).insert([
     {name: 'Innovita research'},
     {name: 'InMedica'},
@@ -56,10 +59,14 @@ exports.seed = async (knex) => {
     {name: 'Viroterapijas & Integrativas medicinas klinika'},
     {name: 'Amber life'},
   ]);
+
+  await knex(tablenames.lysate).insert(lysates);
+
   for (let item of doctors) {
     let id = parseInt(await knex(tablenames.person).insert(item).returning('id'));
     await knex(tablenames.doctor).insert({person_id: id});
   };
+
   for (let item of patients) {
     let id = parseInt(await knex(
       tablenames.person)
@@ -72,5 +79,4 @@ exports.seed = async (knex) => {
       code: item.code,
     });
   };
-  // await knex(tablenames.person).insert(doctors);
 };

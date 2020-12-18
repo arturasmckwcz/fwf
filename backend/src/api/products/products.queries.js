@@ -1,5 +1,5 @@
 const db = require('../../db');
-const tablenames = require('../../../constants/tablenames');
+const tablenames = require('../../../db/constants/tablenames');
 
 const fields = ['id', 'name'];
 

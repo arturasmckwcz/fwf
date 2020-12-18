@@ -34,11 +34,3 @@ const patients =
   patients20))));
 
 module.exports = patients;
-
-// module.exports = patients.data.map(({ production, first, last, code, status }) => ({
-//   production,
-//   first,
-//   last,
-//   code,
-//   status,
-// }));
