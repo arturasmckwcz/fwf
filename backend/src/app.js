@@ -3,11 +3,14 @@ const morgan = require('morgan');
 const compression = require('compression');
 const helmet = require('helmet');
 const middlewares = require('./middlewares');
+const cors = require('cors');
 
 const apiRouter = require('./api/api')
 
-
 const app = express();
+
+app.use(cors());
+app.options('*', cors());
 
 app.use(morgan('dev'));
 app.use(compression());

@@ -4,7 +4,7 @@
     "type": "object",
     "title": "The Produc",
     "required": [
-        "code"
+        "name"
     ],
     "properties": {
         "id": {
@@ -12,8 +12,8 @@
             "type": "integer",
             "title": "The id in database"
         },
-        "code": {
-            "$id": "#/properties/code",
+        "name": {
+            "$id": "#/properties/name",
             "type": "string",
             "title": "The code"
         },

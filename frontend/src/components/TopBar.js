@@ -20,7 +20,7 @@ class TopBar extends Component {
               offset={-50}
               duration={500}
             >
-              [New production data]
+              [New production]
             </Link>
           </div>
           <div className='menuItem'>
@@ -59,24 +59,22 @@ class TopBar extends Component {
               [Production file]
             </Link>
           </div>
+          <div className='menuItem'>
+            <Link
+              activeClass="active"
+              to="Products"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+            >
+              [Producs]
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 }
-
-
-
-// class TopBar extends Component {
-//   render() {
-//     return (<div className='TopBar'>
-//       <h3>[FWF]</h3>
-//       <div className='link'><h5>Insert production</h5></div>
-//       <div className='link'><h5>Insert prescription</h5></div>
-//       <div className='link'><h5>Insert blood</h5></div>
-//       <div className='link'><h5>Generate production</h5></div>
-//     </div>)
-//   }
-// }
 
 export default TopBar

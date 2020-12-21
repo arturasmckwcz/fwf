@@ -7,6 +7,7 @@ import ProductionCombined from './components/ProductionCombined'
 import BloodCombined from './components/BloodCombined'
 import PrescriptionCombined from './components/PrescriptionCombined'
 import NewProductionFile from './components/NewProductionFile'
+import Products from './components/Products'
 
 class App extends Component {
   render() {
@@ -25,6 +26,9 @@ class App extends Component {
           </Element>
           <Element name='NewProductionFile'>
             <NewProductionFile />
+          </Element>
+          <Element name='Products'>
+            <Products />
           </Element>
         </div>
         <div className='dummy'><h3>Other options</h3></div>
