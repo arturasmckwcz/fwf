@@ -1,0 +1,22 @@
+.clearbtn {
+  -webkit-appearance: button;
+  margin-top: 0em;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  font-family: system-ui;
+  font-variant-caps: normal;
+  color: initial;
+  letter-spacing: normal;
+  word-spacing: normal;
+  line-height: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  text-align: center;
+  display: inline-block;
+}
+
+.clearbtn {
+  cursor: default;
+}

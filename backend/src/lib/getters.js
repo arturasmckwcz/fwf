@@ -8,52 +8,40 @@ const Product = require('../api/products/products.model');
 const Blood = require('../api/blood/blood.model');
 const Production = require('../api/productions/productions.model');
 
-
 const getBlood = async (id) => {
-  const blood = await Blood.query()
-    .where('deleted_at', null)
-    .findById(id);
+  const blood = await Blood.query().where('deleted_at', null).findById(id);
   const person = await Person.query()
     .where('deleted_at', null)
-    .select(
-      'first',
-      'last',
-      'age',
-      'gender'
-    )
+    .select('first', 'last', 'age', 'gender')
     .findById(blood.person_id);
-    let clinic;
-    if (blood.clinic_id) {
-      clinic = await Clinic.query()
-        .where('deleted_at', null)
-        .select('name')
-        .findById(blood.clinic_id);
-    };
-    return {
-      id: blood.id,
-      code: blood.code,
-      draw_date: blood.draw_date,
-      arrive_date: blood.arrive_date,
-      donor: {... person},
-      clinic: blood.clinic_id
-        ? clinic.name
-        : undefined,
-    }
+  let clinic;
+  if (blood.clinic_id) {
+    clinic = await Clinic.query()
+      .where('deleted_at', null)
+      .select('name')
+      .findById(blood.clinic_id);
+  }
+  return {
+    id: blood.id,
+    code: blood.code,
+    draw_date: blood.draw_date,
+    arrive_date: blood.arrive_date,
+    donor: { ...person },
+    clinic: blood.clinic_id ? clinic.name : undefined,
+  };
 };
-
 
 const getProduction = async (id) => {
   const production = await Production.query()
-  .where('deleted_at', null)
-  .findById(id);
+    .where('deleted_at', null)
+    .findById(id);
   return {
     id: production.id,
     code: production.code,
     prescription: await getPrescription(production.prescription_id),
     blood: await getBlood(production.blood_id),
-  }
+  };
 };
-
 
 const getPrescription = async (id) => {
   const prescription = await Prescription.query()
@@ -75,78 +63,75 @@ const getPrescription = async (id) => {
   };
 };
 
+const getDoctorsJoined = async () => {
+  const doctors = await Doctor.query().where('deleted_at', null);
+  const clinics = await Clinic.query().where('deleted_at', null);
+  const persons = await Person.query().where('deleted_at', null);
+
+  let result = [];
+  doctors.map((doctor) => {
+    const clinic = clinics.find((item) => item.id === doctor.clinic_id);
+    const person = persons.find((item) => item.id === doctor.person_id);
+    result.push({
+      ...doctor,
+      ...person,
+      clinic: clinic ? clinic.name : null,
+      id: undefined,
+      created_at: undefined,
+      updated_at: undefined,
+      deleted_at: undefined,
+    });
+  });
+  return result;
+};
 
 const getDoctor = async (id) => {
-  const doctor = await Doctor.query()
-    .where('deleted_at',  null)
-    .findById(id);
+  const doctor = await Doctor.query().where('deleted_at', null).findById(id);
   let clinic;
   if (doctor.clinic_id) {
     clinic = await Clinic.query()
       .where('deleted_at', null)
       .select('name')
       .findById(doctor.clinic_id);
-  };
+  }
   const person = await Person.query()
-    .where('deleted_at',  null)
-    .select(
-      'first',
-      'last',
-      'email',
-      'phone',
-      'address'
-      )
+    .where('deleted_at', null)
+    .select('first', 'last', 'email', 'phone', 'address')
     .findById(doctor.person_id);
   return {
-    'id': doctor.id,
-    ... person,
-    'clinic': doctor.clinic_id
-      ? clinic.name
-      : undefined
+    id: doctor.id,
+    ...person,
+    clinic: doctor.clinic_id ? clinic.name : undefined,
   };
 };
 
-
 const getPatient = async (id) => {
-  const patient = await Patient.query()
-    .where('deleted_at',  null)
-    .findById(id);
+  const patient = await Patient.query().where('deleted_at', null).findById(id);
   let clinic;
   if (patient.clinic_id) {
     clinic = await Clinic.query()
       .where('deleted_at', null)
       .select('name')
       .findById(patient.clinic_id);
-  };
+  }
   const person = await Person.query()
-    .where('deleted_at',  null)
-    .select(
-      'first',
-      'last',
-      'age',
-      'gender',
-      'email',
-      'phone',
-      'address'
-      )
+    .where('deleted_at', null)
+    .select('first', 'last', 'age', 'gender', 'email', 'phone', 'address')
     .findById(patient.person_id);
   return {
-    'id': patient.id,
-    'code': patient.code,
-    'status': patient.status,
-    ... person,
-    'clinic': patient.clinic_id
-      ? clinic.name
-      : undefined
+    id: patient.id,
+    code: patient.code,
+    status: patient.status,
+    ...person,
+    clinic: patient.clinic_id ? clinic.name : undefined,
   };
-
 };
-
 
 module.exports = {
   getBlood,
   getPrescription,
   getProduction,
   getDoctor,
+  getDoctorsJoined,
   getPatient,
 };

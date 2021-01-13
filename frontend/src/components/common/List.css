@@ -1,0 +1,14 @@
+.listframe {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.tbl {
+  border: 1px solid #13082b;
+  border-collapse: collapse;
+}
+
+.rw:hover {
+  cursor: default;
+  background-color: #aaaaaa;
+}

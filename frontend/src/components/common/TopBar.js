@@ -1,17 +1,23 @@
-import { Component } from 'react'
-import { Link } from 'react-scroll'
-import './TopBar.css'
+import { Component } from 'react';
+import { Link } from 'react-scroll';
+import './TopBar.css';
 
 class TopBar extends Component {
   render() {
     return (
       <div className="container-fluid sticky">
-        <div style={{ display: 'inline' }}><h3>[FWF]</h3></div>
+        <div style={{ display: 'inline' }}>
+          <img
+            src="/xnia.png"
+            style={{ paddingLeft: '10px', height: '30px' }}
+            alt=""
+          />
+        </div>
         <div
           className="collapse navbar-collapse"
           id="bs-example-navbar-collapse-1"
         >
-          <div className='menuItem'>
+          <div className="menuItem">
             <Link
               activeClass="active"
               to="ProductionCombined"
@@ -23,7 +29,7 @@ class TopBar extends Component {
               [New production]
             </Link>
           </div>
-          <div className='menuItem'>
+          <div className="menuItem">
             <Link
               activeClass="active"
               to="BloodCombined"
@@ -35,7 +41,7 @@ class TopBar extends Component {
               [New blood]
             </Link>
           </div>
-          <div className='menuItem'>
+          <div className="menuItem">
             <Link
               activeClass="active"
               to="PrescriptionCombined"
@@ -47,19 +53,43 @@ class TopBar extends Component {
               [New prescription]
             </Link>
           </div>
-          <div className='menuItem'>
+          <div className="menuItem">
             <Link
               activeClass="active"
-              to="NewProductionFile"
+              to="Doctors"
               spy={true}
               smooth={true}
               offset={-50}
               duration={500}
             >
-              [Production file]
+              [Doctors]
             </Link>
           </div>
-          <div className='menuItem'>
+          <div className="menuItem">
+            <Link
+              activeClass="active"
+              to="Clinics"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+            >
+              [Clinics]
+            </Link>
+          </div>
+          <div className="menuItem">
+            <Link
+              activeClass="active"
+              to="Lysates"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+            >
+              [Lysates]
+            </Link>
+          </div>
+          <div className="menuItem">
             <Link
               activeClass="active"
               to="Products"
@@ -71,10 +101,22 @@ class TopBar extends Component {
               [Producs]
             </Link>
           </div>
+          <div className="menuItem">
+            <Link
+              activeClass="active"
+              to="Persons"
+              spy={true}
+              smooth={true}
+              offset={-50}
+              duration={500}
+            >
+              [Persons]
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default TopBar
+export default TopBar;

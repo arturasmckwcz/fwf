@@ -4,8 +4,7 @@ const { getBloodCode } = require('../../lib/codes');
 const Blood = require('./blood.model');
 
 router.get('/', async (req, res) => {
-  const blood = await Blood.query()
-    .where('deleted_at', null);
+  const blood = await Blood.query().where('deleted_at', null);
   res.json(blood);
 });
 
@@ -21,16 +20,15 @@ router.get('/:id', async (req, res, next) => {
     return next();
   } catch (error) {
     return next(error);
-  };
+  }
 });
 
 router.post('/', async (req, res, next) => {
   try {
-    const blood = await Blood.query()
-      .insert({
-        ... req.body,
+    const blood = await Blood.query().insertAndFetch({
+      ...req.body,
       code: getBloodCode(),
-      });
+    });
     res.json(blood);
   } catch (error) {
     next(error);

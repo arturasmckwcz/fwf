@@ -2,9 +2,11 @@ const express = require('express');
 const { getLysateCode } = require('../../lib/codes');
 const router = express.Router();
 const Lysate = require('./lysates.model');
+const lysateFields = ['id', 'name', 'code', 'person_id'];
 
 router.get('/', async (req, res) => {
   const lysates = await Lysate.query()
+    .select(lysateFields)
     .where('deleted_at', null);
   res.json(lysates);
 });
@@ -13,6 +15,7 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const lysate = await Lysate.query()
+      .select(lysateFields)
       .where('deleted_at', null)
       .findById(parseInt(id, 10) || 0);
     if (lysate) {
@@ -21,16 +24,30 @@ router.get('/:id', async (req, res, next) => {
     return next();
   } catch (error) {
     return next(error);
-  };
+  }
 });
 
 router.post('/', async (req, res, next) => {
   try {
+    const lysate = await Lysate.query().insertAndFetch({
+      ...req.body,
+      code: getLysateCode(),
+    });
+    res.json(lysate);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/', async (req, res, next) => {
+  const { id } = req.body;
+  try {
     const lysate = await Lysate.query()
-      .insert({
-        ... req.body,
-        code: getLysateCode(),
-      });
+      .updateAndFetch({
+        ...req.body,
+        id: undefined,
+      })
+      .where({ id });
     res.json(lysate);
   } catch (error) {
     next(error);
