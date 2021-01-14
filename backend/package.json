@@ -4,7 +4,7 @@
   "description": "FWF Backend",
   "main": "./src/index.js",
   "scripts": {
-    "start":"node ./src/index.js",
+    "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
@@ -12,7 +12,9 @@
     "test": "jest"
   },
   "jest": {
-    "testPathIgnorePatterns": ["/home/artur/fwf/backend/docker-data/db-data"]
+    "testPathIgnorePatterns": [
+      "/home/artur/fwf/backend/docker-data/db-data"
+    ]
   },
   "author": "Arturas Mickiewicz",
   "license": "ISC",
