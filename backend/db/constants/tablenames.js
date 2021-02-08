@@ -1,13 +1,14 @@
 module.exports = {
+  document: 'document',
   person: 'person',
-  clinic: 'clinic',
   product: 'product',
+  clinic: 'clinic',
   lysate: 'lysate',
   blood: 'blood',
   doctor: 'doctor',
-  prescription: 'prescription',
   patient: 'patient',
+  prescription: 'prescription',
   production: 'production',
   user: 'user',
   role: 'role',
-};
+}

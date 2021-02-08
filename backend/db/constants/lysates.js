@@ -1,23 +1,19 @@
-const fs = require('fs');
-const path = require('path');
-const Papa = require('papaparse');
+const fs = require('fs')
+const path = require('path')
+const Papa = require('papaparse')
 
-const getLysatesFromFile = (url) => {
-  const csvData = fs.readFileSync(
-    url,
-    'utf8'
-  );
+const getLysatesFromFile = url => {
+  const csvData = fs.readFileSync(url, 'utf8')
   return Papa.parse(csvData, {
     header: true,
-    })
-    .data.map(({ production, first, last, code, status }) => ({
-      name,
-      code,
-    }));
-};
+  }).data.map(({ name, code }) => ({
+    name,
+    code,
+  }))
+}
 
+const lysates = getLysatesFromFile(
+  path.join(__dirname, '..', 'sources', 'lysates.csv')
+)
 
-const lysates = getLysatesFromFile(path.join(__dirname, '..', 'db', 'sources', 'lysates.csv'));
-
-
-module.exports = lysates;
+module.exports = lysates

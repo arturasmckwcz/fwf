@@ -1,38 +1,40 @@
-const express = require('express');
-const router = express.Router();
-const { getBloodCode } = require('../../lib/codes');
-const Blood = require('./blood.model');
+const express = require('express')
+const router = express.Router()
+const { getBloodCode } = require('../../lib/codes')
+const Blood = require('./blood.model')
+
+console.log('src/api/blood/blood.routes.js')
 
 router.get('/', async (req, res) => {
-  const blood = await Blood.query().where('deleted_at', null);
-  res.json(blood);
-});
+  const blood = await Blood.query().where('deleted_at', null)
+  res.json(blood)
+})
 
 router.get('/:id', async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.params
   try {
     const blood = await Blood.query()
       .where('deleted_at', null)
-      .findById(parseInt(id, 10) || 0);
+      .findById(parseInt(id, 10) || 0)
     if (blood) {
-      return res.json(blood);
+      return res.json(blood)
     }
-    return next();
+    return next()
   } catch (error) {
-    return next(error);
+    return next(error)
   }
-});
+})
 
 router.post('/', async (req, res, next) => {
   try {
     const blood = await Blood.query().insertAndFetch({
       ...req.body,
       code: getBloodCode(),
-    });
-    res.json(blood);
+    })
+    res.json(blood)
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
-module.exports = router;
+module.exports = router

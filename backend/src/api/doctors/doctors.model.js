@@ -1,14 +1,15 @@
-const { Model } = require('objection');
-const tablenames = require('../../../db/constants/tablenames');
-const schema = require('./doctors.schema.json');
-
-const Prescription = require('./../prescriptions/prescriptions.model');
+const { Model } = require('objection')
+const tablenames = require('../../../db/constants/tablenames')
+const schema = require('./doctors.schema.json')
 
 class Doctor extends Model {
   static get tableName() {
-    return tablenames.doctor;
+    return tablenames.doctor
   }
   static get relationMappings() {
+    const Prescription = require('../prescriptions/prescriptions.model')
+    const Person = require('../persons/persons.model')
+    const Clinic = require('../clinics/clinics.model')
     return {
       prescritions: {
         relation: Model.HasManyRelation,
@@ -18,11 +19,27 @@ class Doctor extends Model {
           to: `${tablenames.prescription}.${tablenames.doctor}_id`,
         },
       },
+      person: {
+        realation: Model.BelongsToOneRelation,
+        modelClass: Person,
+        join: {
+          from: `${tablenames.doctor}.${tablenames.person}_id`,
+          to: `${tablenames.person}.id`,
+        },
+      },
+      clinic: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Clinic,
+        join: {
+          from: `${tablenames.doctor}.${tablenames.clinic}_id`,
+          to: `${tablenames.clinic}.id`,
+        },
+      },
     }
   }
   static get jsonSchema() {
     return schema
   }
-};
+}
 
-module.exports = Doctor;
+module.exports = Doctor

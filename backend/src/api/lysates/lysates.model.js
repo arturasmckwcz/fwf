@@ -1,14 +1,14 @@
-const { Model } = require('objection');
-const tablenames = require('../../../db/constants/tablenames');
-const schema = require('./lysates.schema.json');
-
-const Prescription = require('./../prescriptions/prescriptions.model');
+const { Model } = require('objection')
+const tablenames = require('../../../db/constants/tablenames')
+const schema = require('./lysates.schema.json')
 
 class Lysate extends Model {
   static get tableName() {
-    return tablenames.lysate;
+    return tablenames.lysate
   }
   static get relationMappings() {
+    const Prescription = require('../prescriptions/prescriptions.model')
+    const Person = require('../persons/persons.model')
     return {
       prescritions: {
         relation: Model.HasManyRelation,
@@ -18,11 +18,19 @@ class Lysate extends Model {
           to: `${tablenames.prescription}.${tablenames.lysate}_id`,
         },
       },
+      person: {
+        realation: Model.BelongsToOneRelation,
+        modelClass: Person,
+        join: {
+          from: `${tablenames.lysate}.${tablenames.person}_id`,
+          to: `${tablenames.person}.id`,
+        },
+      },
     }
   }
   static get jsonSchema() {
     return schema
   }
-};
+}
 
-module.exports = Lysate;
+module.exports = Lysate

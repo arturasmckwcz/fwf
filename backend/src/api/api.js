@@ -1,38 +1,44 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const doctors = require('./doctors/doctors.routes');
-const patients = require('./patients/patients.routes');
-const persons = require('./persons/persons.routes');
-const products = require('./products/products.routes');
-const clinics = require('./clinics/clinics.routes');
-const blood = require('./blood/blood.routes');
-const lysates = require('./lysates/lysates.routes');
-const prescriptions = require('./prescriptions/prescriptions.routes');
-const productions = require('./productions/productions.routes');
-const users = require('./users/users.routes');
-const roles = require('./roles/roles.routes');
-const joined = require('./joined/joined');
-const pdfs = require('./storage/pdfs');
+const { graphqlHTTP } = require('express-graphql')
+const schema = require('./graphql/schema')
+router.use('/graphql', graphqlHTTP({ schema }))
 
-router.use('/doctors', doctors);
-router.use('/patients', patients);
-router.use('/persons', persons);
-router.use('/products', products);
-router.use('/clinics', clinics);
-router.use('/blood', blood);
-router.use('/lysates', lysates);
-router.use('/prescriptions', prescriptions);
-router.use('/productions', productions);
-router.use('/users', users);
-router.use('/roles', roles);
-router.use('/joined', joined);
-router.use('/pdfs', pdfs);
+const doctors = require('./doctors/doctors.routes')
+const patients = require('./patients/patients.routes')
+const persons = require('./persons/persons.routes')
+const products = require('./products/products.routes')
+const clinics = require('./clinics/clinics.routes')
+const blood = require('./blood/blood.routes')
+const lysates = require('./lysates/lysates.routes')
+const prescriptions = require('./prescriptions/prescriptions.routes')
+const productions = require('./productions/productions.routes')
+const users = require('./users/users.routes')
+const roles = require('./roles/roles.routes')
+const documents = require('./documents/documents.routes')
+const joined = require('./joined/joined')
+const pdfs = require('./storage/pdfs')
+
+router.use('/doctors', doctors)
+router.use('/documents', documents)
+router.use('/patients', patients)
+router.use('/persons', persons)
+router.use('/products', products)
+router.use('/clinics', clinics)
+router.use('/blood', blood)
+router.use('/lysates', lysates)
+router.use('/prescriptions', prescriptions)
+router.use('/productions', productions)
+router.use('/users', users)
+router.use('/roles', roles)
+router.use('/joined', joined)
+router.use('/pdfs', pdfs)
 
 router.get('/', (req, res) => {
-    res.json({
-        message: "FWF API",
-    });
-});
+  res.json({
+    message: 'Go .../api/ for REST or .../api/graphql for GraphQL',
+  })
+})
 
-module.exports = router;
+module.exports = router

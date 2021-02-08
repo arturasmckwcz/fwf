@@ -25,6 +25,11 @@
             "type": "integer",
             "title": "The FK clinic_id to clinic table"
         },
+        "document_id": {
+            "$id": "#/properties/document_id",
+            "type": "integer",
+            "title": "The FK document_id to document table"
+        },
         "code": {
             "$id": "#/properties/code",
             "type": "string",
