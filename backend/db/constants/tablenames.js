@@ -1,5 +1,4 @@
 module.exports = {
-  document: 'document',
   person: 'person',
   product: 'product',
   clinic: 'clinic',
@@ -9,6 +8,8 @@ module.exports = {
   patient: 'patient',
   prescription: 'prescription',
   production: 'production',
+  filesystem: 'filesystem',
+  document: 'document',
   user: 'user',
   role: 'role',
 }

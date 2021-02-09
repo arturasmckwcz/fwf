@@ -4,9 +4,9 @@ const addDefaultColumns = table => {
 }
 
 const addContactInfo = table => {
-  table.string('address', 127)
-  table.string('email', 127)
-  table.string('phone', 127)
+  table.string('address', 128)
+  table.string('email', 128)
+  table.string('phone', 128)
 }
 
 const addReference = (table, foreignTableName, not_nullable = true) => {
