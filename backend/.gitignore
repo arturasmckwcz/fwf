@@ -1,3 +1,6 @@
+# Sensitive data
+db/sources
+
 # Logs
 logs
 *.log
