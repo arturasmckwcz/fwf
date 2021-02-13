@@ -1,16 +1,16 @@
-const { Model } = require('objection');
-const tablenames = require('../../../db/constants/tablenames');
-const schema = require('./persons.schema.json');
+const { Model } = require('objection')
+const tablenames = require('../../../db/constants/tablenames')
+const schema = require('./persons.schema.json')
 
-const Doctor = require('./../doctors/doctors.model');
-const Patient = require('./../patients/patients.model');
-const Blood = require('./../blood/blood.model');
-const Lysate = require('./../lysates/lysates.model');
-const User = require('./../users/users.model');
+const Doctor = require('./../doctors/doctors.model')
+const Patient = require('./../patients/patients.model')
+const Source = require('../source/source.model')
+const Lysate = require('./../lysates/lysates.model')
+const User = require('./../users/users.model')
 
 class Person extends Model {
   static get tableName() {
-    return tablenames.person;
+    return tablenames.person
   }
   static get relationMappings() {
     return {
@@ -30,12 +30,12 @@ class Person extends Model {
           to: `${tablenames.patient}.${tablenames.person}_id`,
         },
       },
-      blood: {
+      source: {
         relation: Model.HasManyRelation,
-        modelClass: Blood,
+        modelClass: Source,
         join: {
           from: `${tablenames.person}.id`,
-          to: `${tablenames.blood}.${tablenames.person}_id`,
+          to: `${tablenames.source}.${tablenames.person}_id`,
         },
       },
       lysates: {
@@ -44,7 +44,7 @@ class Person extends Model {
         join: {
           from: `${tablenames.person}.id`,
           to: `${tablenames.lysate}.${tablenames.person}_id`,
-        },  
+        },
       },
       users: {
         relation: Model.HasManyRelation,
@@ -54,11 +54,11 @@ class Person extends Model {
           to: `${tablenames.user}.${tablenames.person}_id`,
         },
       },
-    };
+    }
   }
   static get jsonSchema() {
-      return schema;
+    return schema
   }
-};
+}
 
-module.exports = Person;
+module.exports = Person

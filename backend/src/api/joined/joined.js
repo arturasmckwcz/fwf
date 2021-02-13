@@ -1,22 +1,22 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const doctors = require('./doctors.routes');
-const blood = require('./blood.routes');
-const patients = require('./patients.routes');
-const prescriptions = require('./prescriptions.routes');
-const productions = require('./productions.routes');
+const doctors = require('./doctors.routes')
+const source = require('./source.routes')
+const patients = require('./patients.routes')
+const prescriptions = require('./prescriptions.routes')
+const productions = require('./productions.routes')
 
-router.use('/doctors', doctors);
-router.use('/blood', blood);
-router.use('/patients', patients);
-router.use('/prescriptions', prescriptions);
-router.use('/productions', productions);
+router.use('/doctors', doctors)
+router.use('/source', source)
+router.use('/patients', patients)
+router.use('/prescriptions', prescriptions)
+router.use('/productions', productions)
 
 router.get('/', (req, res) => {
-    res.json({
-        message: "FWF API Joined Queries",
-    });
-});
+  res.json({
+    message: 'FWF API Joined Queries',
+  })
+})
 
-module.exports = router;
+module.exports = router

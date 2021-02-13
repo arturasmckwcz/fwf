@@ -1,15 +1,13 @@
 const { Model } = require('objection')
 const tablenames = require('../../../db/constants/tablenames')
-const schema = require('./blood.schema.json')
+const schema = require('./source.schema.json')
 
-console.log('src/api/blood/blood.model.js')
-
-class Blood extends Model {
+class Source extends Model {
   static get tableName() {
-    return tablenames.blood
+    return tablenames.source
   }
   static get relationMappings() {
-    const Production = require('./../productions/productions.model')
+    const Production = require('../productions/productions.model')
     const Person = require('../persons/persons.model')
     const Clinic = require('../clinics/clinics.model')
     return {
@@ -17,15 +15,15 @@ class Blood extends Model {
         relation: Model.HasManyRelation,
         modelClass: Production,
         join: {
-          from: `${tablenames.blood}.id`,
-          to: `${tablenames.production}.${tablenames.blood}_id`,
+          from: `${tablenames.source}.id`,
+          to: `${tablenames.production}.${tablenames.source}_id`,
         },
       },
       person: {
         realation: Model.BelongsToOneRelation,
         modelClass: Person,
         join: {
-          from: `${tablenames.blood}.${tablenames.person}_id`,
+          from: `${tablenames.source}.${tablenames.person}_id`,
           to: `${tablenames.person}.id`,
         },
       },
@@ -33,7 +31,7 @@ class Blood extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Clinic,
         join: {
-          from: `${tablenames.blood}.${tablenames.clinic}_id`,
+          from: `${tablenames.source}.${tablenames.clinic}_id`,
           to: `${tablenames.clinic}.id`,
         },
       },
@@ -44,4 +42,4 @@ class Blood extends Model {
   }
 }
 
-module.exports = Blood
+module.exports = Source

@@ -1,37 +1,34 @@
 const express = require('express')
 const router = express.Router()
-const { getBloodCode } = require('../../lib/codes')
-const Blood = require('./blood.model')
-
-console.log('src/api/blood/blood.routes.js')
+const { getSourceCode } = require('../../lib/codes')
+const Source = require('./source.model')
 
 router.get('/', async (req, res) => {
-  const blood = await Blood.query().where('deleted_at', null)
-  res.json(blood)
+  const source = await Source.query().where('deleted_at', null)
+  res.json(source)
 })
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params
   try {
-    const blood = await Blood.query()
+    const source = await Source.query()
       .where('deleted_at', null)
       .findById(parseInt(id, 10) || 0)
-    if (blood) {
-      return res.json(blood)
+    if (source) {
+      res.json(source)
     }
-    return next()
   } catch (error) {
-    return next(error)
+    next(error)
   }
 })
 
 router.post('/', async (req, res, next) => {
   try {
-    const blood = await Blood.query().insertAndFetch({
+    const source = await Source.query().insertAndFetch({
       ...req.body,
-      code: getBloodCode(),
+      code: getSourceCode(),
     })
-    res.json(blood)
+    res.json(source)
   } catch (error) {
     next(error)
   }

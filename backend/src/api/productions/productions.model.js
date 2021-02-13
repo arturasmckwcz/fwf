@@ -8,7 +8,7 @@ class Production extends Model {
   }
   static get relationMappings() {
     const Prescription = require('../prescriptions/prescriptions.model')
-    const Blood = require('../blood/blood.model')
+    const Source = require('../source/source.model')
     return {
       prescription: {
         realtion: Model.BelongsToOneRelation,
@@ -18,12 +18,12 @@ class Production extends Model {
           to: `${tablenames.prescription}.id`,
         },
       },
-      blood: {
+      source: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Blood,
+        modelClass: Source,
         join: {
-          from: `${tablenames.production}.${tablenames.blood}_id`,
-          to: `${tablenames.blood}.id`,
+          from: `${tablenames.production}.${tablenames.source}_id`,
+          to: `${tablenames.source}.id`,
         },
       },
     }
