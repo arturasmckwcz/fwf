@@ -36,7 +36,7 @@ exports.up = async knex => {
   })
   await knex.schema.createTable(tablenames.parameter, table => {
     table.increments().notNullable()
-    table.string('code', 16).notNullable().unique()
+    table.string('code', 32).notNullable().unique()
     table.string('description', 128)
     table.string('mesurement', 16)
   })
@@ -103,6 +103,7 @@ exports.up = async knex => {
     addReference(table, tablenames.patient)
     addReference(table, tablenames.lysate)
     addReference(table, tablenames.product)
+    addReference(table, tablenames.source)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.production, table => {
