@@ -39,6 +39,7 @@ exports.up = async knex => {
     table.string('code', 32).notNullable().unique()
     table.string('description', 128)
     table.string('mesurement', 16)
+    addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.location, table => {
     table.increments().notNullable()
@@ -47,6 +48,7 @@ exports.up = async knex => {
     table.string('place', 16).notNullable()
     table.unique(['room', 'container', 'place'])
     table.boolean('occupied').notNullable().defaultTo(false)
+    addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.clinic, table => {
     table.increments().notNullable()
@@ -123,17 +125,20 @@ exports.up = async knex => {
     addReference(table, tablenames.production)
     addReference(table, tablenames.location)
     addReference(table, tablenames.clinic)
+    addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.science, table => {
     table.increments().notNullable()
     addReference(table, tablenames.product)
     addReference(table, tablenames.parameter)
+    addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.data, table => {
     table.increments().notNullable()
     table.string('value', 16)
     addReference(table, tablenames.science)
     addReference(table, tablenames.production)
+    addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.filesystem, table => {
     table.increments().notNullable()
