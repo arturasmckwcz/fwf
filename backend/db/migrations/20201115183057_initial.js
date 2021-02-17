@@ -120,6 +120,9 @@ exports.up = async knex => {
   await knex.schema.createTable(tablenames.dose, table => {
     table.increments().notNullable()
     table.string('code', 32).notNullable().unique()
+    table
+      .enu('status', ['quarantine', 'storage', 'utilised', 'dispatched'])
+      .notNullable()
     table.dateTime('scheduled_date').notNullable()
     table.dateTime('dispatch_date').notNullable()
     addReference(table, tablenames.production)
