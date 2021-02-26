@@ -2,13 +2,17 @@ const { Model } = require('objection')
 const tablenames = require('../../../db/constants/tablenames')
 const schema = require('./prescriptions.schema.json')
 
-const Production = require('./../productions/productions.model')
-
 class Prescription extends Model {
   static get tableName() {
     return tablenames.prescription
   }
+
+  static get idColumn() {
+    return ['id', 'table_id']
+  }
+
   static get relationMappings() {
+    const Production = require('../productions/productions.model')
     const Doctor = require('../doctors/doctors.model')
     const Patient = require('../patients/patients.model')
     const Product = require('../products/products.model')

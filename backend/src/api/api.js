@@ -16,12 +16,9 @@ const prescriptions = require('./prescriptions/prescriptions.routes')
 const productions = require('./productions/productions.routes')
 const users = require('./users/users.routes')
 const roles = require('./roles/roles.routes')
-const documents = require('./documents/documents.routes')
 const joined = require('./joined/joined')
-const pdfs = require('./storage/pdfs')
 
 router.use('/doctors', doctors)
-router.use('/documents', documents)
 router.use('/patients', patients)
 router.use('/persons', persons)
 router.use('/products', products)
@@ -33,7 +30,6 @@ router.use('/productions', productions)
 router.use('/users', users)
 router.use('/roles', roles)
 router.use('/joined', joined)
-router.use('/pdfs', pdfs)
 
 router.get('/', (req, res) => {
   res.json({

@@ -6,6 +6,11 @@ class Lysate extends Model {
   static get tableName() {
     return tablenames.lysate
   }
+
+  static get idColumn() {
+    return ['id', 'table_id']
+  }
+
   static get relationMappings() {
     const Prescription = require('../prescriptions/prescriptions.model')
     const Person = require('../persons/persons.model')

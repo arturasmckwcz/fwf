@@ -10,6 +10,11 @@ class Clinic extends Model {
   static get tableName() {
     return tablenames.clinic
   }
+
+  static get idColumn() {
+    return ['id', 'table_id']
+  }
+
   static get relationMappings() {
     return {
       doctors: {

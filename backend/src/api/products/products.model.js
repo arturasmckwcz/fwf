@@ -1,14 +1,18 @@
-const { Model } = require('objection');
-const tablenames = require('../../../db/constants/tablenames');
-const schema = require('./products.schema.json');
-
-const Prescription = require('./../prescriptions/prescriptions.model');
+const { Model } = require('objection')
+const tablenames = require('../../../db/constants/tablenames')
+const schema = require('./products.schema.json')
 
 class Product extends Model {
   static get tableName() {
-    return tablenames.product;
+    return tablenames.product
   }
+
+  static get idColumn() {
+    return ['id', 'table_id']
+  }
+
   static get relationMappings() {
+    const Prescription = require('./../prescriptions/prescriptions.model')
     return {
       prescritions: {
         relation: Model.HasManyRelation,
@@ -23,6 +27,6 @@ class Product extends Model {
   static get jsonSchema() {
     return schema
   }
-};
+}
 
-module.exports = Product;
+module.exports = Product

@@ -6,9 +6,15 @@ class Production extends Model {
   static get tableName() {
     return tablenames.production
   }
+
+  static get idColumn() {
+    return ['id', 'table_id']
+  }
+
   static get relationMappings() {
     const Prescription = require('../prescriptions/prescriptions.model')
     const Source = require('../source/source.model')
+    const Clinic = require('../clinics/clinics.model')
     return {
       prescription: {
         realtion: Model.BelongsToOneRelation,
@@ -24,6 +30,14 @@ class Production extends Model {
         join: {
           from: `${tablenames.production}.${tablenames.source}_id`,
           to: `${tablenames.source}.id`,
+        },
+      },
+      clinic: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Clinic,
+        join: {
+          from: `${tablenames.production}.${tablenames.clinic}_id`,
+          to: `${tablenames.clinic}.id`,
         },
       },
     }

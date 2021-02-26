@@ -6,6 +6,11 @@ class Source extends Model {
   static get tableName() {
     return tablenames.source
   }
+
+  static get idColumn() {
+    return ['id', 'table_id']
+  }
+
   static get relationMappings() {
     const Production = require('../productions/productions.model')
     const Person = require('../persons/persons.model')
