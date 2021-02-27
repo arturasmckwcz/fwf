@@ -18,6 +18,7 @@ class Doc extends Model {
     const Clinic = require('../clinics/clinics.model')
     const Lysate = require('../lysates/lysates.model')
     const Product = require('../products/products.model')
+    const Dose = require('../doses/doses.model')
 
     return {
       filesystem: {
@@ -109,6 +110,17 @@ class Doc extends Model {
             `${tablenames.document}.table_id`,
           ],
           to: [`${tablenames.product}.id`, `${tablenames.product}.table_id`],
+        },
+      },
+      dose: {
+        realation: Model.BelongsToOneRelation,
+        modelClass: Product,
+        join: {
+          from: [
+            `${tablenames.document}.${tablenames.dose}_id`,
+            `${tablenames.document}.table_id`,
+          ],
+          to: [`${tablenames.dose}.id`, `${tablenames.dose}.table_id`],
         },
       },
     }

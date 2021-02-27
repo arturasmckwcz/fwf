@@ -125,6 +125,8 @@ exports.up = async knex => {
   })
   await knex.schema.createTable(tablenames.dose, table => {
     table.increments().notNullable()
+    table.string('table_id', 16).defaultTo(tablenames.dose)
+    table.unique(['id', 'table_id'])
     table.string('code', 32).notNullable().unique()
     table
       .enu('status', ['quarantine', 'storage', 'utilised', 'dispatched'])
@@ -199,6 +201,12 @@ exports.up = async knex => {
     table.integer('lysate_id').unsigned()
     table
       .foreign(['lysate_id', 'table_id'])
+      .references(['id', 'table_id'])
+      .inTable(tablenames.lysate)
+      .onDelete('CASCADE')
+    table.integer('dose_id').unsigned()
+    table
+      .foreign(['dose_id', 'table_id'])
       .references(['id', 'table_id'])
       .inTable(tablenames.lysate)
       .onDelete('CASCADE')

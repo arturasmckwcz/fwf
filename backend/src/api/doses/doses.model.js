@@ -9,7 +9,16 @@ class Dose extends Model {
   static get relationMappings() {
     const Production = require('../productions/productions.model')
     const Location = require('../locations/locations.model')
+    const Document = require('../documents/documents.model')
     return {
+      document: {
+        relation: Model.HasManyRelation,
+        modelClass: Document,
+        join: {
+          from: `${tablenames.dose}.id`,
+          to: `${tablenames.document}.${tablenames.dose}_id`,
+        },
+      },
       production: {
         realation: Model.BelongsToOneRelation,
         modelClass: Production,

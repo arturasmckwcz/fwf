@@ -17,7 +17,7 @@ class Clinic extends Model {
 
   static get relationMappings() {
     return {
-      doctors: {
+      doctor: {
         relation: Model.HasManyRelation,
         modelClass: Doctor,
         join: {
