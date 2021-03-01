@@ -4,7 +4,7 @@ const schema = require('./filesystem.schema.json')
 
 class Filesystem extends Model {
   static get tableName() {
-    return tablenames.location
+    return tablenames.filesystem
   }
   static get relationMappings() {
     const Document = require('../documents/documents.model')

@@ -8,6 +8,8 @@ const Product = require('../api/products/products.model')
 const Source = require('../api/source/source.model')
 const Production = require('../api/productions/productions.model')
 
+const tablenames = require('../../db/constants/tablenames')
+
 const getSource = async id => {
   const source = await Source.query().where('deleted_at', null).findById(id)
   const person = await Person.query()
@@ -106,7 +108,9 @@ const getDoctor = async id => {
 }
 
 const getPatient = async id => {
-  const patient = await Patient.query().where('deleted_at', null).findById(id)
+  const patient = await Patient.query()
+    .where('deleted_at', null)
+    .findById([id, tablenames.patient])
   let clinic
   if (patient.clinic_id) {
     clinic = await Clinic.query()

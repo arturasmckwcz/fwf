@@ -153,8 +153,8 @@ exports.up = async knex => {
   })
   await knex.schema.createTable(tablenames.filesystem, table => {
     table.increments().notNullable()
-    table.string('name', 128).notNullable().unique()
-    table.enu('type', ['pdf', 'docx', 'adoc', 'xlsx']).defaultTo('pdf')
+    table.string('name', 128).notNullable()
+    table.string('type', 128)
     table.specificType('body', 'bytea').notNullable()
     addDefaultColumns(table)
   })

@@ -2,7 +2,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLID,
-  GraphQBoolean,
+  GraphQLBoolean,
   GraphQLSchema,
   GraphQLList,
   GraphQLInt,
@@ -21,11 +21,17 @@ const Source = require('../source/source.model')
 const Production = require('../productions/productions.model')
 const Dose = require('../doses/doses.model')
 const Location = require('../locations/locations.model')
+const Filesystem = require('../filesystem/filesystem.model')
+const Document = require('../documents/documents.model')
+const Parameter = require('../parameters/parameters.model')
+const Science = require('../science/science.model')
+const Data = require('../data/data.model')
 
 const ProductType = new GraphQLObjectType({
   name: 'Product',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
   }),
@@ -49,6 +55,7 @@ const ClinicType = new GraphQLObjectType({
   name: 'Clinic',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     name: { type: GraphQLString },
     address: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -84,6 +91,7 @@ const LysateType = new GraphQLObjectType({
   name: 'LysateType',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     name: { type: GraphQLString },
     code: { type: GraphQLString },
     person: {
@@ -100,6 +108,8 @@ const LysateType = new GraphQLObjectType({
 const PatientType = new GraphQLObjectType({
   name: 'PatientType',
   fields: () => ({
+    id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     person: {
       type: PersonType,
       async resolve(parent, args) {
@@ -124,6 +134,7 @@ const PrescriptionType = new GraphQLObjectType({
   name: 'PrescriptionType',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     code: { type: GraphQLString },
     blood_source: { type: GraphQLString },
     doctor: {
@@ -165,6 +176,7 @@ const SourceType = new GraphQLObjectType({
   name: 'SourceType',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     code: { type: GraphQLString },
     type: { type: GraphQLString },
     draw_date: { type: GraphQLString },
@@ -192,11 +204,12 @@ const ProductionType = new GraphQLObjectType({
   name: 'ProductionType',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     code: { type: GraphQLString },
     start_date: { type: GraphQLString },
     finish_date: { type: GraphQLString },
     expire_date: { type: GraphQLString },
-    certified: { type: GraphQBoolean },
+    certified: { type: GraphQLBoolean },
     prescription: {
       type: PrescriptionType,
       async resolve(parent, args) {
@@ -232,7 +245,7 @@ const LocationType = new GraphQLObjectType({
     handle: { type: GraphQLString },
     shelf: { type: GraphQLString },
     place: { type: GraphQLString },
-    occupied: { type: GraphQBoolean },
+    occupied: { type: GraphQLBoolean },
   }),
 })
 
@@ -240,6 +253,7 @@ const DoseType = new GraphQLObjectType({
   name: 'DoseType',
   fields: () => ({
     id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
     code: { type: GraphQLString },
     status: { type: GraphQLString },
     scheduled_date: { type: GraphQLString },
@@ -258,6 +272,160 @@ const DoseType = new GraphQLObjectType({
         return await Location.query()
           .where('deleted_at', null)
           .findById(parent.location_id)
+      },
+    },
+  }),
+})
+
+const ParameterType = new GraphQLObjectType({
+  name: 'ParemeterType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    code: { type: GraphQLString },
+    description: { type: GraphQLString },
+    mesurement: { type: GraphQLString },
+  }),
+})
+
+const ScienceType = new GraphQLObjectType({
+  name: 'ScienceType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    product: {
+      type: ProductType,
+      async resolve(parent, args) {
+        return await Product.query()
+          .where('deleted_at', null)
+          .findById([parent.product_id, tablenames.product])
+      },
+    },
+    parameter: {
+      type: ParameterType,
+      async resolve(parent, args) {
+        return await Parameter.query()
+          .where('deleted_at', null)
+          .findById(parent.parameter_id)
+      },
+    },
+  }),
+})
+
+const DataType = new GraphQLObjectType({
+  name: 'DataType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    production: {
+      type: ProductionType,
+      async resolve(parent, args) {
+        return await Production.query()
+          .where('deleted_at', null)
+          .findById([parent.production_id, tablenames.production])
+      },
+    },
+    science: {
+      type: ScienceType,
+      async resolve(parent, args) {
+        return await Science.query()
+          .where('deleted_at', null)
+          .findById(parent.science_id)
+      },
+    },
+  }),
+})
+
+const FilesystemType = new GraphQLObjectType({
+  name: 'FilesystemType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    type: { type: GraphQLString },
+    body: { type: GraphQLString },
+  }),
+})
+
+const DocumentType = new GraphQLObjectType({
+  name: 'DocumentType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    file: {
+      type: FilesystemType,
+      async resolve(parent, args) {
+        return await Filesystem.query()
+          .where('deleted_at', null)
+          .findById(parent.filesystem_id)
+      },
+    },
+    table_id: { type: GraphQLString },
+    patient: {
+      type: PatientType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.patient)
+          return await Patient.query()
+            .where('deleted_at', null)
+            .findById([parent.patient_id, tablenames.patient])
+      },
+    },
+    source: {
+      type: GraphQLID,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.source)
+          return await Source.query()
+            .where('deleted_at', null)
+            .findById([parent.source_id, tablenames.source])
+      },
+    },
+    prescription: {
+      type: PrescriptionType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.prescription)
+          return await Prescription.query()
+            .where('deleted_at', null)
+            .findById([parent.prescription_id, tablenames.prescription])
+      },
+    },
+    production: {
+      type: ProductionType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.production)
+          return await Production.query()
+            .where('deleted_at', null)
+            .findById([parent.production_id, tablenames.production])
+      },
+    },
+    clinic: {
+      type: ClinicType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.clinic)
+          return await Clinic.query()
+            .where('deleted_at', null)
+            .findById([parent.clinic_id, tablenames.clinic])
+      },
+    },
+    lysate: {
+      type: LysateType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.lysate)
+          return await Lysate.query()
+            .where('deleted_at', null)
+            .findById([parent.lysate_id, tablenames.lysate])
+      },
+    },
+    product: {
+      type: ProductType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.product)
+          return await Product.query()
+            .where('deleted_at', null)
+            .findById([parent.product_id, tablenames.product])
+      },
+    },
+    dose: {
+      type: DoseType,
+      async resolver(parent, args) {
+        if (parent.table_id === tablenames.dose)
+          return await Dose.query()
+            .where('deleted_at', null)
+            .findById([parent.dose_id, tablenames.dose])
       },
     },
   }),
@@ -292,6 +460,21 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(PersonType),
       async resolve(parent, args) {
         return await Person.query().where('deleted_at', null)
+      },
+    },
+    patient: {
+      type: PatientType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await Patient.query()
+          .where('deleted_at', null)
+          .findById([args.id, tablenames.patient])
+      },
+    },
+    patients: {
+      type: new GraphQLList(PatientType),
+      async resolve(parent, args) {
+        return await Patient.query().where('deleted_at', null)
       },
     },
     clinic: {
@@ -337,6 +520,32 @@ const RootQuery = new GraphQLObjectType({
         return await Lysate.query().where('deleted_at', null)
       },
     },
+    file: {
+      type: FilesystemType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await Filesystem.query()
+          .where('deleted_at', null)
+          .findById(args.id)
+      },
+    },
+    files: {
+      type: new GraphQLList(FilesystemType),
+      async resolve(parent, args) {
+        return await Filesystem.query()
+          // .select(['id', 'name', 'type'])
+          .where('deleted_at', null)
+      },
+    },
+    document: {
+      type: DocumentType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await Document.query()
+          .where('deleted_at', null)
+          .findById(args.id)
+      },
+    },
   },
 })
 
@@ -351,6 +560,35 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(parent, args) {
         return await Product.query().insertAndFetch(args)
+      },
+    },
+    addFile: {
+      type: FilesystemType,
+      args: {
+        name: { type: GraphQLString },
+        type: { type: GraphQLString },
+        body: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        return await Filesystem.query().insertAndFetch(args)
+      },
+    },
+    addDocument: {
+      type: DocumentType,
+      args: {
+        filesystem_id: { type: GraphQLID },
+        owner_id: { type: GraphQLID },
+        table_id: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        let { filesystem_id, table_id, owner_id } = args
+        filesystem_id = parseInt(filesystem_id)
+        owner_id = parseInt(owner_id)
+        return await Document.query().insertAndFetch({
+          filesystem_id,
+          table_id,
+          [table_id + '_id']: owner_id,
+        })
       },
     },
   },
