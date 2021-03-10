@@ -46,6 +46,7 @@ exports.up = async knex => {
     table.string('container', 16).notNullable()
     table.string('handle', 16).notNullable()
     table.string('shelf', 16).notNullable()
+    table.string('line', 16).notNullable()
     table.string('place', 16).notNullable()
     table.unique(['container', 'handle', 'shelf', 'place', 'deleted_at'])
     table.boolean('occupied').notNullable().defaultTo(false)
@@ -155,7 +156,7 @@ exports.up = async knex => {
     table.increments().notNullable()
     table.string('name', 128).notNullable()
     table.string('type', 128)
-    table.specificType('body', 'bytea').notNullable()
+    table.text('body').notNullable()
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.document, table => {

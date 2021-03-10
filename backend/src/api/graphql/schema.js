@@ -244,6 +244,7 @@ const LocationType = new GraphQLObjectType({
     container: { type: GraphQLString },
     handle: { type: GraphQLString },
     shelf: { type: GraphQLString },
+    line: { type: GraphQLString },
     place: { type: GraphQLString },
     occupied: { type: GraphQLBoolean },
   }),
@@ -431,6 +432,15 @@ const DocumentType = new GraphQLObjectType({
   }),
 })
 
+const DocumentLookupType = new GraphQLObjectType({
+  name: 'DocumentOwnerType',
+  fields: () => ({
+    filesystem_id: { type: GraphQLID },
+    table_id: { type: GraphQLString },
+    owner: { type: GraphQLID },
+  }),
+})
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -458,8 +468,13 @@ const RootQuery = new GraphQLObjectType({
     },
     persons: {
       type: new GraphQLList(PersonType),
+      args: {
+        first: { type: GraphQLString },
+        last: { type: GraphQLString },
+        gender: { type: GraphQLString },
+      },
       async resolve(parent, args) {
-        return await Person.query().where('deleted_at', null)
+        return await Person.query().where(args).where('deleted_at', null)
       },
     },
     patient: {
@@ -520,6 +535,25 @@ const RootQuery = new GraphQLObjectType({
         return await Lysate.query().where('deleted_at', null)
       },
     },
+    location: {
+      type: LocationType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args) {
+        return await Location.query()
+          .where('deleted_at', null)
+          .findById([args.id, tablenames.lysate])
+      },
+    },
+    locations: {
+      type: new GraphQLList(LocationType),
+      args: {
+        container: { type: GraphQLString },
+        occupied: { type: GraphQLBoolean },
+      },
+      async resolve(parent, args) {
+        return await Location.query().where(args).where('deleted_at', null)
+      },
+    },
     file: {
       type: FilesystemType,
       args: { id: { type: GraphQLID } },
@@ -537,13 +571,15 @@ const RootQuery = new GraphQLObjectType({
           .where('deleted_at', null)
       },
     },
-    document: {
-      type: DocumentType,
-      args: { id: { type: GraphQLID } },
+    documents: {
+      type: new GraphQLList(DocumentLookupType),
+      args: {
+        filesystem_id: { type: GraphQLID },
+        table_id: { type: GraphQLString },
+        owner_id: { type: GraphQLID },
+      },
       async resolve(parent, args) {
-        return await Document.query()
-          .where('deleted_at', null)
-          .findById(args.id)
+        return await Document.query().where(args).where('deleted_at', null)
       },
     },
   },
@@ -586,6 +622,31 @@ const Mutation = new GraphQLObjectType({
         owner_id = parseInt(owner_id)
         return await Document.query().insertAndFetch({
           filesystem_id,
+          table_id,
+          [table_id + '_id']: owner_id,
+        })
+      },
+    },
+    addFileAndDocument: {
+      type: DocumentType,
+      args: {
+        name: { type: GraphQLString },
+        type: { type: GraphQLString },
+        body: { type: GraphQLString },
+        owner_id: { type: GraphQLID },
+        table_id: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        let { table_id, owner_id, name, type, body } = args
+        const file = await Filesystem.query().insertAndFetch({
+          name,
+          type,
+          body,
+        })
+        console.log('schema:mutation:addFileAndDocument:file.id: ', file.id)
+        owner_id = parseInt(owner_id)
+        return await Document.query().insertAndFetch({
+          filesystem_id: file.id,
           table_id,
           [table_id + '_id']: owner_id,
         })

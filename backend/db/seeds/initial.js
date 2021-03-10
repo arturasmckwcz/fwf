@@ -3,7 +3,7 @@ const tablenames = require('../constants/tablenames')
 const patients = require('../constants/patients')
 const lysates = require('../constants/lysates')
 const params = require('../constants/params')
-const { indexOf } = require('../constants/lysates')
+const locations = require('../constants/locations')
 
 /**
  *
@@ -18,6 +18,14 @@ exports.seed = async knex => {
       .reverse()
       .map(table_name => knex(table_name).del())
   )
+
+  // seed locations
+  try {
+    await knex(tablenames.location).insert(locations)
+  } catch (error) {
+    console.log(locations)
+    console.log(error)
+  }
 
   // Seed clinics
   const clinics = await knex(tablenames.clinic)

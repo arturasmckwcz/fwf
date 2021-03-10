@@ -25,6 +25,11 @@
       "type": "string",
       "title": "The shelf"
     },
+    "line": {
+      "$id": "#/properties/line",
+      "type": "string",
+      "title": "The line"
+    },
     "place": {
       "$id": "#/properties/place",
       "type": "string",
