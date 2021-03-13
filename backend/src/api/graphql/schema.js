@@ -471,10 +471,19 @@ const RootQuery = new GraphQLObjectType({
       args: {
         first: { type: GraphQLString },
         last: { type: GraphQLString },
-        gender: { type: GraphQLString },
+        // gender: { type: GraphQLString },
+        // older: { type: GraphQLInt },
+        // younger: { type: GraphQLInt },
       },
       async resolve(parent, args) {
-        return await Person.query().where(args).where('deleted_at', null)
+        return await Person.query()
+          .skipUndefined()
+          .where('first', 'ilike', '%' + args.first + '%')
+          .andWhere('last', 'ilike', '%' + args.last + '%')
+          // .where('gender', args.gender)
+          // .where('age', '>', args.older)
+          // .where('age', '<', args.younger)
+          .where('deleted_at', null)
       },
     },
     patient: {

@@ -1,67 +1,49 @@
-// import logo from './logo.svg';
-import { Component } from 'react';
-import { Element } from 'react-scroll';
-import './App.css';
-import TopBar from './components/common/TopBar';
-import ProductionCombined from './components/ProductionCombined';
-import BloodCombined from './components/BloodCombined';
-import PrescriptionCombined from './components/PrescriptionCombined';
-import Doctors from './components/Doctors/Doctors';
-import Clinics from './components/Clinics/Clinics';
-import Lysates from './components/Lysates/Lysates';
-import Products from './components/Products/Products';
-import Persons from './components/Persons/Persons';
+import React from 'react'
+import { connect } from 'react-redux'
 
-import PersonsContextProvider from './components/contexts/PersonsContext';
-import ClinicsContextProvider from './components/contexts/ClinicsContext';
-import DoctorsContextProvider from './components/contexts/DoctorsContext';
-import LysatesContextProvider from './components/contexts/LystateContext';
+import { menuNewPatient } from './redux'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <TopBar />
-        <div style={{ paddingTop: '70px' }}>
-          <PersonsContextProvider>
-            <LysatesContextProvider>
-              <ClinicsContextProvider>
-                <Element name="ProductionCombined">
-                  <ProductionCombined />
-                </Element>
-                <Element name="BloodCombined">
-                  <BloodCombined />
-                </Element>
-                <DoctorsContextProvider>
-                  <Element name="PrescriptionCombined">
-                    <PrescriptionCombined />
-                  </Element>
-                  <Element name="Doctors">
-                    <Doctors />
-                  </Element>
-                </DoctorsContextProvider>
-                <Element name="Clinics">
-                  <Clinics />
-                </Element>
-              </ClinicsContextProvider>
-              <Element name="Lysates">
-                <Lysates />
-              </Element>
-            </LysatesContextProvider>
-            <Element name="Products">
-              <Products />
-            </Element>
-            <Element name="Persons">
-              <Persons />
-            </Element>
-          </PersonsContextProvider>
-        </div>
-        <div className="dummy">
-          <h3>Other options</h3>
-        </div>
-      </div>
-    );
-  }
+import MenuContainer from './components/root/MenuContainer'
+import FormContainer from './components/root/FormContainer'
+import ListContainer from './components/root/ListContainer'
+import styled from 'styled-components'
+
+const App = ({ selected }) => {
+  return (
+    <AppWrapper>
+      <MenuContainer />
+      <FormContainer />
+      <ListContainer />
+    </AppWrapper>
+  )
 }
 
-export default App;
+const mapStateToProps = state => ({
+  selected: state.menu.selected,
+})
+const mapDispatchToProps = dispatch => ({
+  menuNewPatient: () => dispatch(menuNewPatient()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+const AppWrapper = styled.div`
+   {
+    text-align: center;
+    // background-color: #282c34;
+    background-color: #30343c;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: center;
+    font-size: calc(2px + 2vmin);
+    text-align: left;
+    color: lightgrey;
+
+    &:hover {
+    cursor: default;
+  }
+`
