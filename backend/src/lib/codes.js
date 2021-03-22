@@ -1,27 +1,18 @@
-const random_4 = () => {
-  return Math.floor(Math.random() * 10000).toString()
-}
+const random_4 = () => Math.floor(Math.random() * 10000).toString()
 
-const getSourceCode = () => {
+// Code generators, stubs only for the moment
+export const getSourceCode = () => {
   return 'XNIA' + random_4()
 }
-const getPatientCode = () => {
+export const getPatientCode = () => {
   return 'XNIA' + random_4()
 }
-const getLysateCode = () => {
+export const getLysateCode = () => {
   return 'XNIA' + random_4()
 }
-const getPrescriptionCode = () => {
+export const getPrescriptionCode = () => {
   return 'XNIA' + random_4()
 }
-const getProductionCode = () => {
+export const getProductionCode = () => {
   return 'XNIA' + random_4()
-}
-
-module.exports = {
-  getSourceCode,
-  getPatientCode,
-  getLysateCode,
-  getPrescriptionCode,
-  getProductionCode,
 }

@@ -479,8 +479,8 @@ const RootQuery = new GraphQLObjectType({
         // console.log('schema:RootQuery:parsons:args: ', args)
         return await Person.query()
           .skipUndefined()
-          .where('first', 'ilike', '%' + args.first + '%')
-          .andWhere('last', 'ilike', '%' + args.last + '%')
+          .where('first', 'ilike', `%${args.first}%`)
+          .andWhere('last', 'ilike', `%${args.last}%`)
           .andWhere('gender', args.gender)
           .andWhere('age', '>', args.older)
           .andWhere('age', '<', args.younger)
@@ -633,7 +633,7 @@ const Mutation = new GraphQLObjectType({
         return await Document.query().insertAndFetch({
           filesystem_id,
           table_id,
-          [table_id + '_id']: owner_id,
+          [`${table_id}_id`]: owner_id,
         })
       },
     },
@@ -658,7 +658,7 @@ const Mutation = new GraphQLObjectType({
         return await Document.query().insertAndFetch({
           filesystem_id: file.id,
           table_id,
-          [table_id + '_id']: owner_id,
+          [`${table_id}_id`]: owner_id,
         })
       },
     },

@@ -21,10 +21,9 @@ exports.up = async knex => {
       .defaultTo('undefined')
       .notNullable()
     table.integer('age').defaultTo(0).notNullable()
-    table.string('code', 128)
     addContactInfo(table)
     addDefaultColumns(table)
-    table.unique(['first', 'last', 'age', 'code', 'deleted_at'])
+    table.unique(['first', 'last', 'age', 'deleted_at'])
   })
   await knex.schema.createTable(tablenames.product, table => {
     table.increments().notNullable()

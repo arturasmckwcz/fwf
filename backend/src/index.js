@@ -5,7 +5,7 @@ const server = app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
 })
 
-// Graceful shutdown of server
+// Graceful shutdown otherwise nodemon doesn't work propoerly all the time
 process.on('SIGINT', () => {
   console.log('\n[server] Shutting down...')
   server.close()

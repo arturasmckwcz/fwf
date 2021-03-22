@@ -25,4 +25,4 @@ export const lists = {
 
 export const genders = ['male', 'female', 'undefined']
 
-export const urlAPI = 'http://192.168.0.214:3001/api/graphql'
+export const urlAPI = 'http://78.56.77.77:3001/api/graphql'
