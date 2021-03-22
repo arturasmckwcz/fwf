@@ -1,1 +1,3 @@
-# fwf
+# FWF
+
+Froceth Workflow App
