@@ -1,32 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { styling } from '../../constants'
 
-import { menuNewPatient, menuNewPrescription, menuNewSource } from '../../redux'
+import { styling, menus } from '../../constants'
 
-const MenuContainer = ({
-  selected,
-  menuNewPatient,
-  menuNewPrescription,
-  menuNewSource,
-}) => {
+import { menuSelect } from '../../redux'
+
+const MenuContainer = ({ menuSelect }) => {
   return (
     <MenuWrapper>
-      <MenuItem onClick={menuNewPrescription}>New Prescription</MenuItem>
-      <MenuItem onClick={menuNewSource}>New Source Material</MenuItem>
-      <MenuItem onClick={menuNewPatient}>New Patient</MenuItem>
+      <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRESCRIPTION)}>
+        New Prescription
+      </MenuItem>
+      <MenuItem onClick={() => menuSelect(menus.MENU_NEW_SOURCE)}>
+        New Source Material
+      </MenuItem>
+      <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PATIENT)}>
+        New Patient
+      </MenuItem>
     </MenuWrapper>
   )
 }
 
-const mapStateToProps = state => ({
-  selected: state.menu.selected,
-})
+const mapStateToProps = state => ({})
 const mapDispatchToProps = dispatch => ({
-  menuNewPatient: () => dispatch(menuNewPatient()),
-  menuNewPrescription: () => dispatch(menuNewPrescription()),
-  menuNewSource: () => dispatch(menuNewSource()),
+  menuSelect: item => dispatch(menuSelect(item)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer)
 

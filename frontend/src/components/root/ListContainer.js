@@ -1,19 +1,35 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { styling } from '../../constants'
+import { styling, lists } from '../../constants'
 
-const ListContainer = props => {
-  return (
-    <ListWrapper>
-      <span>LIST GOES HERE</span>
-    </ListWrapper>
-  )
+import PersonList from '../lists/PersonList'
+import DoctorList from '../lists/DoctorList'
+
+const display = list => {
+  console.log('ListContainer:display: ', lists.LIST_PERSON)
+  switch (list) {
+    case lists.LIST_PERSON:
+      return <PersonList />
+    case lists.LIST_DOCTOR:
+      return <DoctorList />
+    default:
+      return <></>
+  }
 }
 
-export default ListContainer
+const ListContainer = ({ list }) => {
+  return <ListContainerWrapper>{list && display(list)}</ListContainerWrapper>
+}
 
-const ListWrapper = styled.div`
+const mapStateToProps = state => ({
+  list: state.list.list,
+})
+const mapDispatchToProps = dispatch => ({})
+export default connect(mapStateToProps, mapDispatchToProps)(ListContainer)
+
+const ListContainerWrapper = styled.div`
    {
     display: flex;
     flex: 2;

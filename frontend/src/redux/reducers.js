@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux'
 
-import { menuReducer } from './menu/menuReducer'
+import menu from './menu/menuReducer'
+import form from './form/formReducer'
+import list from './list/listReducer'
+import person from './person/personReducer'
 
 export default combineReducers({
-  menu: menuReducer,
+  menu,
+  form,
+  list,
+  person,
 })

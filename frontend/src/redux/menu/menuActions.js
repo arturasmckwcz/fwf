@@ -1,7 +1,3 @@
-export const NEW_PATIENT = 'NEW_PATIENT'
-export const NEW_PRESCRIPTION = 'NEW_PRESCRIPTION'
-export const NEW_SOURCE = 'NEW_SOURCE'
+export const MENU_SELECT = 'MENU_SELECT'
 
-export const menuNewPatient = () => ({ type: NEW_PATIENT })
-export const menuNewSource = () => ({ type: NEW_SOURCE })
-export const menuNewPrescription = () => ({ type: NEW_PRESCRIPTION })
+export const menuSelect = item => ({ type: MENU_SELECT, payload: item })

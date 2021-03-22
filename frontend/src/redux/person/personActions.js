@@ -1,30 +1,48 @@
-export const PERSONS_FETCH_REQUEST = 'PERSON_FETCH_REQUEST'
-export const PERSONS_FETCH_SUCCESS = 'PERSON_FETCH_SUCCESS'
-export const PERSONS_FETCH_FAILURE = 'PERSON_FETCH_FAILURE'
+import axios from 'axios'
+import { urlAPI } from '../../constants'
+
+export const PERSONS_REQUEST = 'PERSON_REQUEST'
+export const PERSONS_SUCCESS = 'PERSON_SUCCESS'
+export const PERSONS_FAILURE = 'PERSON_FAILURE'
 export const PERSON_CREATE = 'PERSON_CREATE'
 export const PERSON_UPDATE = 'PERSON_UPDATE'
 export const PERSON_DELETE = 'PERSON_DELETE'
+export const PERSON_SET = 'PERSON_SET'
 
-import { urlAPI } from '../../constants'
-
-export const personsFetchRequest = person => ({
-  type: PERSONS_FETCH_REQUEST,
-  payload: person,
+export const personsRequest = () => ({
+  type: PERSONS_REQUEST,
 })
-export const personsFetchSuccess = persons => ({
-  type: PERSONS_FETCH_SUCCESS,
+export const personsSuccess = persons => ({
+  type: PERSONS_SUCCESS,
   payload: persons,
 })
-export const personsFetchFailure = error => ({
-  type: PERSONS_FETCH_FAILURE,
+export const personsFailure = error => ({
+  type: PERSONS_FAILURE,
   payload: error,
 })
 
-export const personsFetch = person => {
-  personsFetchQuery(person)
+export const personsFetch = person => dispatch => {
+  dispatch(personsRequest())
+  const params =
+    '(first:"' +
+    (person.first ? person.first : '') +
+    '"' +
+    'last:"' +
+    (person.last ? person.last : '') +
+    '"' +
+    (person.gender ? 'gender:"' + person.gender + '"' : '') +
+    ')'
 
-  fetch(urlAPI, {})
-    .then(response => respinse.json())
-    .then(result => personFetchSuccess(result))
-    .catch(error => personsFetchFailure(error))
+  axios({
+    url: urlAPI,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: {
+      query: `{persons${params}{id,first,last,gender,age,address,email,phone}}`,
+    },
+  })
+    .then(result => dispatch(personsSuccess(result.data.data.persons)))
+    .catch(error => dispatch(personsFailure(error)))
 }
+
+export const personSet = person => ({ type: PERSON_SET, payload: person })

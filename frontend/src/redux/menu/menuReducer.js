@@ -1,16 +1,13 @@
-import { NEW_PATIENT, NEW_SOURCE, NEW_PRESCRIPTION } from './menuActions'
+import { MENU_SELECT } from './menuActions'
 
 const initialState = { selected: null }
 
-export const menuReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case NEW_PATIENT:
-      return { ...state, selected: NEW_PATIENT }
-    case NEW_PRESCRIPTION:
-      return { ...state, selected: NEW_PRESCRIPTION }
-    case NEW_SOURCE:
-      return { ...state, selected: NEW_SOURCE }
+    case MENU_SELECT:
+      return { ...state, selected: action.payload }
     default:
       return state
   }
 }
+export default reducer

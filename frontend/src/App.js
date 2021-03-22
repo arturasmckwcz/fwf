@@ -1,37 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { menuNewPatient } from './redux'
+import { Provider } from 'react-redux'
+import store from './redux/store'
 
 import MenuContainer from './components/root/MenuContainer'
 import FormContainer from './components/root/FormContainer'
 import ListContainer from './components/root/ListContainer'
 import styled from 'styled-components'
 
-const App = ({ selected }) => {
+const App = () => {
   return (
-    <AppWrapper>
-      <MenuContainer />
-      <FormContainer />
-      <ListContainer />
-    </AppWrapper>
+    <Provider store={store}>
+      <AppWrapper>
+        <MenuContainer />
+        <FormContainer />
+        <ListContainer />
+      </AppWrapper>
+    </Provider>
   )
 }
 
-const mapStateToProps = state => ({
-  selected: state.menu.selected,
-})
-const mapDispatchToProps = dispatch => ({
-  menuNewPatient: () => dispatch(menuNewPatient()),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App
 
 const AppWrapper = styled.div`
    {
     text-align: center;
     // background-color: #282c34;
-    background-color: #30343c;
+    // background-color: #30343c;
+    background-color: #353941;
     height: 100%;
     width: 100%;
     margin: 0;
