@@ -1,4 +1,6 @@
-html,
+html {
+  height: 100vh;
+}
 body,
 #root {
   width: 100%;

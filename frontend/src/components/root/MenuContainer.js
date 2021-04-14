@@ -28,29 +28,33 @@ const mapDispatchToProps = dispatch => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer)
 
+// height:${styling.menu_height}
 const MenuWrapper = styled.div`
    {
-    display: flex;
-    flex-dirction: row;
     position: absolute;
     top: 0;
     left: 0;
-    width:100%
-    height:${styling.menu_height}
-    padding-top: 10px;
-    margin-top: 10px;
+    display: flex;
+    flex-dirction: row;
+    align-items: center;
+    width: 100vw;
+    background-color: ${styling.color.background};
+
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-left: ${styling.padding_left};
   }
 `
 const MenuItem = styled.div`
    {
     text-transform: uppercase;
-    margin-left: 20px;
     border-radius: 4px;
-    border: solid 1px lightgrey;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding: 3px 10px;
+    border: solid 1px ${styling.color.border};
+    box-shadow: ${styling.shadow};
+    padding: 0 10px;
+    margin-right: 10px;
     &:hover {
-      background-color: black;
+      ${styling.color.hover};
     }
   }
 `

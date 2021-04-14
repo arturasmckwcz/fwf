@@ -1,23 +1,22 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 
-import { formShow, formHideAll } from '../../redux'
+import { formShow } from '../../redux'
 
 import { forms, menus } from '../../constants'
 
-import Forms from '../forms/Forms'
+import FormList from '../forms/FormList'
 
 const FormContainer = ({ selected, formShow, formHideAll }) => {
   useEffect(() => {
-    formHideAll()
     switch (selected) {
       case menus.MENU_NEW_PATIENT:
-        formShow(forms.FORM_PERSON_SEARCH)
+        formShow(forms.FORM_PERSON)
         break
       default:
     }
-  }, [selected, formShow, formHideAll])
-  return <Forms />
+  }, [selected, formShow])
+  return <FormList />
 }
 
 const mapStateToProps = state => ({
@@ -25,7 +24,6 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   formShow: form => dispatch(formShow(form)),
-  formHideAll: () => dispatch(formHideAll()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormContainer)

@@ -2,13 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { styling, lists } from '../../constants'
+import { lists, styling } from '../../constants'
 
 import PersonList from '../lists/PersonList'
 import DoctorList from '../lists/DoctorList'
+import { MenuPlaceHolder } from '../root/MenuPlaceHolder'
 
 const display = list => {
-  console.log('ListContainer:display: ', lists.LIST_PERSON)
   switch (list) {
     case lists.LIST_PERSON:
       return <PersonList />
@@ -20,7 +20,12 @@ const display = list => {
 }
 
 const ListContainer = ({ list }) => {
-  return <ListContainerWrapper>{list && display(list)}</ListContainerWrapper>
+  return (
+    <ListContainerWrapper>
+      <MenuPlaceHolder />
+      <ListWrapper>{list && display(list)}</ListWrapper>
+    </ListContainerWrapper>
+  )
 }
 
 const mapStateToProps = state => ({
@@ -38,7 +43,16 @@ const ListContainerWrapper = styled.div`
     justify-content: start;
     width: 100%;
     height: 100%;
-    margin-top: ${styling.menu_height};
-    margin-left: ${styling.margin_left};
+    overflow-y: auto;
+    padding-left: 10px;
   }
 `
+const ListWrapper = styled.div`
+   {
+    width: 100%;
+    height: calc(100% - ${styling.menu_height});
+  }
+`
+
+// margin-top: ${styling.menu_height};
+// margin-left: ${styling.margin_left};
