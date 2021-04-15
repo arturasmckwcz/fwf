@@ -6,6 +6,7 @@ import { lists, styling } from '../../constants'
 
 import PersonList from '../lists/PersonList'
 import DoctorList from '../lists/DoctorList'
+
 import { MenuPlaceHolder } from '../root/MenuPlaceHolder'
 
 const display = list => {

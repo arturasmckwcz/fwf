@@ -1,12 +1,9 @@
 import axios from 'axios'
 import { urlAPI } from '../../constants'
 
-export const PERSONS_REQUEST = 'PERSON_REQUEST'
-export const PERSONS_SUCCESS = 'PERSON_SUCCESS'
-export const PERSONS_FAILURE = 'PERSON_FAILURE'
-export const PERSON_CREATE = 'PERSON_CREATE'
-export const PERSON_UPDATE = 'PERSON_UPDATE'
-export const PERSON_DELETE = 'PERSON_DELETE'
+export const PERSONS_REQUEST = 'PERSONS_REQUEST'
+export const PERSONS_SUCCESS = 'PERSONS_SUCCESS'
+export const PERSONS_FAILURE = 'PERSONS_FAILURE'
 export const PERSON_SET = 'PERSON_SET'
 
 export const personsRequest = () => ({
