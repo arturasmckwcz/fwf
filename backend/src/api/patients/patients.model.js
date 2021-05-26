@@ -16,7 +16,7 @@ class Patient extends Model {
     const Person = require('../persons/persons.model')
     const Clinic = require('../clinics/clinics.model')
     return {
-      prescritions: {
+      prescriptions: {
         relation: Model.HasManyRelation,
         modelClass: Prescription,
         join: {

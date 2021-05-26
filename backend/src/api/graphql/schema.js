@@ -34,6 +34,24 @@ const ProductType = new GraphQLObjectType({
     table_id: { type: GraphQLString },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
+    params: {
+      type: new GraphQLList(ParameterType),
+      async resolve(parent, args) {
+        try {
+          const science = await Science.query()
+            .where('deleted_at', null)
+            .where('product_id', parent.id)
+          return await science.map(
+            async item =>
+              await Parameter.query()
+                .where('deleted_at', null)
+                .findById(item.parameter_id)
+          )
+        } catch (error) {
+          return { error }
+        }
+      },
+    },
   }),
 })
 
@@ -86,7 +104,7 @@ const DoctorType = new GraphQLObjectType({
         try {
           return await Clinic.query()
             .where('deleted_at', null)
-            .findById(parent.clinic_id)
+            .findById([parent.clinic_id, tablenames.clinic])
         } catch (error) {
           return { error }
         }
@@ -146,6 +164,8 @@ const PatientType = new GraphQLObjectType({
         }
       },
     },
+    code: { type: GraphQLString },
+    status: { type: GraphQLString },
   }),
   id: { type: GraphQLID },
 })
@@ -387,6 +407,7 @@ const DataType = new GraphQLObjectType({
   name: 'DataType',
   fields: () => ({
     id: { type: GraphQLID },
+    value: { type: GraphQLString },
     production: {
       type: ProductionType,
       async resolve(parent, args) {

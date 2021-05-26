@@ -6,12 +6,13 @@ const getPatientsFromFile = url => {
   const csvData = fs.readFileSync(url, 'utf8')
   return Papa.parse(csvData, {
     header: true,
-  }).data.map(({ production, first, last, code, status }) => ({
+  }).data.map(({ production, first, last, code, status, clinic }) => ({
     production,
     first,
     last,
     code,
     status,
+    clinic,
   }))
 }
 
@@ -61,8 +62,20 @@ const patients20 = getPatientsFromFile(
   )
 )
 
+const patientsCIK = getPatientsFromFile(
+  path.join(
+    __dirname,
+    '..',
+    // 'db',
+    'sources',
+    'CIK.csv'
+  )
+)
+
 const patients = patients16.concat(
-  patients17.concat(patients18.concat(patients19.concat(patients20)))
+  patients17.concat(
+    patients18.concat(patients19.concat(patients20.concat(patientsCIK)))
+  )
 )
 
 module.exports = patients

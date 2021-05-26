@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const tablenames = require('../constants/tablenames')
+const enums = require('../constants/enums')
 const {
   addDefaultColumns,
   addContactInfo,
@@ -16,10 +17,7 @@ exports.up = async knex => {
     table.increments().notNullable()
     table.string('first', 128).notNullable()
     table.string('last', 128).notNullable()
-    table
-      .enu('gender', ['male', 'female', 'undefined'])
-      .defaultTo('undefined')
-      .notNullable()
+    table.enu('gender', enums.genders).defaultTo('undefined').notNullable()
     table.integer('age').defaultTo(0).notNullable()
     addContactInfo(table)
     addDefaultColumns(table)
@@ -93,7 +91,7 @@ exports.up = async knex => {
     addReference(table, tablenames.person)
     addReference(table, tablenames.clinic, false)
     table.string('code')
-    table.enu('status', ['O', 'X', 'undefined']).defaultTo('undefined')
+    table.enu('status', enums.patient_statuses).defaultTo('undefined')
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.prescription, table => {
@@ -101,7 +99,10 @@ exports.up = async knex => {
     table.string('table_id', 16).defaultTo(tablenames.prescription)
     table.unique(['id', 'table_id'])
     table.string('code', 32).notNullable().unique()
-    table.enu('blood_source', ['allogeneic', 'autologous']).notNullable()
+    table
+      .enu('blood_source', enums.sources)
+      .defaultTo('undefined')
+      .notNullable()
     table.dateTime('issue_date')
     addReference(table, tablenames.doctor)
     addReference(table, tablenames.patient)
@@ -128,9 +129,7 @@ exports.up = async knex => {
     table.string('table_id', 16).defaultTo(tablenames.dose)
     table.unique(['id', 'table_id'])
     table.string('code', 32).notNullable().unique()
-    table
-      .enu('status', ['quarantine', 'storage', 'utilised', 'dispatched'])
-      .notNullable()
+    table.enu('status', enums.dose_statuses).notNullable()
     table.dateTime('expire_date').notNullable()
     table.dateTime('scheduled_date')
     table.dateTime('dispatch_date')
@@ -221,8 +220,25 @@ exports.up = async knex => {
   })
   await knex.schema.createTable(tablenames.role, table => {
     table.increments().notNullable()
-    table.string('name', 128).notNullable().unique()
+    table.string('description', 128).notNullable().unique()
+    addDefaultColumns(table)
+  })
+  await knex.schema.createTable(tablenames.permission, table => {
+    table.increments().notNullable()
+    table.string('relation', 128).notNullable()
+    table.enu('permission', enums.permissions)
+    addDefaultColumns(table)
+  })
+  await knex.schema.createTable(tablenames.member, table => {
+    table.increments().notNullable()
     addReference(table, tablenames.user)
+    addReference(table, tablenames.role)
+    addDefaultColumns(table)
+  })
+  await knex.schema.createTable(tablenames.right, table => {
+    table.increments().notNullable()
+    addReference(table, tablenames.permission)
+    addReference(table, tablenames.role)
     addDefaultColumns(table)
   })
 }

@@ -17,4 +17,7 @@ module.exports = {
   document: 'document',
   user: 'user',
   role: 'role',
+  permission: 'permission',
+  member: 'member',
+  right: 'right',
 }

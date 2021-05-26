@@ -1,0 +1,52 @@
+[
+  { "first": "Irena", "last": "Pavilonienė", "clinic": "Innovita research" },
+  {
+    "first": "Rugilė",
+    "last": "Pikturnienė",
+    "clinic": "Klaipėdos universitetinė ligoninė"
+  },
+  { "first": "Eduardas", "last": "Aleknavičius", "clinic": "GK klinika" },
+  { "first": "Abdulla", "last": "El-Hossami", "clinic": "Verita Life" },
+  { "first": "Marius", "last": "Strioga", "clinic": "InMedica" },
+  {
+    "first": "Ladislav",
+    "last": "Kelbl",
+    "clinic": "Fakultni nemocnice v Motole"
+  },
+  { "first": "Pavol", "last": "Demo", "clinic": "Fakultni nemocnice v Motole" },
+  { "first": "Asad", "last": "Saad", "clinic": "Verita Life Center Hamburg" },
+  {
+    "first": "Sonata",
+    "last": "Šaulytė-Trakymienė",
+    "clinic": "Santaros klinikų vaikų ligoninė"
+  },
+  {
+    "first": "Giedrė",
+    "last": "Rutkauskienė",
+    "clinic": "LSMU Kauno klinikos"
+  },
+  { "first": "Inta", "last": "Jaunalksne", "clinic": "Amber life" },
+  { "first": "Adem", "last": "Gunes", "clinic": "Amber life" },
+  {
+    "first": "František",
+    "last": "Rolinek",
+    "clinic": "Fakultni nemocnice v Motole"
+  },
+  {
+    "first": "Jaroslav",
+    "last": "Michalek",
+    "clinic": "Fakultni nemocnice v Motole"
+  },
+  { "first": "Guna", "last": "Proboka", "clinic": "Amber life" },
+  { "first": "Linda", "last": "Brokane", "clinic": "Amber life" },
+  {
+    "first": "Jiri",
+    "last": "Prochazka",
+    "clinic": "Fakultni nemocnice v Motole"
+  },
+  {
+    "first": "Dainora",
+    "last": "Mačiulienė",
+    "clinic": "Integracinės onkologijos sveikatinimo priemonės"
+  }
+]

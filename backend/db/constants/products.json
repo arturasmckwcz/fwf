@@ -1,0 +1,7 @@
+[
+  { "name": "DLP", "description": "Dendritic cells vaccine" },
+  { "name": "CIK", "description": "Citokyne induced killers" },
+  { "name": "SVF", "description": "Stoma vascular fraction" },
+  { "name": "TCV", "description": "T-cells vaccine" },
+  { "name": "MSC", "description": "Mesenchymal stem cells" }
+]
