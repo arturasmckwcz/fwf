@@ -1,21 +1,21 @@
-const { Model } = require('objection');
-const tablenames = require('../../../db/constants/tablenames');
-const schema = require('./users.schema.json');
+const { Model } = require('objection')
+const tablenames = require('../../../db/constants/tablenames')
+const schema = require('./users.schema.json')
 
-const Role = require('../roles/roles.model');
+const Member = require('../members/members.model')
 
-class Lysate extends Model {
+class User extends Model {
   static get tableName() {
-    return tablenames.user;
+    return tablenames.user
   }
   static get relationMappings() {
     return {
-      prescritions: {
+      members: {
         relation: Model.HasManyRelation,
-        modelClass: Role,
+        modelClass: Menber,
         join: {
           from: `${tablenames.user}.id`,
-          to: `${tablenames.role}.${tablenames.user}_id`,
+          to: `${tablenames.member}.${tablenames.user}_id`,
         },
       },
     }
@@ -23,6 +23,6 @@ class Lysate extends Model {
   static get jsonSchema() {
     return schema
   }
-};
+}
 
-module.exports = Lysate;
+module.exports = User

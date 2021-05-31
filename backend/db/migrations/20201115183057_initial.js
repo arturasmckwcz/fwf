@@ -214,7 +214,7 @@ exports.up = async knex => {
   await knex.schema.createTable(tablenames.user, table => {
     table.increments().notNullable()
     table.string('username', 128).notNullable().unique()
-    table.string('password', 128).notNullable().unique()
+    table.string('password', 128).notNullable()
     addReference(table, tablenames.person)
     addDefaultColumns(table)
   })

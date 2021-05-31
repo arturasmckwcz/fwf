@@ -10,6 +10,8 @@ const clinicsJSON = require('../constants/clinics.json')
 const doctorsJSON = require('../constants/doctors.json')
 const productsJSON = require('../constants/products.json')
 
+const convertArr = require('../../src/lib/arrayconvert')
+
 /**
  *
  * @param {require('knex')} knex
@@ -109,11 +111,124 @@ exports.seed = async knex => {
   await knex(tablenames.lysate).insert(lysates)
 
   // Seed permissions
-  const records = []
+  const permissionRecords = []
   for (let tablename of Object.values(tablenames)) {
     for (let permission of permissions) {
-      records.push({ relation: tablename, permission })
+      permissionRecords.push({ relation: tablename, permission })
     }
   }
-  await knex(tablenames.permission).insert(records)
+  const allPermissions = await knex(tablenames.permission)
+    .insert(permissionRecords)
+    .returning(['id', 'relation', 'permission'])
+
+  // seed admin role
+  const adminRole = parseInt(
+    await knex(tablenames.role)
+      .insert({
+        description: 'FWF Administrator',
+      })
+      .returning('id')
+  )
+  const adminRights = []
+  for (let permission of allPermissions) {
+    adminRights.push({
+      role_id: adminRole,
+      permission_id: parseInt(permission.id),
+    })
+  }
+  await knex(tablenames.right).insert(adminRights)
+
+  const bcrypt = require('bcrypt')
+  const saltRounds = 10
+
+  // seed admin user
+  const adminPerson = await knex(tablenames.person)
+    .insert({
+      first: 'Arturas',
+      last: 'Mickiewicz',
+      gender: 'male',
+      age: 56,
+      email: 'arturasmckwcz@gmail.com',
+    })
+    .returning('id')
+  const adminUser = await knex(tablenames.user)
+    .insert({
+      username: 'arturas',
+      password: await bcrypt.hash('froceth0', saltRounds),
+      person_id: parseInt(adminPerson),
+    })
+    .returning('id')
+  await knex(tablenames.member).insert({
+    user_id: parseInt(adminUser),
+    role_id: parseInt(adminRole),
+  })
+
+  // seed receptionist role
+  const receptionistRole = parseInt(
+    await knex(tablenames.role)
+      .insert({
+        description: 'Receptionist',
+      })
+      .returning('id')
+  )
+  const receptionistReadOnlyTables = [
+    tablenames.product,
+    tablenames.source,
+    tablenames.lysate,
+    tablenames.doctor,
+    tablenames.clinic,
+    tablenames.prescription,
+    tablenames.source,
+    tablenames.production,
+  ]
+  const receptionistCreateReadUpdateTables = [
+    tablenames.person,
+    tablenames.patient,
+  ]
+
+  // convert arr of strings to arr of objs
+  const permissionObjs = convertArr(permissions)
+
+  const receptionistPermissions = [
+    ...allPermissions.filter(
+      permission =>
+        receptionistReadOnlyTables.includes(permission.relation) &&
+        permission.permission === permissionObjs.read
+    ),
+    ...allPermissions.filter(
+      permission =>
+        receptionistCreateReadUpdateTables.includes(permission.relation) &&
+        permission.permission !== permissionObjs.delete
+    ),
+  ]
+  const receptionistRights = []
+  for (let permission of receptionistPermissions) {
+    receptionistRights.push({
+      role_id: receptionistRole,
+      permission_id: parseInt(permission.id),
+    })
+  }
+  await knex(tablenames.right).insert(receptionistRights)
+
+  // seed receptionist user
+  const receptionistPerson = await knex(tablenames.person)
+    .insert({
+      first: 'Simona',
+      last: 'Janušauskienė',
+      gender: 'female',
+      age: 40,
+      email: 'simona@froceth.lt',
+    })
+    .returning('id')
+  const receptionistUser = await knex(tablenames.user)
+    .insert({
+      username: 'simona',
+      password: await bcrypt.hash('froceth0', saltRounds),
+      person_id: parseInt(receptionistPerson),
+    })
+    .returning('id')
+  await knex(tablenames.member).insert({
+    user_id: parseInt(receptionistUser),
+    role_id: parseInt(receptionistRole),
+  })
 }

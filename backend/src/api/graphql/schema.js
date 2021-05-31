@@ -8,8 +8,17 @@ const {
   GraphQLInt,
 } = require('graphql')
 
-const tablenames = require('../../../db/constants/tablenames')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
+const tablenames = require('../../../db/constants/tablenames')
+const permissions = require('../../lib/arrayconvert')(
+  require('../../../db/constants/enums').permissions
+)
+
+const checkPermission = require('../../lib/checkPermission')
+
+// TODO: check all models!
 const Product = require('../products/products.model')
 const Person = require('../persons/persons.model')
 const Clinic = require('../clinics/clinics.model')
@@ -26,6 +35,14 @@ const Document = require('../documents/documents.model')
 const Parameter = require('../parameters/parameters.model')
 const Science = require('../science/science.model')
 const Data = require('../data/data.model')
+const User = require('../users/users.model')
+const Role = require('../roles/roles.model')
+const Member = require('../members/members.model')
+const Right = require('../rights/rights.model')
+const Permission = require('../permissions/permissions.model')
+
+// TODO: refactor schema.js file to a file structure. do i need objection at all? maybe i can get away with knex only. if i come up to decision to refactor schema.js to apolo it would be a chance to get rid of objection
+// TODO: write auth check to all resolvers
 
 const ProductType = new GraphQLObjectType({
   name: 'Product',
@@ -464,7 +481,7 @@ const DocumentType = new GraphQLObjectType({
     table_id: { type: GraphQLString },
     patient: {
       type: PatientType,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.patient)
           try {
             return await Patient.query()
@@ -477,7 +494,7 @@ const DocumentType = new GraphQLObjectType({
     },
     source: {
       type: GraphQLID,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.source)
           try {
             return await Source.query()
@@ -490,7 +507,7 @@ const DocumentType = new GraphQLObjectType({
     },
     prescription: {
       type: PrescriptionType,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.prescription)
           try {
             return await Prescription.query()
@@ -516,7 +533,7 @@ const DocumentType = new GraphQLObjectType({
     },
     clinic: {
       type: ClinicType,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.clinic)
           try {
             return await Clinic.query()
@@ -529,7 +546,7 @@ const DocumentType = new GraphQLObjectType({
     },
     lysate: {
       type: LysateType,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.lysate)
           try {
             return await Lysate.query()
@@ -542,7 +559,7 @@ const DocumentType = new GraphQLObjectType({
     },
     product: {
       type: ProductType,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.product)
           try {
             return await Product.query()
@@ -555,7 +572,7 @@ const DocumentType = new GraphQLObjectType({
     },
     dose: {
       type: DoseType,
-      async resolver(parent, args) {
+      async resolve(parent, args) {
         if (parent.table_id === tablenames.dose)
           try {
             return await Dose.query()
@@ -578,13 +595,127 @@ const DocumentLookupType = new GraphQLObjectType({
   }),
 })
 
+const UserType = new GraphQLObjectType({
+  name: 'UserType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    username: { type: GraphQLString },
+    password: { type: GraphQLString },
+    person: {
+      type: PersonType,
+      async resolve(parent, args) {
+        try {
+          return await Person.query()
+            .where('deleted_at', null)
+            .findById(parent.person_id)
+        } catch (error) {
+          return { error }
+        }
+      },
+    },
+    roles: {
+      type: new GraphQLList(RoleType),
+      async resolve(parent, args) {
+        const memberships = await Member.query()
+          .where('deleted_at', null)
+          .where('user_id', parent.id)
+        const roles = []
+        for (let membership of memberships)
+          roles.push(
+            await Role.query()
+              .where('deleted_at', null)
+              .findById(membership.role_id)
+          )
+        return roles
+      },
+    },
+  }),
+})
+
+const RoleType = new GraphQLObjectType({
+  name: 'RoleType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    description: { type: GraphQLString },
+    permissions: {
+      type: new GraphQLList(PermissionType),
+      async resolve(parent, args) {
+        const rights = await Right.query()
+          .where('deleted_at', null)
+          .where('role_id', parent.id)
+        const permissions = []
+        for (let right of rights)
+          permissions.push(
+            await Permission.query()
+              .where('deleted_at', null)
+              .findById(right.permission_id)
+          )
+        return permissions
+      },
+    },
+  }),
+})
+
+const PermissionType = new GraphQLObjectType({
+  name: 'PermissionType',
+  fields: () => ({
+    id: { type: GraphQLID },
+    relation: { type: GraphQLString },
+    permission: { type: GraphQLString },
+  }),
+})
+
+const LoginType = new GraphQLObjectType({
+  name: 'LoginType',
+  fields: () => ({
+    token: { type: GraphQLString },
+  }),
+})
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    login: {
+      type: LoginType,
+      args: {
+        username: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        const { username, password } = args
+        let user
+
+        if (!username || !password) throw new Error('Invalid credentials 1.')
+
+        try {
+          user = await User.query()
+            .where('deleted_at', null)
+            .where('username', username)
+            .first()
+        } catch (error) {
+          return { error }
+        }
+
+        if (!user) throw new Error('Invalid credentials 2.')
+
+        const logedIn = await bcrypt.compare(password, user.password)
+        if (!logedIn) throw new Error('Invalid credentials login 3.')
+
+        const jwtAccessToken = await jwt.sign(
+          { userId: user.id },
+          process.env.API_ACCESS_TOKEN,
+          { expiresIn: '2y' }
+        )
+
+        return { token: jwtAccessToken }
+      },
+    },
     product: {
       type: ProductType,
       args: { id: { type: GraphQLID } },
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (!checkPermission(req.userId, tablenames.product, permissions.read))
+          throw new Error('Unauthorised!')
         try {
           return await Product.query()
             .where('deleted_at', null)
@@ -596,7 +727,9 @@ const RootQuery = new GraphQLObjectType({
     },
     products: {
       type: new GraphQLList(ProductType),
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (!checkPermission(req.userId, tablenames.product, permissions.read))
+          throw new Error('Unauthorised!')
         try {
           return await Product.query().where('deleted_at', null)
         } catch (error) {
@@ -631,7 +764,7 @@ const RootQuery = new GraphQLObjectType({
           return await Person.query()
             .skipUndefined()
             .where('first', 'ilike', `%${args.first}%`)
-            .andWhere('last', 'ilike', `%${args.last}%`)
+            .andWhere('last', 'ilike', `%${args.last}%`) // TODO: last must be presented, doesn't work if not
             .andWhere('gender', args.gender)
             .andWhere('age', '>', args.older)
             .andWhere('age', '<', args.younger)
@@ -740,7 +873,7 @@ const RootQuery = new GraphQLObjectType({
         try {
           return await Location.query()
             .where('deleted_at', null)
-            .findById([args.id, tablenames.lysate])
+            .findById([args.id, tablenames.location])
         } catch (error) {
           return { error }
         }
@@ -793,6 +926,29 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parent, args) {
         try {
           return await Document.query().where(args).where('deleted_at', null)
+        } catch (error) {
+          return { error }
+        }
+      },
+    },
+    user: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLID },
+      },
+      async resolve(parent, args) {
+        try {
+          return await User.query().where('deleted_at', null).findById(args.id)
+        } catch (error) {
+          return { error }
+        }
+      },
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      async resolve(parent, args) {
+        try {
+          return User.query().where('deleted_at', null)
         } catch (error) {
           return { error }
         }
