@@ -1,5 +1,5 @@
 module.exports = arr => {
-  const result = []
-  arr.map(value => result.push({ [value]: value }))
+  const result = {}
+  arr.map(value => (result[value] = value))
   return result
 }

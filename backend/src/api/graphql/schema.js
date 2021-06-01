@@ -740,7 +740,9 @@ const RootQuery = new GraphQLObjectType({
     person: {
       type: PersonType,
       args: { id: { type: GraphQLID } },
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (!checkPermission(req.userId, tablenames.person, permissions.read))
+          throw new Error('Unauthorised!')
         try {
           return await Person.query()
             .where('deleted_at', null)
@@ -759,7 +761,9 @@ const RootQuery = new GraphQLObjectType({
         older: { type: GraphQLInt },
         younger: { type: GraphQLInt },
       },
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (!checkPermission(req.userId, tablenames.person, permissions.read))
+          throw new Error('Unauthorised!')
         try {
           return await Person.query()
             .skipUndefined()
@@ -777,7 +781,9 @@ const RootQuery = new GraphQLObjectType({
     patient: {
       type: PatientType,
       args: { id: { type: GraphQLID } },
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (!checkPermission(req.userId, tablenames.patient, permissions.read))
+          throw new Error('Unauthorised!')
         try {
           return await Patient.query()
             .where('deleted_at', null)
@@ -789,7 +795,9 @@ const RootQuery = new GraphQLObjectType({
     },
     patients: {
       type: new GraphQLList(PatientType),
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (!checkPermission(req.userId, tablenames.patient, permissions.read))
+          throw new Error('Unauthorised!')
         try {
           return await Patient.query().where('deleted_at', null)
         } catch (error) {
@@ -936,7 +944,15 @@ const RootQuery = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
       },
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.user,
+            permissions.read
+          ))
+        )
+          throw new Error('Unauthorised!')
         try {
           return await User.query().where('deleted_at', null).findById(args.id)
         } catch (error) {
@@ -946,7 +962,15 @@ const RootQuery = new GraphQLObjectType({
     },
     users: {
       type: new GraphQLList(UserType),
-      async resolve(parent, args) {
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.user,
+            permissions.read
+          ))
+        )
+          throw new Error('Unauthorised!')
         try {
           return User.query().where('deleted_at', null)
         } catch (error) {
