@@ -1,4 +1,9 @@
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
+
+const redis = require('redis')
+const JwtRedis = require('jwt-redis').default
+const redisClient = redis.createClient()
+const jwt = new JwtRedis(redisClient)
 
 errorTypes = {
   ValidationError: 422,
@@ -34,14 +39,14 @@ const authCheck = (req, res, next) => {
   const token = auth.split(' ')[1] // content of Authorization is 'Bearer' followed by blank space followed by token
   if (!token || token === '') return next()
 
-  try {
-    const { userId } = jwt.verify(token, process.env.API_ACCESS_TOKEN)
-    req.userId = userId || null
-  } catch (error) {
-    req.userId = null
-    return next()
-  }
-  next()
+  jwt
+    .verify(token, process.env.API_ACCESS_TOKEN)
+    .then(token => {
+      req.userId = token.userId || null
+      req.tokenJti = token.jti
+      next()
+    })
+    .catch(() => next())
 }
 
 module.exports = {

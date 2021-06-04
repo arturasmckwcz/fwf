@@ -8,19 +8,19 @@ const server = app.listen(port, () => {
 
 // Graceful shutdown otherwise nodemon doesn't work propoerly all the time
 process.on('SIGINT', () => {
-  console.log('\n[server] Shutting down...')
+  console.log('\n[server] Shutting down on SIGINT')
   server.close()
   process.exit()
 })
 
 process.on('SIGTERM', () => {
-  console.log('\n[server] Shutting down...')
+  console.log('\n[server] Shutting down on SIGTERM')
   server.close()
   process.exit()
 })
 
 process.on('uncaughtException', () => {
-  console.log('\n[server] Shutting down...')
+  console.log('\n[server] Shutting down on uncaughtException')
   server.close()
   process.exit()
 })

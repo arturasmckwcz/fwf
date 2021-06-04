@@ -8,10 +8,8 @@ const {
   GraphQLInt,
 } = require('graphql')
 
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-
 const tablenames = require('../../../db/constants/tablenames')
+// get permissions list from enums as an object
 const permissions = require('../../lib/arrayconvert')(
   require('../../../db/constants/enums').permissions
 )
@@ -672,17 +670,37 @@ const LoginType = new GraphQLObjectType({
   }),
 })
 
+/*
+============================================================================================================
+*/
+const bcrypt = require('bcrypt')
+// const jwt = require('jsonwebtoken')
+const redis = require('redis')
+const JwtRedis = require('jwt-redis').default
+const redisClient = redis.createClient()
+const jwt = new JwtRedis(redisClient)
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    // TODO: write logout and refresh of jwt
+    logout: {
+      type: GraphQLBoolean,
+      async resolve(parent, args, { tokenJti }) {
+        try {
+          return await jwt.destroy(tokenJti)
+        } catch (error) {
+          return error
+        }
+      },
+    },
     login: {
       type: LoginType,
       args: {
         username: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      async resolve(parent, args) {
-        const { username, password } = args
+      async resolve(parent, { username, password }) {
         let user
 
         if (!username || !password) throw new Error('Invalid credentials 1.')
@@ -695,26 +713,35 @@ const RootQuery = new GraphQLObjectType({
         } catch (error) {
           return { error }
         }
-
         if (!user) throw new Error('Invalid credentials 2.')
 
         const logedIn = await bcrypt.compare(password, user.password)
         if (!logedIn) throw new Error('Invalid credentials login 3.')
 
-        const jwtAccessToken = await jwt.sign(
-          { userId: user.id },
-          process.env.API_ACCESS_TOKEN,
-          { expiresIn: '2y' }
-        )
-
-        return { token: jwtAccessToken }
+        try {
+          return {
+            token: await jwt.sign(
+              { userId: user.id },
+              process.env.API_ACCESS_TOKEN,
+              { expiresIn: '1d' }
+            ),
+          }
+        } catch (error) {
+          return { error }
+        }
       },
     },
     product: {
       type: ProductType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.product, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.product,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Product.query()
@@ -728,7 +755,13 @@ const RootQuery = new GraphQLObjectType({
     products: {
       type: new GraphQLList(ProductType),
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.product, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.product,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Product.query().where('deleted_at', null)
