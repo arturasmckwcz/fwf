@@ -8,36 +8,37 @@ const {
   GraphQLInt,
 } = require('graphql')
 
-const tablenames = require('../../../db/constants/tablenames')
+const tablenames = require('../../constants/tablenames')
 // get permissions list from enums as an object
 const permissions = require('../../lib/arrayconvert')(
-  require('../../../db/constants/enums').permissions
+  require('../../constants/enums').permissions
 )
 
 const checkPermission = require('../../lib/checkPermission')
 
-// TODO: check all models!
-const Product = require('../products/products.model')
-const Person = require('../persons/persons.model')
-const Clinic = require('../clinics/clinics.model')
-const Doctor = require('../doctors/doctors.model')
-const Lysate = require('../lysates/lysates.model')
-const Patient = require('../patients/patients.model')
-const Prescription = require('../prescriptions/prescriptions.model')
-const Source = require('../source/source.model')
-const Production = require('../productions/productions.model')
-const Dose = require('../doses/doses.model')
-const Location = require('../locations/locations.model')
-const Filesystem = require('../filesystem/filesystem.model')
-const Document = require('../documents/documents.model')
-const Parameter = require('../parameters/parameters.model')
-const Science = require('../science/science.model')
-const Data = require('../data/data.model')
-const User = require('../users/users.model')
-const Role = require('../roles/roles.model')
-const Member = require('../members/members.model')
-const Right = require('../rights/rights.model')
-const Permission = require('../permissions/permissions.model')
+const {
+  Product,
+  Person,
+  Clinic,
+  Doctor,
+  Lysate,
+  Patient,
+  Prescription,
+  Source,
+  Production,
+  Dose,
+  Location,
+  Filesystem,
+  Document,
+  Parameter,
+  Science,
+  Data,
+  User,
+  Role,
+  Member,
+  Right,
+  Permission,
+} = require('../model')
 
 // TODO: refactor schema.js file to a file structure. do i need objection at all? maybe i can get away with knex only. if i come up to decision to refactor schema.js to apolo it would be a chance to get rid of objection
 // TODO: write auth check to all resolvers
@@ -1118,4 +1119,5 @@ const Mutation = new GraphQLObjectType({
   },
 })
 
-module.exports = new GraphQLSchema({ query: RootQuery, mutation: Mutation })
+// module.exports = new GraphQLSchema({ query: RootQuery, mutation: Mutation })
+module.exports = { RootQuery, Mutation }

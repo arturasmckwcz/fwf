@@ -1,7 +1,7 @@
-const Member = require('../api/members/members.model')
-const Role = require('../api/roles/roles.model')
-const Right = require('../api/rights/rights.model')
-const Permission = require('../api/permissions/permissions.model')
+const Member = require('../api/model/members/members.model')
+const Role = require('../api/model/roles/roles.model')
+const Right = require('../api/model/rights/rights.model')
+const Permission = require('../api/model/permissions/permissions.model')
 
 module.exports = async (userId, tablename, permission) => {
   // has the user got the right on tablename to do permission?

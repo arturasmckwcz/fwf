@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { graphqlHTTP } = require('express-graphql')
-const schema = require('./graphql/schema')
+const schema = require('./graphql')
 
 const { authCheck } = require('../middlewares')
 

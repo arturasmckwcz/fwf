@@ -1,0 +1,29 @@
+T1,T2,Pavadinimas,Pastabos,code,description,mesurement,dlp,cik,svf
+,,Diagnozė,pagal ICD-10-CM,diagnosis,Diagnozė pagal ICD-10-CM,ICD-10-CM,+,+,+
+,,Ligos stadija,I / II / III / IV,stage,Ligos stadija I / II / III / IV,I/II/III/IV,+,+,-
+,,Kraujo svoris be maišo,gramais,blood_weight,Kraujo svoris be maišo gramais,g,+,+,-
+,,Riebalinio audinio kiekis,mL,adipose_volume,Riebalinio audinio kiekis mL,mL,-,-,+
+,,Išskirtų vienbranduolių ląstelių skaičius,milijonais,nuclear_cells,Išskirtų vienbranduolių ląstelių skaičius milijonais,mln,+,+,-
+,,Ląstelių išsėtų į bioreaktorių kiekis,milijonais,seeded_cells,Ląstelių išsėtų į bioreaktorių kiekis milijonais,mln,-,+,-
+,,Diferencijavimo laikotarpis,dienos,diff_period,Diferencijavimo laikotarpis dienos,days,+,-,-
+,,Proliferacijos laikotarpis,dienos,prolif_period,Proliferacijos laikotarpis dienos,days,-,+,-
+,,Gliukozės kiekis (paskutinis matavimas prieš šaldymą),mM,glucosis,Gliukozės kiekis (paskutinis matavimas prieš šaldymą) mM,mM,-,+,-
+,,Bendras ląstelių skaičius,milijonais,cells,Bendras ląstelių skaičius milijonais,mln,+,+,+
+,,Užšaldytų dozų skaičius,vnt,doses,Užšaldytų dozų skaičius vnt,units,+,+,+
+,,Ląstelių skaičius dozėje,milijonais,cells_per_dose,Ląstelių skaičius dozėje milijonais,mln,+,+,+
+,,Pagaminimo data,,manuf_date,Pagaminimo data ,datetime,+,+,+
+,,Galiojimo data,,expiration_date,Galiojimo data ,datetime,+,+,+
+,,Sterilu,Taip/Ne,sterility,Sterilu Taip/Ne,boolean,+,+,+
+,,Jai nesterilu: patogenas,įrašyti ranka,pathogen,Jai nesterilu: patogenas įrašyti ranka,text,+,+,+
+,,Ląstelių gyvybingumas prieš šaldymą,%,cells_before_fr,Ląstelių gyvybingumas prieš šaldymą %,percent,+,+,+
+,,Ląstelių gyvybingumas po atšildymo,%,cells_after_fr,Ląstelių gyvybingumas po atšildymo %,percent,+,+,+
+,,Arbitražinė dozė,Yra/Nėra,arbitrage,Arbitražinė dozė Yra/Nėra,boolean,+,+,+
+,,Fenotipavimas,CD3+,fenotype_cd3+,Fenotipavimas CD3+,mln,-,+,-
+,,Fenotipavimas,CD3+CD16/56+,fenotype_cd3+cd16.56+,Fenotipavimas CD3+CD16/56+,mln,-,+,-
+,,Fenotipavimas,CD3+CD8+,fenotype_cd3+cd8+,Fenotipavimas CD3+CD8+,mln,-,+,-
+,,Fenotipavimas,CD11c,fenotype_cd11c,Fenotipavimas CD11c,mln,+,-,-
+,,Fenotipavimas,CD80,fenotype_cd80,Fenotipavimas CD80,mln,+,-,-
+,,Fenotipavimas,CD83,fenotype_cd83,Fenotipavimas CD83,mln,+,-,-
+,,Fenotipavimas,HLA-DR,fenotype_hla-dr,Fenotipavimas HLA-DR,mln,+,-,-
+,,Fenotipavimas,Grynumas,fenotype_purity,Fenotipavimas Grynumas,mln,+,-,-
+,,Sertifikuota (sertifikavimo būsena),Taip/Ne (sertifikuota/nesertifikuota),sertified,Sertifikuota (sertifikavimo būsena) Taip/Ne (sertifikuota/nesertifikuota),boolean,+,+,+
