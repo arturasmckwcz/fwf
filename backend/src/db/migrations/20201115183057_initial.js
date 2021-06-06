@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-const tablenames = require('../constants/tablenames')
-const enums = require('../constants/enums')
+const tablenames = require('../../constants/tablenames')
+const enums = require('../../constants/enums')
 const {
   addDefaultColumns,
   addContactInfo,

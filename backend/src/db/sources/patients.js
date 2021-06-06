@@ -17,60 +17,22 @@ const getPatientsFromFile = url => {
 }
 
 const patients16 = getPatientsFromFile(
-  path.join(
-    __dirname,
-    '..',
-    // 'db',
-    'sources',
-    'CSV ready DLP patient lists 2016-2020 - DLP16.csv'
-  )
+  path.join(__dirname, 'CSV ready DLP patient lists 2016-2020 - DLP16.csv')
 )
 const patients17 = getPatientsFromFile(
-  path.join(
-    __dirname,
-    '..',
-    // 'db',
-    'sources',
-    'CSV ready DLP patient lists 2016-2020 - DLP17.csv'
-  )
+  path.join(__dirname, 'CSV ready DLP patient lists 2016-2020 - DLP17.csv')
 )
 const patients18 = getPatientsFromFile(
-  path.join(
-    __dirname,
-    '..',
-    // 'db',
-    'sources',
-    'CSV ready DLP patient lists 2016-2020 - DLP18.csv'
-  )
+  path.join(__dirname, 'CSV ready DLP patient lists 2016-2020 - DLP18.csv')
 )
 const patients19 = getPatientsFromFile(
-  path.join(
-    __dirname,
-    '..',
-    // 'db',
-    'sources',
-    'CSV ready DLP patient lists 2016-2020 - DLP19.csv'
-  )
+  path.join(__dirname, 'CSV ready DLP patient lists 2016-2020 - DLP19.csv')
 )
 const patients20 = getPatientsFromFile(
-  path.join(
-    __dirname,
-    '..',
-    // 'db',
-    'sources',
-    'CSV ready DLP patient lists 2016-2020 - DLP20.csv'
-  )
+  path.join(__dirname, 'CSV ready DLP patient lists 2016-2020 - DLP20.csv')
 )
 
-const patientsCIK = getPatientsFromFile(
-  path.join(
-    __dirname,
-    '..',
-    // 'db',
-    'sources',
-    'CIK.csv'
-  )
-)
+const patientsCIK = getPatientsFromFile(path.join(__dirname, 'CIK.csv'))
 
 const patients = patients16.concat(
   patients17.concat(

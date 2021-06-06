@@ -17,7 +17,7 @@ const getParamsFromFile = url => {
 }
 
 const params = getParamsFromFile(
-  path.join(__dirname, '..', 'sources', 'CSV ready parameter.csv')
+  path.join(__dirname, 'CSV ready parameter.csv')
 )
 
 module.exports = params

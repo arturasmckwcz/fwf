@@ -12,8 +12,6 @@ const getLysatesFromFile = url => {
   }))
 }
 
-const lysates = getLysatesFromFile(
-  path.join(__dirname, '..', 'sources', 'lysates.csv')
-)
+const lysates = getLysatesFromFile(path.join(__dirname, 'lysates.csv'))
 
 module.exports = lysates

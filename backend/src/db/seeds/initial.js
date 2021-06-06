@@ -1,16 +1,16 @@
-const tablenames = require('../constants/tablenames')
-const { permissions } = require('../constants/enums')
+const tablenames = require('../../constants/tablenames')
+const { permissions } = require('../../constants/enums')
 const { matchName } = require('../helpers')
 
-const patients = require('../constants/patients')
-const lysates = require('../constants/lysates')
-const params = require('../constants/params')
-const locations = require('../constants/locations')
-const clinicsJSON = require('../constants/clinics.json')
-const doctorsJSON = require('../constants/doctors.json')
-const productsJSON = require('../constants/products.json')
+const patients = require('../sources/patients')
+const lysates = require('../sources/lysates')
+const params = require('../sources/params')
+const locations = require('../sources/locations')
+const clinicsJSON = require('../sources/clinics.json')
+const doctorsJSON = require('../sources/doctors.json')
+const productsJSON = require('../sources/products.json')
 
-const convertArr = require('../../src/lib/arrayconvert')
+const convertArr = require('../../../src/lib/arrayconvert')
 
 /**
  *
