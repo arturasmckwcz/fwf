@@ -9,9 +9,9 @@ const tablenames = require('../../../constants/tablenames')
 
 const { Clinic, Prescription, Source } = require('../../model')
 
-const ClinicType = request('./ClinicType')
-const SourceType = request('./SourceType')
-const PrescriptionType = request('./PrescriptionType')
+const ClinicType = require('./ClinicType')
+const SourceType = require('./SourceType')
+const PrescriptionType = require('./PrescriptionType')
 
 const ProductionType = new GraphQLObjectType({
   name: 'ProductionType',
