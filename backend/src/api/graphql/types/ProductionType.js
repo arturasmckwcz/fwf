@@ -7,7 +7,7 @@ const {
 
 const tablenames = require('../../../constants/tablenames')
 
-const { Clinic, Prescription, Source } = require('../../model')
+const { Clinic, Prescription, Source } = require('../../../model')
 
 const ClinicType = require('./ClinicType')
 const SourceType = require('./SourceType')

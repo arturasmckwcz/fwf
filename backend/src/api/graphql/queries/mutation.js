@@ -15,7 +15,7 @@ const permissions = require('../../../lib/arrayconvert')(
 
 const checkPermission = require('../../../lib/checkPermission')
 
-const { Product, Person, Filesystem, Document } = require('../../model')
+const { Product, Person, Filesystem, Document } = require('../../../model')
 
 const {
   ProductType,

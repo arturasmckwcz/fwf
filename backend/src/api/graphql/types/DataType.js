@@ -2,7 +2,7 @@ const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql')
 
 const tablenames = require('../../../constants/tablenames')
 
-const { Production, Science } = require('../../model')
+const { Production, Science } = require('../../../model')
 
 const ProductionType = require('./ProductionType')
 const ScienceType = require('./ScienceType')

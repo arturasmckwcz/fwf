@@ -12,7 +12,7 @@ const {
   Production,
   Dose,
   Filesystem,
-} = require('../../model')
+} = require('../../../model')
 
 const FilesystemType = require('./FilesystemType')
 const PatientType = require('./PatientType')

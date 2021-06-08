@@ -5,7 +5,7 @@ const {
   GraphQLList,
 } = require('graphql')
 
-const { Parameter, Science } = require('../../model')
+const { Parameter, Science } = require('../../../model')
 
 const ParameterType = require('./ParameterType')
 

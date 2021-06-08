@@ -5,7 +5,7 @@ const {
   GraphQLList,
 } = require('graphql')
 
-const { Right, Permission } = require('../../model')
+const { Right, Permission } = require('../../../model')
 
 const PermissionType = require('./PermissionType')
 

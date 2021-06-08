@@ -5,7 +5,7 @@ const {
   GraphQLList,
 } = require('graphql')
 
-const { Person, Role, Member } = require('../../model')
+const { Person, Role, Member } = require('../../../model')
 
 const PersonType = require('./PersonType')
 const RoleType = require('./RoleType')

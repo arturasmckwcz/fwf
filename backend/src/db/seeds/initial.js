@@ -1,6 +1,5 @@
 const tablenames = require('../../constants/tablenames')
 const { permissions } = require('../../constants/enums')
-const { matchName } = require('../helpers')
 
 const patients = require('../sources/patients')
 const lysates = require('../sources/lysates')
@@ -10,6 +9,7 @@ const clinicsJSON = require('../sources/clinics.json')
 const doctorsJSON = require('../sources/doctors.json')
 const productsJSON = require('../sources/products.json')
 
+const matchName = require('../../../src/lib/matchNames')
 const convertArr = require('../../../src/lib/arrayconvert')
 
 /**
@@ -47,27 +47,6 @@ exports.seed = async knex => {
 
     await knex(tablenames.doctor).insert({
       person_id,
-      clinic_id: clinic_id ? parseInt(clinic_id) : undefined,
-    })
-  }
-
-  //Seed persons and patients from csv
-  for (let { first, last, code, status, clinic } of patients) {
-    const person_id = parseInt(
-      await knex(tablenames.person)
-        .insert({
-          first,
-          last,
-        })
-        .returning('id')
-    )
-    const clinic_id =
-      clinics[clinics.findIndex(item => matchName(clinic, item.name, 0.4))]?.id
-
-    await knex(tablenames.patient).insert({
-      person_id,
-      code,
-      status: status === 'O' || status === 'X' ? status : 'undefined',
       clinic_id: clinic_id ? parseInt(clinic_id) : undefined,
     })
   }
@@ -231,4 +210,25 @@ exports.seed = async knex => {
     user_id: parseInt(receptionistUser),
     role_id: parseInt(receptionistRole),
   })
+  //Seed persons and patients from csv
+  for (let { first, last, code, status, clinic } of patients) {
+    const person_id = parseInt(
+      await knex(tablenames.person)
+        .insert({
+          first,
+          last,
+        })
+        .returning('id')
+    )
+    const clinic_id =
+      clinics[clinics.findIndex(item => matchName(clinic, item.name, 0.4))]?.id
+
+    await knex(tablenames.patient).insert({
+      person_id,
+      code,
+      status: status === 'O' || status === 'X' ? status : 'undefined',
+      clinic_id: clinic_id ? parseInt(clinic_id) : undefined,
+      user_id: parseInt(adminUser),
+    })
+  }
 }

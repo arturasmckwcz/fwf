@@ -26,7 +26,7 @@ const {
   Filesystem,
   Document,
   User,
-} = require('../../model')
+} = require('../../../model')
 
 const {
   ProductType,

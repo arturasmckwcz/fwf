@@ -1,5 +1,6 @@
 module.exports = {
   person: 'person',
+  user: 'user',
   product: 'product',
   parameter: 'parameter',
   location: 'location',
@@ -15,7 +16,6 @@ module.exports = {
   data: 'data',
   filesystem: 'filesystem',
   document: 'document',
-  user: 'user',
   role: 'role',
   permission: 'permission',
   member: 'member',

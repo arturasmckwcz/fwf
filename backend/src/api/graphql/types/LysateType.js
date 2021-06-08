@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql')
 
-const { Person } = require('../../model')
+const { Person } = require('../../../model')
 const PersonType = require('./PersonType')
 
 const LysateType = new GraphQLObjectType({

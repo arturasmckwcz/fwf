@@ -23,6 +23,13 @@ exports.up = async knex => {
     addDefaultColumns(table)
     table.unique(['first', 'last', 'age', 'deleted_at'])
   })
+  await knex.schema.createTable(tablenames.user, table => {
+    table.increments().notNullable()
+    table.string('username', 128).notNullable().unique()
+    table.string('password', 128).notNullable()
+    addReference(table, tablenames.person)
+    addDefaultColumns(table)
+  })
   await knex.schema.createTable(tablenames.product, table => {
     table.increments().notNullable()
     table.string('table_id', 16).defaultTo(tablenames.product)
@@ -76,6 +83,7 @@ exports.up = async knex => {
     table.string('code', 32).notNullable().unique()
     addReference(table, tablenames.person)
     addReference(table, tablenames.clinic, false)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.doctor, table => {
@@ -88,10 +96,11 @@ exports.up = async knex => {
     table.increments().notNullable()
     table.string('table_id', 16).defaultTo(tablenames.patient)
     table.unique(['id', 'table_id'])
-    addReference(table, tablenames.person)
-    addReference(table, tablenames.clinic, false)
     table.string('code')
     table.enu('status', enums.patient_statuses).defaultTo('undefined')
+    addReference(table, tablenames.person)
+    addReference(table, tablenames.clinic, false)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.prescription, table => {
@@ -101,14 +110,14 @@ exports.up = async knex => {
     table.string('code', 32).notNullable().unique()
     table
       .enu('blood_source', enums.sources)
-      .defaultTo('undefined')
+      .defaultTo(enums.sources[0])
       .notNullable()
     table.dateTime('issue_date')
     addReference(table, tablenames.doctor)
     addReference(table, tablenames.patient)
     addReference(table, tablenames.lysate)
     addReference(table, tablenames.product)
-    addReference(table, tablenames.source)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.production, table => {
@@ -122,6 +131,7 @@ exports.up = async knex => {
     addReference(table, tablenames.source)
     addReference(table, tablenames.prescription)
     addReference(table, tablenames.clinic)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.dose, table => {
@@ -135,6 +145,7 @@ exports.up = async knex => {
     table.dateTime('dispatch_date')
     addReference(table, tablenames.production)
     addReference(table, tablenames.location)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.science, table => {
@@ -148,6 +159,7 @@ exports.up = async knex => {
     table.string('value', 16)
     addReference(table, tablenames.science)
     addReference(table, tablenames.production)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.filesystem, table => {
@@ -157,6 +169,7 @@ exports.up = async knex => {
     table.text('body').notNullable()
     addDefaultColumns(table)
   })
+
   await knex.schema.createTable(tablenames.document, table => {
     table.increments().notNullable()
     addReference(table, tablenames.filesystem)
@@ -209,13 +222,7 @@ exports.up = async knex => {
       .references(['id', 'table_id'])
       .inTable(tablenames.lysate)
       .onDelete('CASCADE')
-    addDefaultColumns(table)
-  })
-  await knex.schema.createTable(tablenames.user, table => {
-    table.increments().notNullable()
-    table.string('username', 128).notNullable().unique()
-    table.string('password', 128).notNullable()
-    addReference(table, tablenames.person)
+    addReference(table, tablenames.user)
     addDefaultColumns(table)
   })
   await knex.schema.createTable(tablenames.role, table => {

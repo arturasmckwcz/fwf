@@ -12,15 +12,16 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - 5432:5432
-  adminer:
-    image: adminer
-    restart: always
-    env_file:
-      - ./.env
+  pgadmin:
+    image: dpage/pgadmin4
     depends_on:
       - db
     ports:
-      - 3004:8080
+      - '53603:53603'
+      - '3004:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${FWF_ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${FWF_ADMIN_PASSWORD}
   redis:
     image: docker.io/bitnami/redis:6.2
     environment:
