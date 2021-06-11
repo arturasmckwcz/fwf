@@ -10,6 +10,7 @@ const apiRouter = require('./api/api')
 const app = express()
 
 // TODO: figure out a better way to get Objection connected to knex
+// TODO: no error if there's no connection to db
 const db = require('./db') // For Objection Model connection to knex
 
 app.use(cors())

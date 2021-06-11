@@ -35,6 +35,6 @@ export const logout = ({ token }) => dispatch => {
       query: `{logout}`,
     },
   })
-    .then(result => dispatch(userSet(result.data.data.login)))
+    .then(result => dispatch(userSet(null)))
     .catch(error => dispatch(userSet(null)))
 }

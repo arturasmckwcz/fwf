@@ -6,9 +6,9 @@ import { styling, menus } from '../../constants'
 
 import Login from '../root/Login'
 
-import { menuSelect, userSet } from '../../redux'
+import { menuSelect, logout } from '../../redux'
 
-const MenuContainer = ({ user, userSet, menuSelect }) => {
+const MenuContainer = ({ user, logout, menuSelect }) => {
   return (
     <MenuWrapper>
       {user ? (
@@ -26,7 +26,7 @@ const MenuContainer = ({ user, userSet, menuSelect }) => {
             New Production
           </MenuItem>
           <span></span>
-          <MenuItem onClick={() => userSet(null)}>Logout</MenuItem>
+          <MenuItem onClick={() => logout(user)}>Logout</MenuItem>
           <span></span>
         </>
       ) : (
@@ -41,7 +41,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   menuSelect: item => dispatch(menuSelect(item)),
-  userSet: user => dispatch(userSet(user)),
+  logout: user => dispatch(logout(user)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer)
 
