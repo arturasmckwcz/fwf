@@ -5,5 +5,8 @@ import reducer from './reducers'
 
 const composeEnhancers = composeWithDevTools({ trace: true })
 
-const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)))
+const store =
+  process.env.REACT_APP_RUN_ENVIROMENT === 'development'
+    ? createStore(reducer, composeEnhancers(applyMiddleware(thunk)))
+    : createStore(reducer, applyMiddleware(thunk))
 export default store

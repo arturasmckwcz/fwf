@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { personsFetch, menuSelect, listShow } from '../../redux'
 import { genders, menus, lists, styling } from '../../constants'
-import { FormWrapper, InputWrapper, ButtonWrapper } from './FormStyling'
+import { FormWrapper, InputWrapper, ButtonWrapper, Input } from './FormStyling'
 
 const emptyPerson = {
   first: '',
@@ -15,7 +15,13 @@ const emptyPerson = {
   phone: '',
 }
 
-const PersonForm = ({ personObj, personsFetch, menuSelect, listShow }) => {
+const PersonForm = ({
+  user,
+  personObj,
+  personsFetch,
+  menuSelect,
+  listShow,
+}) => {
   const [person, setPerson] = useState(emptyPerson)
 
   const handleChange = e =>
@@ -26,7 +32,7 @@ const PersonForm = ({ personObj, personsFetch, menuSelect, listShow }) => {
 
   const handleSearch = e => {
     e.preventDefault()
-    personsFetch(person)
+    personsFetch({ person, token: user.token })
     setPerson({})
     menuSelect(menus.MENU_NULL)
     listShow(lists.LIST_PERSON)
@@ -37,17 +43,18 @@ const PersonForm = ({ personObj, personsFetch, menuSelect, listShow }) => {
   return (
     <FormWrapper>
       <form>
-        <span>
+        <div>
           <strong>PERSON</strong>
-        </span>
+        </div>
+        <div>SEARCH</div>
         <InputWrapper>
-          <input
+          <Input
             name='first'
             placeholder='First name'
             value={person.first ? person.first : ''}
             onChange={handleChange}
           />
-          <input
+          <Input
             name='last'
             placeholder='Last name'
             value={person.last ? person.last : ''}
@@ -63,16 +70,16 @@ const PersonForm = ({ personObj, personsFetch, menuSelect, listShow }) => {
             Search
           </button>
         </ButtonWrapper>
-        <span>MANAGE</span>
+        <div>MANAGE</div>
         <InputWrapper>
           {' '}
-          <input
+          <Input
             name='first'
             placeholder='First name'
             value={person.first ? person.first : ''}
             onChange={handleChange}
           />
-          <input
+          <Input
             name='last'
             placeholder='Last name'
             value={person.last ? person.last : ''}
@@ -86,25 +93,25 @@ const PersonForm = ({ personObj, personsFetch, menuSelect, listShow }) => {
               </option>
             ))}
           </select>
-          <input
+          <Input
             name='age'
             placeholder='Age'
             value={person.age ? person.age : ''}
             onChange={handleChange}
           />
-          <input
+          <Input
             name='address'
             placeholder='Address'
             value={person.address ? person.address : ''}
             onChange={handleChange}
           />
-          <input
+          <Input
             name='email'
             placeholder='Email'
             value={person.email ? person.email : ''}
             onChange={handleChange}
           />
-          <input
+          <Input
             name='phone'
             placeholder='Phone'
             value={person.phone ? person.phone : ''}
@@ -133,6 +140,7 @@ const PersonForm = ({ personObj, personsFetch, menuSelect, listShow }) => {
 }
 const mapStateToProps = state => ({
   personObj: state.person.obj,
+  user: state.user.user,
 })
 const mapDispatchToProps = dispatch => ({
   personsFetch: person => dispatch(personsFetch(person)),

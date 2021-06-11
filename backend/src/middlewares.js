@@ -49,8 +49,18 @@ const authCheck = (req, res, next) => {
     .catch(() => next())
 }
 
+const loggerHeaders = (req, res, next) => {
+  console.log('loggerHeaders:')
+  req.headers &&
+    Object.keys(req.headers).map(key =>
+      console.log(`${key}: ${req.headers[key]}`)
+    )
+  next()
+}
+
 module.exports = {
   notFound,
   errorHandler,
   authCheck,
+  loggerHeaders,
 }

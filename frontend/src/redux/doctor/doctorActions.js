@@ -4,7 +4,7 @@ import { urlAPI } from '../../constants'
 export const DOCTORS_REQUEST = 'DOCTORS_REQUEST'
 export const DOCTORS_SUCCESS = 'DOCTORS_SUCCESS'
 export const DOCTORS_FAILURE = 'DOCTORS_FAILURE'
-export const DOCTOR_SET = 'PERSON_SET'
+export const DOCTOR_SET = 'DOCTOR_SET'
 
 export const doctorsRequest = () => ({
   type: DOCTORS_REQUEST,

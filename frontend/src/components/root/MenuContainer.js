@@ -4,27 +4,44 @@ import styled from 'styled-components'
 
 import { styling, menus } from '../../constants'
 
-import { menuSelect } from '../../redux'
+import Login from '../root/Login'
 
-const MenuContainer = ({ menuSelect }) => {
+import { menuSelect, userSet } from '../../redux'
+
+const MenuContainer = ({ user, userSet, menuSelect }) => {
   return (
     <MenuWrapper>
-      <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRESCRIPTION)}>
-        New Prescription
-      </MenuItem>
-      <MenuItem onClick={() => menuSelect(menus.MENU_NEW_SOURCE)}>
-        New Source Material
-      </MenuItem>
-      <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PATIENT)}>
-        New Patient
-      </MenuItem>
+      {user ? (
+        <>
+          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PATIENT)}>
+            New Patient
+          </MenuItem>
+          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRESCRIPTION)}>
+            New Prescription
+          </MenuItem>
+          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_SOURCE)}>
+            New Source Material
+          </MenuItem>
+          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRODUCTION)}>
+            New Production
+          </MenuItem>
+          <span></span>
+          <MenuItem onClick={() => userSet(null)}>Logout</MenuItem>
+          <span></span>
+        </>
+      ) : (
+        <Login />
+      )}
     </MenuWrapper>
   )
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  user: state.user.user,
+})
 const mapDispatchToProps = dispatch => ({
   menuSelect: item => dispatch(menuSelect(item)),
+  userSet: user => dispatch(userSet(user)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer)
 
@@ -39,7 +56,12 @@ const MenuWrapper = styled.div`
     align-items: center;
     width: 100vw;
     background-color: ${styling.color.background};
-
+    & > span {
+      flex-grow: 1;
+    }
+    & > span:last-child {
+      max-width: ${styling.padding_right};
+    }
     margin-top: 15px;
     margin-bottom: 10px;
     padding-left: ${styling.padding_left};
@@ -54,7 +76,7 @@ const MenuItem = styled.div`
     padding: 0 10px;
     margin-right: 10px;
     &:hover {
-      ${styling.color.hover};
+      background-color: ${styling.color.hover};
     }
   }
 `

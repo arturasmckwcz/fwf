@@ -5,7 +5,8 @@ export const List = ({ list, handleClick }) => (
   <ListWrapper>
     <thead>
       <tr>
-        {list.length !== 0 &&
+        {list &&
+          list.length !== 0 &&
           Object.keys(list[0]).map(
             key => key !== 'id' && <th key={key}>{key}</th>
           )}
@@ -13,7 +14,7 @@ export const List = ({ list, handleClick }) => (
     </thead>
 
     <tbody>
-      {list.length !== 0 &&
+      {list && list.length ? (
         list.map(item => (
           <tr key={item.id} onClick={() => handleClick(item)}>
             {Object.keys(item).map(
@@ -21,7 +22,12 @@ export const List = ({ list, handleClick }) => (
                 key !== 'id' && <td key={`${key}${item[key]}`}>{item[key]}</td>
             )}
           </tr>
-        ))}
+        ))
+      ) : (
+        <tr>
+          <td>There's nothing to display.</td>
+        </tr>
+      )}
     </tbody>
   </ListWrapper>
 )

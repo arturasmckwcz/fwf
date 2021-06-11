@@ -24,7 +24,7 @@ const ListContainer = ({ list }) => {
   return (
     <ListContainerWrapper>
       <MenuPlaceHolder />
-      <ListWrapper>{list && display(list)}</ListWrapper>
+      <ListWrapper>{display(list)}</ListWrapper>
     </ListContainerWrapper>
   )
 }

@@ -10,8 +10,15 @@ export const FormWrapper = styled.div`
     box-shadow: ${styling.shadow};
     border: solid 1px ${styling.color.border};
     border-radius: 4px;
+    & > form {
+      width: 100%;
+    }
+    & > form > div:first-child {
+      text-align: center;
+    }
     &:hover {
       background-color: ${styling.color.hover};
+    }
   }
 `
 export const ButtonWrapper = styled.div`
@@ -23,6 +30,9 @@ export const ButtonWrapper = styled.div`
       width: 100%;
       height: ${styling.input_height};
       background-color: ${styling.color.background};
+      border-color: ${styling.color.shadow_lighter}
+        ${styling.color.shadow_darker} ${styling.color.shadow_darker}
+        ${styling.color.shadow_lighter};
     }
   }
 `
@@ -37,6 +47,12 @@ export const InputWrapper = styled.div`
       border: 0;
       text-indent: 4px;
     }
+    & > select {
+      border-color: ${styling.color.border_dimmed};
+    }
+    & > select > option {
+      color: red;
+    }
     & > * {
       width: 100%;
       border-radius: 3px;
@@ -44,9 +60,12 @@ export const InputWrapper = styled.div`
       background-color: ${styling.color.background};
       color: ${styling.color.text};
     }
-    ::placeholder,
-    & > select > option[value=''] {
-      color: red;
+  }
+`
+export const Input = styled.input`
+   {
+    ::placeholder {
+      color: ${styling.color.text_dimmed};
     }
   }
 `

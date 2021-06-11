@@ -18,27 +18,26 @@ export const personsFailure = error => ({
   payload: error,
 })
 
-export const personsFetch = person => dispatch => {
+export const personsFetch = ({ person, token }) => dispatch => {
   dispatch(personsRequest())
-  const params =
-    '(first:"' +
-    (person.first ? person.first : '') +
-    '"' +
-    'last:"' +
-    (person.last ? person.last : '') +
-    '"' +
-    (person.gender ? 'gender:"' + person.gender + '"' : '') +
-    ')'
-
+  const params = `(first:"${person.first ? person.first : ''}"last:"${
+    person.last ? person.last : ''
+  }"${person.gender ? 'gender:"' + person.gender + '"' : ''})`
+  console.log('personsFetch: person', person)
+  console.log('personsFetch: params', params)
+  console.log('personsFetch: token', token)
   axios({
     url: urlAPI,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
     data: {
       query: `{persons${params}{id,first,last,gender,age,address,email,phone}}`,
     },
   })
-    .then(result => dispatch(personsSuccess(result.data.data.persons)))
+    .then(result => dispatch(personsSuccess(result.data.data.persons || [])))
     .catch(error => dispatch(personsFailure(error)))
 }
 

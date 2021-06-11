@@ -69,7 +69,7 @@ module.exports = new GraphQLObjectType({
       },
       async resolve(parent, { username, password }) {
         let user
-        if (!username || !password) throw new Error('Invalid credentials 1.')
+        if (!username || !password) throw new Error('Invalid credentials.')
         try {
           user = await User.query()
             .where('deleted_at', null)
@@ -78,16 +78,22 @@ module.exports = new GraphQLObjectType({
         } catch (error) {
           return { error }
         }
-        if (!user) throw new Error('Invalid credentials 2.')
+        if (!user) throw new Error('Invalid credentials.')
         const logedIn = await bcrypt.compare(password, user.password)
-        if (!logedIn) throw new Error('Invalid credentials login 3.')
+        if (!logedIn) throw new Error('Invalid credentials.')
         try {
+          const person = await Person.query()
+            .where('deleted_at', null)
+            .findById(user.person_id)
           return {
             token: await jwt.sign(
-              { userId: user.id },
+              {
+                userId: user.id,
+              },
               process.env.API_ACCESS_TOKEN,
               { expiresIn: '1d' }
             ),
+            name: person ? `${person.first} ${person.last}` : undefined,
           }
         } catch (error) {
           return { error }
@@ -137,7 +143,13 @@ module.exports = new GraphQLObjectType({
       type: PersonType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.person, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.person,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Person.query()
@@ -158,7 +170,13 @@ module.exports = new GraphQLObjectType({
         younger: { type: GraphQLInt },
       },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.person, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.person,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Person.query()
@@ -178,7 +196,13 @@ module.exports = new GraphQLObjectType({
       type: PatientType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.patient, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.patient,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Patient.query()
@@ -192,7 +216,13 @@ module.exports = new GraphQLObjectType({
     patients: {
       type: new GraphQLList(PatientType),
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.patient, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.patient,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Patient.query().where('deleted_at', null)
@@ -205,7 +235,13 @@ module.exports = new GraphQLObjectType({
       type: ClinicType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.clinic, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.clinic,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Clinic.query()
@@ -219,7 +255,13 @@ module.exports = new GraphQLObjectType({
     clinics: {
       type: new GraphQLList(ClinicType),
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.clinic, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.clinic,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Clinic.query().where('deleted_at', null)
@@ -232,7 +274,13 @@ module.exports = new GraphQLObjectType({
       type: DoctorType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.doctor, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.doctor,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Doctor.query()
@@ -246,7 +294,13 @@ module.exports = new GraphQLObjectType({
     doctors: {
       type: new GraphQLList(DoctorType),
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.doctor, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.doctor,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Doctor.query().where('deleted_at', null)
@@ -259,7 +313,13 @@ module.exports = new GraphQLObjectType({
       type: LysateType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.lysate, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.lysate,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Lysate.query()
@@ -273,7 +333,13 @@ module.exports = new GraphQLObjectType({
     lysates: {
       type: new GraphQLList(LysateType),
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.lysate, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.lysate,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Lysate.query().where('deleted_at', null)
@@ -286,7 +352,13 @@ module.exports = new GraphQLObjectType({
       type: LocationType,
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.location, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.location,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Location.query()
@@ -304,7 +376,13 @@ module.exports = new GraphQLObjectType({
         occupied: { type: GraphQLBoolean },
       },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.location, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.location,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Location.query().where(args).where('deleted_at', null)
@@ -318,7 +396,11 @@ module.exports = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       async resolve(parent, args, req) {
         if (
-          !checkPermission(req.userId, tablenames.filesystem, permissions.read)
+          !(await checkPermission(
+            req.userId,
+            tablenames.filesystem,
+            permissions.read
+          ))
         )
           throw new Error('Unauthorised!')
         try {
@@ -334,7 +416,11 @@ module.exports = new GraphQLObjectType({
       type: new GraphQLList(FilesystemType),
       async resolve(parent, args, req) {
         if (
-          !checkPermission(req.userId, tablenames.filesystem, permissions.read)
+          !(await checkPermission(
+            req.userId,
+            tablenames.filesystem,
+            permissions.read
+          ))
         )
           throw new Error('Unauthorised!')
         try {
@@ -352,7 +438,13 @@ module.exports = new GraphQLObjectType({
         owner_id: { type: GraphQLID },
       },
       async resolve(parent, args, req) {
-        if (!checkPermission(req.userId, tablenames.document, permissions.read))
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.document,
+            permissions.read
+          ))
+        )
           throw new Error('Unauthorised!')
         try {
           return await Document.query().where(args).where('deleted_at', null)
