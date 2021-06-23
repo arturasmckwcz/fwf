@@ -69,3 +69,30 @@ export const Input = styled.input`
     }
   }
 `
+export const TableWrapper = styled.table`
+   {
+    height: 100%;
+    & > thead > tr > th {
+      position: sticky;
+      top: ${styling.menu_height};
+      background-color: ${styling.color.background};
+    }
+    & > tbody {
+      max-height: 100%;
+      overflow-y: auto;
+    }
+    & > tbody > tr:hover {
+      box-shadow: ${styling.shadow};
+      background-color: ${styling.color.hover};
+    }
+  }
+`
+export const ListWrapper = styled.ul`
+   {
+    padding-left: 0px;
+    & > li:hover {
+      box-shadow: ${styling.shadow};
+      background-color: ${styling.color.hover};
+    }
+  }
+`

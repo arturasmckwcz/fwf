@@ -2,12 +2,16 @@ import axios from 'axios'
 import { urlAPI } from '../../constants'
 
 export const USER_SET = 'USER_SET'
-export const USER_LOGIN = 'USER_LOGIN'
-export const USER_LOGOUT = 'USER_LOGOUT'
+export const USER_LOGIN_ERROR = 'USER_LOGIN_ERROR'
 
 export const userSet = user => ({
   type: USER_SET,
   payload: user,
+})
+
+export const userLoginError = error => ({
+  type: USER_LOGIN_ERROR,
+  payload: error,
 })
 
 export const login = ({ username, password }) => dispatch => {
@@ -19,8 +23,12 @@ export const login = ({ username, password }) => dispatch => {
       query: `{login(username:"${username}",password:"${password}"){token,name}}`,
     },
   })
-    .then(result => dispatch(userSet(result.data.data.login)))
-    .catch(error => dispatch(userSet(null)))
+    .then(result =>
+      result.data.data.login
+        ? dispatch(userSet(result.data.data.login))
+        : dispatch(userLoginError(result.data.errors[0].message))
+    )
+    .catch(error => dispatch(userLoginError(error.message)))
 }
 
 export const logout = ({ token }) => dispatch => {
@@ -35,6 +43,9 @@ export const logout = ({ token }) => dispatch => {
       query: `{logout}`,
     },
   })
-    .then(result => dispatch(userSet(null)))
-    .catch(error => dispatch(userSet(null)))
+    .then(result => {
+      dispatch(userSet(null))
+      dispatch(userLoginError(''))
+    })
+    .catch(error => dispatch(userLoginError(error.message)))
 }

@@ -10,29 +10,32 @@ import { menuSelect, logout } from '../../redux'
 
 const MenuContainer = ({ user, logout, menuSelect }) => {
   return (
-    <MenuWrapper>
+    <>
       {user ? (
         <>
-          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PATIENT)}>
-            New Patient
-          </MenuItem>
-          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRESCRIPTION)}>
-            New Prescription
-          </MenuItem>
-          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_SOURCE)}>
-            New Source Material
-          </MenuItem>
-          <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRODUCTION)}>
-            New Production
-          </MenuItem>
-          <span></span>
-          <MenuItem onClick={() => logout(user)}>Logout</MenuItem>
-          <span></span>
+          <MenuWrapper>
+            <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PATIENT)}>
+              New Patient
+            </MenuItem>
+            <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRESCRIPTION)}>
+              New Prescription
+            </MenuItem>
+            <MenuItem onClick={() => menuSelect(menus.MENU_NEW_SOURCE)}>
+              New Source Material
+            </MenuItem>
+            <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRODUCTION)}>
+              New Production
+            </MenuItem>
+            <span></span>
+            <MenuItem onClick={() => logout(user)}>Logout</MenuItem>
+            <span></span>
+          </MenuWrapper>
+          <User>{user.name}</User>
         </>
       ) : (
         <Login />
       )}
-    </MenuWrapper>
+    </>
   )
 }
 
@@ -78,5 +81,18 @@ const MenuItem = styled.div`
     &:hover {
       background-color: ${styling.color.hover};
     }
+  }
+`
+const User = styled.div`
+   {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: solid 1px ${styling.color.background};
+    box-shadow: ${styling.shadow};
+    padding: 0 10px;
+    margin-right: 10px;
   }
 `

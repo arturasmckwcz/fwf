@@ -6,6 +6,7 @@ import form from './form/formReducer'
 import list from './list/listReducer'
 import person from './person/personReducer'
 import doctor from './doctor/doctorReducer'
+import clinic from './clinic/clinicReducer'
 
 export default combineReducers({
   user,
@@ -14,4 +15,5 @@ export default combineReducers({
   list,
   person,
   doctor,
+  clinic,
 })

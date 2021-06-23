@@ -54,6 +54,3 @@ const ListWrapper = styled.div`
     height: calc(100% - ${styling.menu_height});
   }
 `
-
-// margin-top: ${styling.menu_height};
-// margin-left: ${styling.margin_left};

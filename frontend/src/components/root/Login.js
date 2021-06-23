@@ -7,19 +7,21 @@ import { login } from '../../redux'
 
 import styled from 'styled-components'
 
-const Login = ({ login }) => {
+const Login = ({ login, error }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = e => {
     e.preventDefault()
-    login({ username, password })
+    // login({ username, password })
+    login({ username: 'simona', password: 'froceth0' }) // TODO: get rid of autologin!
   }
 
   return (
     <LoginWrapper>
       <form onSubmit={e => handleLogin(e)}>
         <div>Login To FWF</div>
+        <div style={{ color: 'red' }}>{error}</div>
         <Input
           type='text'
           placeholder='Username'
@@ -40,7 +42,9 @@ const Login = ({ login }) => {
   )
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  error: state.user.error,
+})
 const mapDispatchToProps = dispatch => ({
   login: credentials => dispatch(login(credentials)),
 })

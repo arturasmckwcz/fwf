@@ -9,7 +9,7 @@ export const styling = {
     text: `hsl(${color.h}, ${color.s}, 80%)`,
     text_dimmed: `hsl(${color.h}, ${color.s}, 40%)`,
     hover: `hsl(${color.h}, ${color.s}, 10%)`,
-    border: `hsl(${color.h}, ${color.s}, 70%)`,
+    border: `hsl(${color.h}, ${color.s}, 40%)`,
     border_dimmed: `hsl(${color.h}, ${color.s}, 30%)`,
     shadow_lighter: `hsl(${color.h}, ${color.s}, 30%)`,
     shadow_darker: `hsl(${color.h}, ${color.s}, 20%)`,
@@ -22,6 +22,7 @@ export const styling = {
   margin_left: '20px',
   padding_left: '10px',
   padding_right: '10px',
+  margin_top_container: '57px',
   margin_bottom: '5px',
   input_height: '25px',
 }
@@ -46,4 +47,6 @@ export const lists = {
 
 export const genders = ['male', 'female', 'undefined']
 
-export const urlAPI = 'http://78.56.77.77:3001/api/graphql'
+export const statuses = ['O', 'X']
+
+export const urlAPI = process.env.REACT_APP_API_URL

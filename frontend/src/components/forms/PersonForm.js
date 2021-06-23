@@ -3,7 +3,12 @@ import { connect } from 'react-redux'
 
 import { personsFetch, menuSelect, listShow } from '../../redux'
 import { genders, menus, lists, styling } from '../../constants'
-import { FormWrapper, InputWrapper, ButtonWrapper, Input } from './FormStyling'
+import {
+  FormWrapper,
+  InputWrapper,
+  ButtonWrapper,
+  Input,
+} from '../common/FormStyling'
 
 const emptyPerson = {
   first: '',
@@ -34,7 +39,6 @@ const PersonForm = ({
     e.preventDefault()
     personsFetch({ person, token: user.token })
     setPerson({})
-    menuSelect(menus.MENU_NULL)
     listShow(lists.LIST_PERSON)
   }
 

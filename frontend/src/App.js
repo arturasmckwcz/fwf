@@ -4,8 +4,7 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 
 import MenuContainer from './components/root/MenuContainer'
-import FormContainer from './components/root/FormContainer'
-import ListContainer from './components/root/ListContainer'
+import ContentContainer from './components/root/ContentContainer'
 import styled from 'styled-components'
 
 import { styling } from './constants'
@@ -15,34 +14,13 @@ const App = () => {
     <Provider store={store}>
       <AppWrapper>
         <MenuContainer />
-        <ContentWrapper>
-          <FormContainer />
-          <VerticalSeparator />
-          <ListContainer />
-        </ContentWrapper>
+        <ContentContainer />
       </AppWrapper>
     </Provider>
   )
 }
 
 export default App
-
-const ContentWrapper = styled.div`
-   {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-  }
-`
-
-const VerticalSeparator = styled.div`
-   {
-    border-right: solid 1px ${styling.color.border};
-    margin-top: ${styling.menu_height};
-    margin-bottom: 10px;
-  }
-`
 
 const AppWrapper = styled.div`
    {

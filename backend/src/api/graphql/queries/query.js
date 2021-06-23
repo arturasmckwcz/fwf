@@ -12,7 +12,6 @@ const tablenames = require('../../../constants/tablenames')
 const permissions = require('../../../lib/arrayconvert')(
   require('../../../constants/enums').permissions
 )
-
 const checkPermission = require('../../../lib/checkPermission')
 
 const {
@@ -47,6 +46,8 @@ const redis = require('redis')
 const JwtRedis = require('jwt-redis').default
 const redisClient = redis.createClient()
 const jwt = new JwtRedis(redisClient)
+
+// const { login, logout } = require('./userQuery')
 
 module.exports = new GraphQLObjectType({
   name: 'RootQuery',
@@ -254,6 +255,7 @@ module.exports = new GraphQLObjectType({
     },
     clinics: {
       type: new GraphQLList(ClinicType),
+      args: { name: { type: GraphQLString } },
       async resolve(parent, args, req) {
         if (
           !(await checkPermission(
@@ -264,7 +266,9 @@ module.exports = new GraphQLObjectType({
         )
           throw new Error('Unauthorised!')
         try {
-          return await Clinic.query().where('deleted_at', null)
+          return await Clinic.query()
+            .where('name', 'ilike', `%${args.name}%`)
+            .where('deleted_at', null)
         } catch (error) {
           return { error }
         }

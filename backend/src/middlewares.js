@@ -50,11 +50,13 @@ const authCheck = (req, res, next) => {
 }
 
 const loggerHeaders = (req, res, next) => {
-  console.log('loggerHeaders:')
+  console.log('loggerHeaders: BEGIN')
+  console.log(`\t${new Date()}`)
   req.headers &&
     Object.keys(req.headers).map(key =>
-      console.log(`${key}: ${req.headers[key]}`)
+      console.log(`\t${key}: ${req.headers[key]}`)
     )
+  console.log('loggerHeaders: END')
   next()
 }
 

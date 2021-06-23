@@ -9,16 +9,16 @@ export const DOCTOR_SET = 'DOCTOR_SET'
 export const doctorsRequest = () => ({
   type: DOCTORS_REQUEST,
 })
-export const doctorsSuccess = persons => ({
+export const doctorsSuccess = doctors => ({
   type: DOCTORS_SUCCESS,
-  payload: persons,
+  payload: doctors,
 })
 export const doctorsFailure = error => ({
   type: DOCTORS_FAILURE,
   payload: error,
 })
 
-export const doctorsFetch = person => dispatch => {
+export const doctorsFetch = () => dispatch => {
   dispatch(doctorsRequest())
 
   axios({
@@ -26,10 +26,10 @@ export const doctorsFetch = person => dispatch => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: {
-      query: `{doctors{id,person{first,last,email,phone},clinic{name}}}`,
+      query: `{doctors{id,person{first,last},clinic{name}}}`,
     },
   })
-    .then(result => dispatch(doctorsSuccess(result.data.data.persons)))
+    .then(result => dispatch(doctorsSuccess(result.data.data.doctors)))
     .catch(error => dispatch(doctorsFailure(error)))
 }
 
