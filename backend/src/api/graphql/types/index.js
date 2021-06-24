@@ -12,6 +12,7 @@ const ParameterType = require('./ParameterType')
 const PatientType = require('./PatientType')
 const PermissionType = require('./PermissionType')
 const PersonType = require('./PersonType')
+const PersonSearchType = require('./PersonSearchType')
 const PrescriptionType = require('./PrescriptionType')
 const ProductionType = require('./ProductionType')
 const ProductType = require('./ProductType')
@@ -35,6 +36,7 @@ module.exports = {
   PatientType,
   PermissionType,
   PersonType,
+  PersonSearchType,
   PrescriptionType,
   ProductionType,
   ProductType,

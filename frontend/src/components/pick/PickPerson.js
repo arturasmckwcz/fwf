@@ -3,35 +3,37 @@ import { connect } from 'react-redux'
 
 import { Input, InputWrapper, ListWrapper } from '../common/Styling'
 
-import { clinicsFetch, clinicSet } from '../../redux'
+import { personsFetch, personSet } from '../../redux'
 
 import timedOutFetch from '../../lib/timedOutFetch'
 
-const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
+const PickClinic = ({ persons, personsFetch, personSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    const cleanUp = timedOutFetch(clinicsFetch, name, token)
+    const cleanUp = timedOutFetch(personsFetch, name, token)
     return cleanUp
-  }, [name, token, clinicsFetch])
+  }, [name, token, personsFetch])
 
   return (
     <>
       <InputWrapper>
         <Input
           type='text'
-          placeholder='Search clinic by name'
+          placeholder='Search person by name'
           value={name}
           onChange={e => setName(e.target.value)}
         />
       </InputWrapper>
       <ListWrapper>
-        {clinics &&
-          clinics.map(clinic => (
-            <li key={`clinic${clinic.id}`} onClick={() => clinicSet(clinic)}>
-              {clinic.name}
-            </li>
-          ))}
+        {persons &&
+          persons
+            .filter(person => !person.clinic)
+            .map(person => (
+              <li key={`person${person.id}`} onClick={() => personSet(person)}>
+                {person.name}, {person.age}yrs, {person.gender}
+              </li>
+            ))}
       </ListWrapper>
     </>
   )
@@ -39,10 +41,10 @@ const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
 
 const mapStateToProps = state => ({
   token: state.user.user.token,
-  clinics: state.clinic.list,
+  persons: state.person.list,
 })
 const mapDispatchToProps = dispatch => ({
-  clinicsFetch: obj => dispatch(clinicsFetch(obj)),
-  clinicSet: clinic => dispatch(clinicSet(clinic)),
+  personsFetch: obj => dispatch(personsFetch(obj)),
+  personSet: person => dispatch(personSet(person)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(PickClinic)

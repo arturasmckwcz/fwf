@@ -87,12 +87,32 @@ export const TableWrapper = styled.table`
     }
   }
 `
-export const ListWrapper = styled.ul`
+export const ListWrapper = styled.div`
    {
+    height: 70%;
+    overflow-y: scroll;
+
     padding-left: 0px;
+    list-style-type: none;
+
     & > li:hover {
       box-shadow: ${styling.shadow};
       background-color: ${styling.color.hover};
+    }
+  }
+`
+export const ContainerWrapper = styled.form`
+   {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 15px;
+    padding: 10px 10px;
+    & > * {
+      box-shadow: ${styling.shadow};
+      border: solid 1px ${styling.color.border};
+      border-radius: 4px;
     }
   }
 `

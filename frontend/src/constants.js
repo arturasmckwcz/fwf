@@ -45,6 +45,8 @@ export const lists = {
   LIST_DOCTOR: 'LIST_DOCTOR',
 }
 
+export const inputTimeout = 500
+
 export const genders = ['male', 'female', 'undefined']
 
 export const statuses = ['O', 'X']

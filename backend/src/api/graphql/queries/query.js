@@ -30,6 +30,7 @@ const {
 const {
   ProductType,
   PersonType,
+  PersonSearchType,
   ClinicType,
   DoctorType,
   DocumentLookupType,
@@ -161,15 +162,9 @@ module.exports = new GraphQLObjectType({
         }
       },
     },
-    persons: {
-      type: new GraphQLList(PersonType),
-      args: {
-        first: { type: GraphQLString },
-        last: { type: GraphQLString },
-        gender: { type: GraphQLString },
-        older: { type: GraphQLInt },
-        younger: { type: GraphQLInt },
-      },
+    personsByName: {
+      type: new GraphQLList(PersonSearchType),
+      args: { name: { type: GraphQLString } },
       async resolve(parent, args, req) {
         if (
           !(await checkPermission(
@@ -180,14 +175,35 @@ module.exports = new GraphQLObjectType({
         )
           throw new Error('Unauthorised!')
         try {
-          return await Person.query()
-            .skipUndefined()
-            .where('first', 'ilike', `%${args.first}%`)
-            .andWhere('last', 'ilike', `%${args.last}%`) // TODO: last must be presented, doesn't work if not
-            .andWhere('gender', args.gender)
-            .andWhere('age', '>', args.older)
-            .andWhere('age', '<', args.younger)
+          const persons = await Person.query()
+            .where('first', 'ilike', `%${args.name}%`)
+            .orWhere('last', 'ilike', `%${args.name}%`)
             .andWhere('deleted_at', null)
+            .returning(['id', 'first', 'last', 'gender', 'age'])
+          return persons.map(person => ({
+            ...person,
+            name: `${person.first} ${person.last}`,
+            first: undefined,
+            last: undefined,
+          }))
+        } catch (error) {
+          return { error }
+        }
+      },
+    },
+    persons: {
+      type: new GraphQLList(PersonType),
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.person,
+            permissions.read
+          ))
+        )
+          throw new Error('Unauthorised!')
+        try {
+          return await Person.query().where('deleted_at', null)
         } catch (error) {
           return { error }
         }
