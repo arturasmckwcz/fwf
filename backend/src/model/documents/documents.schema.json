@@ -55,6 +55,11 @@
       "type": "integer",
       "title": "The FK product_id to product table"
     },
+    "user_id": {
+      "$id": "#/properties/user_id",
+      "type": "integer",
+      "title": "The FK user_id to user table"
+    },
     "created_at": {
       "$id": "#/properties/created_at",
       "type": "string",

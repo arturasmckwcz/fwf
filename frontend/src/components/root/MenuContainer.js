@@ -26,9 +26,9 @@ const MenuContainer = ({ user, logout, menuSelect }) => {
             <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRODUCTION)}>
               New Production
             </MenuItem>
-            <span></span>
+            {/* <span></span> */}
             <MenuItem onClick={() => logout(user)}>Logout</MenuItem>
-            <span></span>
+            {/* <span></span> */}
           </MenuWrapper>
           <User>{user.name}</User>
         </>
@@ -51,23 +51,17 @@ export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer)
 // height:${styling.menu_height}
 const MenuWrapper = styled.div`
    {
-    position: absolute;
-    top: 0;
-    left: 0;
     display: flex;
-    flex-dirction: row;
+    flex-direction: row;
+    justify-content: start;
     align-items: center;
-    width: 100vw;
+    width: 100%;
+    height: 7%;
     background-color: ${styling.color.background};
-    & > span {
-      flex-grow: 1;
+    & > div:last-child {
+      margin-left: auto;
+      margin-right: 0.6rem;
     }
-    & > span:last-child {
-      max-width: ${styling.padding_right};
-    }
-    margin-top: 15px;
-    margin-bottom: 10px;
-    padding-left: ${styling.padding_left};
   }
 `
 const MenuItem = styled.div`
@@ -76,8 +70,8 @@ const MenuItem = styled.div`
     border-radius: 4px;
     border: solid 1px ${styling.color.border};
     box-shadow: ${styling.shadow};
-    padding: 0 10px;
-    margin-right: 10px;
+    padding: 0 0.6rem;
+    margin-left: 0.6rem;
     &:hover {
       background-color: ${styling.color.hover};
     }

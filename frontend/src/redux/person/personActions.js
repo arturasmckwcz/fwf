@@ -20,10 +20,6 @@ export const personsFailure = error => ({
 
 export const personsFetch = ({ name, token }) => dispatch => {
   if (name) {
-    console.log(
-      'personActions.js:personsFetch:query: ',
-      `{personsByName(name:"${name}"){id,name,gender,age}}`
-    )
     dispatch(personsRequest())
     axios({
       url: urlAPI,
@@ -33,14 +29,16 @@ export const personsFetch = ({ name, token }) => dispatch => {
         authorization: `Bearer ${token}`,
       },
       data: {
-        query: `{personsByName(name:"${name}"){id,name,gender,age,clinic}}`,
+        query: `{personsByName(name:"${
+          name !== ' ' ? name : ''
+        }"){id,name,gender,age,patient}}`,
       },
     })
       .then(result =>
         dispatch(personsSuccess(result.data.data.personsByName || []))
       )
       .catch(error => dispatch(personsFailure(error)))
-  } else dispatch(personsFailure(new Error('Parameter name is falsy')))
+  } else dispatch(personsSuccess([]))
 }
 
 export const personSet = person => ({ type: PERSON_SET, payload: person })

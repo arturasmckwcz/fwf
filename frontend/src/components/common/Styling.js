@@ -21,6 +21,11 @@ export const FormWrapper = styled.div`
     }
   }
 `
+export const HeightPlaceholder = styled.div`
+   {
+    height: ${styling.input_height};
+  }
+`
 export const ButtonWrapper = styled.div`
    {
     display: flex;
@@ -29,6 +34,7 @@ export const ButtonWrapper = styled.div`
     & > button {
       width: 100%;
       height: ${styling.input_height};
+      color: ${styling.color.text};
       background-color: ${styling.color.background};
       border-color: ${styling.color.shadow_lighter}
         ${styling.color.shadow_darker} ${styling.color.shadow_darker}
@@ -47,11 +53,12 @@ export const InputWrapper = styled.div`
       border: 0;
       text-indent: 4px;
     }
+    & > input,
+    select {
+      border-bottom: 1px solid ${styling.color.border_dimmed};
+    }
     & > select {
       border-color: ${styling.color.border_dimmed};
-    }
-    & > select > option {
-      color: red;
     }
     & > * {
       width: 100%;
@@ -87,11 +94,11 @@ export const TableWrapper = styled.table`
     }
   }
 `
-export const ListWrapper = styled.div`
+export const ListWrapper = styled.ul`
    {
     height: 70%;
     overflow-y: scroll;
-
+    margin-top: 0;
     padding-left: 0px;
     list-style-type: none;
 
@@ -101,7 +108,7 @@ export const ListWrapper = styled.div`
     }
   }
 `
-export const ContainerWrapper = styled.form`
+export const ContainerWrapper = styled.div`
    {
     display: flex;
     flex-direction: column;
@@ -113,6 +120,11 @@ export const ContainerWrapper = styled.form`
       box-shadow: ${styling.shadow};
       border: solid 1px ${styling.color.border};
       border-radius: 4px;
+    }
+    & > div > h3 {
+      text-align: center;
+      margin: 0;
+      padding: 0.2rem;
     }
   }
 `

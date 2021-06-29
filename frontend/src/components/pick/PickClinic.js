@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 
 import { Input, InputWrapper, ListWrapper } from '../common/Styling'
 
@@ -11,12 +12,12 @@ const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    const cleanUp = timedOutFetch(clinicsFetch, name, token)
+    const cleanUp = timedOutFetch(clinicsFetch, { name, token })
     return cleanUp
   }, [name, token, clinicsFetch])
 
   return (
-    <>
+    <div style={{ height: '100%' }}>
       <InputWrapper>
         <Input
           type='text'
@@ -33,7 +34,7 @@ const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
             </li>
           ))}
       </ListWrapper>
-    </>
+    </div>
   )
 }
 

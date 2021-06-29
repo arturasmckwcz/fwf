@@ -1,14 +1,12 @@
 const {
   GraphQLObjectType,
   GraphQLString,
+  GraphQLBoolean,
   GraphQLID,
   GraphQLInt,
 } = require('graphql')
 
-const ClinicType = require('./ClinicType')
-const { Clinic, Patient } = require('../../../model')
-
-const tablenames = require('../../../constants/tablenames')
+const { Patient } = require('../../../model')
 
 const PersonSearchType = new GraphQLObjectType({
   name: 'PersonSearch',
@@ -17,18 +15,14 @@ const PersonSearchType = new GraphQLObjectType({
     name: { type: GraphQLString },
     gender: { type: GraphQLString },
     age: { type: GraphQLInt },
-    clinic: {
-      type: GraphQLString,
+    patient: {
+      type: GraphQLBoolean,
       async resolve(parent, args) {
         try {
           const patient = await Patient.query()
             .where('deleted_at', null)
             .andWhere('person_id', parseInt(parent.id))
-            .first()
-          const clinic = await Clinic.query()
-            .where('deleted_at', null)
-            .findById([patient.clinic_id, tablenames.clinic])
-          return clinic.name
+          return patient.length !== 0
         } catch (error) {
           return { error }
         }

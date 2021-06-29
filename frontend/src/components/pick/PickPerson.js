@@ -11,12 +11,12 @@ const PickClinic = ({ persons, personsFetch, personSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    const cleanUp = timedOutFetch(personsFetch, name, token)
+    const cleanUp = timedOutFetch(personsFetch, { name, token })
     return cleanUp
   }, [name, token, personsFetch])
 
   return (
-    <>
+    <div style={{ height: '100%' }}>
       <InputWrapper>
         <Input
           type='text'
@@ -28,14 +28,14 @@ const PickClinic = ({ persons, personsFetch, personSet, token }) => {
       <ListWrapper>
         {persons &&
           persons
-            .filter(person => !person.clinic)
+            .filter(person => !person.patient)
             .map(person => (
               <li key={`person${person.id}`} onClick={() => personSet(person)}>
                 {person.name}, {person.age}yrs, {person.gender}
               </li>
             ))}
       </ListWrapper>
-    </>
+    </div>
   )
 }
 

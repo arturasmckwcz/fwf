@@ -27,8 +27,14 @@ export const styling = {
   input_height: '25px',
 }
 
+export const messageColors = {
+  NORMAL: styling.color.text,
+  ALERT: 'red',
+  SUCCESS: 'green',
+}
+
 export const menus = {
-  MENU_NULL: 'MENU_NULL',
+  MENU_INFO: 'MENU_INFO',
   MENU_NEW_PATIENT: 'MENU_NEW_PATIENT',
   MENU_NEW_PRESCRIPTION: 'MENU_NEW_PRESCRIPTION',
   MENU_NEW_SOURCE: 'MENU_NEW_SOURCE',

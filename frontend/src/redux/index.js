@@ -1,6 +1,6 @@
 export * from './user/userActions'
 export * from './menu/menuActions'
-export * from './form/formActions'
+export * from './info/infoActions'
 export * from './list/listActions'
 export * from './person/personActions'
 export * from './doctor/doctorActions'

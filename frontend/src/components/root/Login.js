@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import { styling } from '../../constants'
+import { styling, messageColors } from '../../constants'
 
-import { login } from '../../redux'
+import { login, infoSet } from '../../redux'
 
 import styled from 'styled-components'
 
-const Login = ({ login, error }) => {
+const Login = ({ login, error, infoSet }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -15,6 +15,11 @@ const Login = ({ login, error }) => {
     e.preventDefault()
     // login({ username, password })
     login({ username: 'simona', password: 'froceth0' }) // TODO: get rid of autologin!
+    if (error === '')
+      infoSet({
+        color: messageColors.SUCCESS,
+        message: 'Login success!',
+      })
   }
 
   return (
@@ -47,6 +52,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   login: credentials => dispatch(login(credentials)),
+  infoSet: message => dispatch(infoSet(message)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
@@ -77,6 +83,7 @@ const LoginWrapper = styled.div`
       widh: 100%;
       padding: 0;
       border: 0;
+      border-bottom: 1px solid ${styling.color.border_dimmed};
       text-indent: 4px;
       background-color: ${styling.color.background};
       color: ${styling.color.text};
@@ -84,6 +91,7 @@ const LoginWrapper = styled.div`
     }
     & > form > button {
       width: 100%;
+      margin-top: 1rem;
       background-color: ${styling.color.background};
       border-color: ${styling.color.shadow_lighter}
         ${styling.color.shadow_darker} ${styling.color.shadow_darker}

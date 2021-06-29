@@ -13,13 +13,14 @@ class Product extends Model {
 
   static get relationMappings() {
     const Prescription = require('../prescriptions/prescriptions.model')
+    const Document = require('../documents/documents.model')
     const Science = require('../science/science.model')
     return {
       prescritions: {
         relation: Model.HasManyRelation,
         modelClass: Prescription,
         join: {
-          from: `${tablenames.product}.id`,
+          from: [`${tablenames.product}.id`],
           to: `${tablenames.prescription}.${tablenames.product}_id`,
         },
       },
@@ -33,6 +34,7 @@ class Product extends Model {
       },
     }
   }
+
   static get jsonSchema() {
     return schema
   }

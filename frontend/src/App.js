@@ -26,13 +26,13 @@ const AppWrapper = styled.div`
    {
     text-align: center;
     background-color: ${styling.color.background};
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: center;
+    justify-content: start;
     font-size: calc(2px + 2vmin);
     text-align: left;
     color: ${styling.color.text};

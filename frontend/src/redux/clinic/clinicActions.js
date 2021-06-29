@@ -20,10 +20,6 @@ export const clinicsFailure = error => ({
 
 export const clinicsFetch = ({ name, token }) => dispatch => {
   if (name) {
-    console.log(
-      'clinicActions.js:clinicsFetch:query: ',
-      `{clinics(name:"${name}"){id,name}}`
-    )
     dispatch(clinicsRequest())
     axios({
       url: urlAPI,
@@ -33,12 +29,12 @@ export const clinicsFetch = ({ name, token }) => dispatch => {
         authorization: `Bearer ${token}`,
       },
       data: {
-        query: `{clinics(name:"${name}"){id,name}}`,
+        query: `{clinics(name:"${name !== ' ' ? name : ''}"){id,name}}`,
       },
     })
       .then(result => dispatch(clinicsSuccess(result.data.data.clinics)))
       .catch(error => dispatch(clinicsFailure(error)))
-  } else dispatch(clinicsFailure(new Error('Parameter name is falsy')))
+  } else dispatch(clinicsSuccess([]))
 }
 
 export const clinicSet = clinic => ({ type: CLINIC_SET, payload: clinic })

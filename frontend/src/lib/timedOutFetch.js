@@ -1,7 +1,7 @@
 import { inputTimeout } from '../constants'
 
-const timedOutFetch = (fetchFn, name, token) => {
-  const timeoutId = setTimeout(() => fetchFn({ name, token }), inputTimeout)
+const timedOutFetch = (fetchFn, obj) => {
+  const timeoutId = setTimeout(() => fetchFn(obj), inputTimeout)
   return () => clearTimeout(timeoutId)
 }
 

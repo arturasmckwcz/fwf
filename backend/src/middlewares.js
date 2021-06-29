@@ -50,13 +50,24 @@ const authCheck = (req, res, next) => {
 }
 
 const loggerHeaders = (req, res, next) => {
-  console.log('loggerHeaders: BEGIN')
+  console.log('loggerHeaders:BEGIN')
   console.log(`\t${new Date()}`)
   req.headers &&
     Object.keys(req.headers).map(key =>
       console.log(`\t${key}: ${req.headers[key]}`)
     )
-  console.log('loggerHeaders: END')
+  console.log('loggerHeaders:END')
+  next()
+}
+
+const loggerRequest = (req, res, next) => {
+  console.log('loggerRequest:BEGIN')
+  Object.keys(req.body).map(key =>
+    console.log(
+      req.body[key].substring(0, req.body.lenth < 100 ? req.body.lenth : 100)
+    )
+  )
+  console.log('loggerRequest:END')
   next()
 }
 
@@ -65,4 +76,5 @@ module.exports = {
   errorHandler,
   authCheck,
   loggerHeaders,
+  loggerRequest,
 }

@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import { personsFetch, menuSelect, listShow } from '../../redux'
-import { genders, menus, lists, styling } from '../../constants'
-import {
-  FormWrapper,
-  InputWrapper,
-  ButtonWrapper,
-  Input,
-} from '../common/FormStyling'
+import { personSet, infoSet, menuSelect } from '../../redux'
+import { createPerson } from '../../lib/api/person'
+
+import { genders, menus, messageColors } from '../../constants'
+import { InputWrapper, Input, ButtonWrapper } from '../common/Styling'
 
 const emptyPerson = {
   first: '',
@@ -20,61 +17,38 @@ const emptyPerson = {
   phone: '',
 }
 
-const PersonForm = ({
-  user,
-  personObj,
-  personsFetch,
-  menuSelect,
-  listShow,
-}) => {
+const PersonForm = ({ personSet, infoSet, menuSelect, token }) => {
   const [person, setPerson] = useState(emptyPerson)
-
   const handleChange = e =>
     setPerson({ ...person, [e.target.name]: e.target.value })
 
-  const handleUpdate = e =>
-    console.log('PersonFullForm:handleSubmit:person: ', person)
-
-  const handleSearch = e => {
+  const handleSubmit = e => {
     e.preventDefault()
-    personsFetch({ person, token: user.token })
-    setPerson({})
-    listShow(lists.LIST_PERSON)
+    createPerson({ person, token })
+      .then(res => {
+        console.log('PersonForm.js:handleSubmit:res: ', res)
+        if (res.data)
+          personSet({
+            ...res.data.data.addPerson,
+            name: `${res.data.data.addPerson.first} ${res.data.data.addPerson.last}`,
+          })
+        else {
+          infoSet({
+            color: messageColors.ALERT,
+            message: 'ERROR: Request failed!',
+          })
+          menuSelect(menus.MENU_INFO)
+        }
+      })
+      .catch(error => {
+        infoSet({ color: messageColors.ALERT, message: error.message })
+        menuSelect(menus.MENU_INFO)
+      })
   }
 
-  useEffect(() => setPerson(personObj), [personObj])
-
   return (
-    <FormWrapper>
-      <form>
-        <div>
-          <strong>PERSON</strong>
-        </div>
-        <div>SEARCH</div>
-        <InputWrapper>
-          <Input
-            name='first'
-            placeholder='First name'
-            value={person.first ? person.first : ''}
-            onChange={handleChange}
-          />
-          <Input
-            name='last'
-            placeholder='Last name'
-            value={person.last ? person.last : ''}
-            onChange={handleChange}
-          />
-        </InputWrapper>
-        <ButtonWrapper>
-          <button
-            style={{ color: styling.color.button_normal }}
-            type='button'
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-        </ButtonWrapper>
-        <div>MANAGE</div>
+    <>
+      <form onSubmit={handleSubmit}>
         <InputWrapper>
           {' '}
           <Input
@@ -123,32 +97,20 @@ const PersonForm = ({
           />
         </InputWrapper>
         <ButtonWrapper>
-          <button
-            style={{ color: styling.color.button_delete }}
-            type='button'
-            onClick={handleSearch}
-          >
-            Delete
-          </button>
-          <button
-            style={{ color: styling.color.button_mutate }}
-            type='button'
-            onClick={handleUpdate}
-          >
-            Update
+          <button type='submit' style={{ color: 'green' }}>
+            Create New Person
           </button>
         </ButtonWrapper>
       </form>
-    </FormWrapper>
+    </>
   )
 }
 const mapStateToProps = state => ({
-  personObj: state.person.obj,
-  user: state.user.user,
+  token: state.user.user.token,
 })
 const mapDispatchToProps = dispatch => ({
-  personsFetch: person => dispatch(personsFetch(person)),
-  listShow: list => dispatch(listShow(list)),
+  personSet: person => dispatch(personSet(person)),
+  infoSet: message => dispatch(infoSet(message)),
   menuSelect: menu => dispatch(menuSelect(menu)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(PersonForm)

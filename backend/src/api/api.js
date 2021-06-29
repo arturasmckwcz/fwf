@@ -4,10 +4,10 @@ const router = express.Router()
 const { graphqlHTTP } = require('express-graphql')
 const schema = require('./graphql')
 
-const { authCheck, loggerHeaders } = require('../middlewares')
+const { authCheck, loggerHeaders, loggerRequest } = require('../middlewares')
 
 router.use(loggerHeaders)
-
+router.use(loggerRequest)
 router.use(authCheck)
 
 router.use('/graphql', graphqlHTTP({ schema }))

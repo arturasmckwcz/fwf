@@ -163,6 +163,8 @@ exports.seed = async knex => {
   const receptionistCreateReadUpdateTables = [
     tablenames.person,
     tablenames.patient,
+    tablenames.filesystem,
+    tablenames.document,
   ]
 
   // convert arr of strings to arr of objs

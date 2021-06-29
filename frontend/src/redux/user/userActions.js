@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { urlAPI } from '../../constants'
 
-export const USER_SET = 'USER_SET'
+export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS'
 export const USER_LOGIN_ERROR = 'USER_LOGIN_ERROR'
 
 export const userSet = user => ({
-  type: USER_SET,
+  type: USER_LOGIN_SUCCESS,
   payload: user,
 })
 

@@ -42,6 +42,7 @@ class Patient extends Model {
       },
     }
   }
+
   static get jsonSchema() {
     return schema
   }

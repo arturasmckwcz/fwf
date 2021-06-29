@@ -78,7 +78,7 @@ module.exports = new GraphQLObjectType({
             .where('username', username)
             .first()
         } catch (error) {
-          return { error }
+          return error
         }
         if (!user) throw new Error('Invalid credentials.')
         const logedIn = await bcrypt.compare(password, user.password)
@@ -98,7 +98,7 @@ module.exports = new GraphQLObjectType({
             name: person ? `${person.first} ${person.last}` : undefined,
           }
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -119,7 +119,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.product])
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -137,34 +137,15 @@ module.exports = new GraphQLObjectType({
         try {
           return await Product.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
-        }
-      },
-    },
-    person: {
-      type: PersonType,
-      args: { id: { type: GraphQLID } },
-      async resolve(parent, args, req) {
-        if (
-          !(await checkPermission(
-            req.userId,
-            tablenames.person,
-            permissions.read
-          ))
-        )
-          throw new Error('Unauthorised!')
-        try {
-          return await Person.query()
-            .where('deleted_at', null)
-            .findById(args.id)
-        } catch (error) {
-          return { error }
+          return error
         }
       },
     },
     personsByName: {
       type: new GraphQLList(PersonSearchType),
-      args: { name: { type: GraphQLString } },
+      args: {
+        name: { type: GraphQLString },
+      },
       async resolve(parent, args, req) {
         if (
           !(await checkPermission(
@@ -187,7 +168,28 @@ module.exports = new GraphQLObjectType({
             last: undefined,
           }))
         } catch (error) {
-          return { error }
+          return error
+        }
+      },
+    },
+    person: {
+      type: PersonType,
+      args: { id: { type: GraphQLID } },
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.person,
+            permissions.read
+          ))
+        )
+          throw new Error('Unauthorised!')
+        try {
+          return await Person.query()
+            .where('deleted_at', null)
+            .findById(args.id)
+        } catch (error) {
+          return error
         }
       },
     },
@@ -205,7 +207,7 @@ module.exports = new GraphQLObjectType({
         try {
           return await Person.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -226,7 +228,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.patient])
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -244,7 +246,7 @@ module.exports = new GraphQLObjectType({
         try {
           return await Patient.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -265,7 +267,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.clinic])
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -286,7 +288,7 @@ module.exports = new GraphQLObjectType({
             .where('name', 'ilike', `%${args.name}%`)
             .where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -307,7 +309,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById(args.id)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -325,7 +327,7 @@ module.exports = new GraphQLObjectType({
         try {
           return await Doctor.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -346,7 +348,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.lysate])
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -364,7 +366,7 @@ module.exports = new GraphQLObjectType({
         try {
           return await Lysate.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -385,7 +387,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.location])
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -407,7 +409,7 @@ module.exports = new GraphQLObjectType({
         try {
           return await Location.query().where(args).where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -428,7 +430,7 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById(args.id)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -446,30 +448,33 @@ module.exports = new GraphQLObjectType({
         try {
           return await Filesystem.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
     documents: {
       type: new GraphQLList(DocumentLookupType),
       args: {
-        filesystem_id: { type: GraphQLID },
         table_id: { type: GraphQLString },
         owner_id: { type: GraphQLID },
       },
-      async resolve(parent, args, req) {
+      async resolve(parent, { owner_id, table_id }, { userId }) {
         if (
           !(await checkPermission(
-            req.userId,
+            userId,
             tablenames.document,
             permissions.read
           ))
         )
           throw new Error('Unauthorised!')
+        if (!(await checkPermission(userId, table_id, permissions.read)))
+          throw new Error('Unauthorised!')
         try {
-          return await Document.query().where(args).where('deleted_at', null)
+          return await Document.query()
+            .where({ table_id, [`${table_id}_id`]: owner_id })
+            .where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -490,7 +495,7 @@ module.exports = new GraphQLObjectType({
         try {
           return await User.query().where('deleted_at', null).findById(args.id)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
@@ -508,7 +513,7 @@ module.exports = new GraphQLObjectType({
         try {
           return User.query().where('deleted_at', null)
         } catch (error) {
-          return { error }
+          return error
         }
       },
     },
