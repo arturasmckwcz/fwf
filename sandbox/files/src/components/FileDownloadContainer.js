@@ -59,8 +59,8 @@ const FileDownloadContainer = ({ list }) => {
             <iframe
               title={result.data.data.file.name}
               src={result.data.data.file.body}
-              width='30rem'
-              heigth='50rem'
+              width='800px'
+              height='500px'
               alt=''
             />
           )

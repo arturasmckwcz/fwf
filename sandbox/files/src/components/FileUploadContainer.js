@@ -68,7 +68,12 @@ const FileUploadContainer = ({ list }) => {
           : 'NOTHING'}
       </p>
       <input type='file' name='file' multiple onChange={handleSelectFiles} />
-      <input type='submit' name='upload' onClick={handleUploadFiles} />
+      <input
+        type='submit'
+        name='upload'
+        onClick={handleUploadFiles}
+        value='Upload'
+      />
     </div>
   )
 }
@@ -76,6 +81,5 @@ const FileUploadContainer = ({ list }) => {
 const mapStateToProps = state => ({
   list: state.list,
 })
-const mapDispatchToProps = dispatch => ({})
 
-export default connect(mapStateToProps, mapDispatchToProps)(FileUploadContainer)
+export default connect(mapStateToProps, null)(FileUploadContainer)
