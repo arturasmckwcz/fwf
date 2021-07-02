@@ -3,8 +3,6 @@ import { urlAPI } from '../../constants'
 
 export const createPatient = async ({ patient, token }) => {
   const { person_id, clinic_id, status } = patient
-  console.log('patient.js:patient: ', patient)
-  console.log('patient.js:token: ', token)
   try {
     return await axios({
       url: urlAPI,

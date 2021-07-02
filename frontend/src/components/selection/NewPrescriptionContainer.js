@@ -2,19 +2,40 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { menus, messageColors } from '../../constants'
+import { menus, messageColors, bloodSources } from '../../constants'
 
-import { ContainerWrapper } from '../common/Styling'
+import { ContainerWrapper, InputWrapper } from '../common/Styling'
 
 import { menuSelect, infoSet } from '../../redux'
 
+import PickFile from '../pick/PickFile'
+
 const NewPatientContainer = ({ menuSelect, infoSet, token }) => {
+  const [bloodSource, setBloodSource] = useState('')
+  const [files, setFiles] = useState([])
   return (
     <ContainerWrapper>
-      <PersonInputWrap></PersonInputWrap>
-      <ScalarsWrap></ScalarsWrap>
-      <ClinicPickWrap></ClinicPickWrap>
-      <InfoPatientWrap></InfoPatientWrap>
+      <ScalarsWrap>
+        <h3>Blood source</h3>
+        <InputWrapper>
+          <select
+            name='bloodSource'
+            value={bloodSource}
+            onChange={e => setBloodSource(e.target.value)}
+          >
+            <option value=''>BLOOD SOURCE</option>
+            {bloodSources.map(source => (
+              <option key={source} value={source}>
+                {source}
+              </option>
+            ))}
+          </select>
+        </InputWrapper>
+      </ScalarsWrap>
+      <DocumentWrap>
+        <h3>Documents</h3>
+        <PickFile files={files} setFiles={setFiles} obj={{}} />
+      </DocumentWrap>
     </ContainerWrapper>
   )
 }
@@ -28,35 +49,19 @@ const mapDispatchToProps = dispatch => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(NewPatientContainer)
 
-const PersonInputWrap = styled.div`
-   {
-    background-color: darkgrey;
-    width: 49%;
-    max-width: 40rem;
-    height: 60%;
-  }
-`
 const ScalarsWrap = styled.div`
    {
-    background-color: darkgrey;
     width: 49%;
     max-width: 40rem;
     height: 30%;
   }
 `
-const ClinicPickWrap = styled.div`
+const DocumentWrap = styled.div`
    {
-    background-color: darkgrey;
-    width: 49%;
-    max-width: 40rem;
-    height: 60%;
-  }
-`
-const InfoPatientWrap = styled.div`
-   {
-    background-color: darkgrey;
-    width: 49%;
-    max-width: 40rem;
-    height: 30%;
+     {
+      width: 49%;
+      max-width: 40rem;
+      height: 45%;
+    }
   }
 `

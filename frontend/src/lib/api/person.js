@@ -2,8 +2,6 @@ import axios from 'axios'
 import { urlAPI } from '../../constants'
 
 export const createPerson = async ({ person, token }) => {
-  console.log('person.js:person: ', person)
-  console.log('person.js:token: ', token)
   try {
     return await axios({
       url: urlAPI,

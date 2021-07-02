@@ -54,7 +54,9 @@ export const lists = {
 export const inputTimeout = 500
 
 export const genders = ['male', 'female', 'undefined']
-
 export const statuses = ['O', 'X']
+export const bloodSources = ['autologous', 'allogeneic']
 
 export const urlAPI = process.env.REACT_APP_API_URL
+
+export const tables = { patient: 'patient' }

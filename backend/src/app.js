@@ -2,7 +2,12 @@ const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
 const helmet = require('helmet')
-const { notFound, errorHandler } = require('./middlewares')
+const {
+  notFound,
+  errorHandler,
+  loggerHeaders,
+  loggerReq,
+} = require('./middlewares')
 const cors = require('cors')
 
 const apiRouter = require('./api/api')
@@ -19,8 +24,11 @@ app.options('*', cors())
 app.use(morgan('dev'))
 app.use(compression())
 app.use(helmet())
+
 app.use(express.json({ limit: '50mb' }))
-app.use(express.urlencoded({ limit: '50mb' }))
+
+app.use(loggerHeaders)
+app.use(loggerReq)
 
 app.use('/api', apiRouter)
 

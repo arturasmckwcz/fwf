@@ -60,14 +60,14 @@ const loggerHeaders = (req, res, next) => {
   next()
 }
 
-const loggerRequest = (req, res, next) => {
-  console.log('loggerRequest:BEGIN')
+const loggerReq = (req, res, next) => {
+  console.log('loggerReq:BEGIN')
   Object.keys(req.body).map(key =>
     console.log(
       req.body[key].substring(0, req.body.lenth < 100 ? req.body.lenth : 100)
     )
   )
-  console.log('loggerRequest:END')
+  console.log('loggerReq:END')
   next()
 }
 
@@ -76,5 +76,5 @@ module.exports = {
   errorHandler,
   authCheck,
   loggerHeaders,
-  loggerRequest,
+  loggerReq,
 }
