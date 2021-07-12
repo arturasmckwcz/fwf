@@ -114,7 +114,7 @@ export const ContainerWrapper = styled.div`
     flex-direction: column;
     flex-wrap: wrap;
     width: 100%;
-    gap: 15px;
+    gap: 0.2rem;
     padding: 10px 10px;
     & > * {
       box-shadow: ${styling.shadow};

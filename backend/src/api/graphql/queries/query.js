@@ -270,10 +270,10 @@ module.exports = new GraphQLObjectType({
       },
     },
     patientsByName: {
-      type: new GraphQLList(PatientSearchType),
+      type: new GraphQLList(PatientType),
       args: {
         name: { type: GraphQLString },
-        date_from: { type: GraphQLDateTime },
+        date_from: { type: GraphQLString /*GraphQLDateTime*/ },
       },
       async resolve(parent, args, req) {
         if (
@@ -284,8 +284,30 @@ module.exports = new GraphQLObjectType({
           ))
         )
           throw new Error('Unauthorised!')
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.person,
+            permissions.read
+          ))
+        )
+          throw new Error('Unauthorised!')
         try {
-          return await Patient.query().where('deleted_at', null)
+          const persons = await Person.query()
+            .where('deleted_at', null)
+            .where('first', 'ilike', `%${args.name}%`)
+            .orWhere('last', 'ilike', `%${args.name}%`)
+          return await Patient.query()
+            .where('deleted_at', null)
+            .andWhere(
+              'created_at',
+              '>',
+              args.date_from ? args.date_from : '2021-01-01T00:00:00.000000+00'
+            )
+            .whereIn(
+              'person_id',
+              persons.length ? persons.map(person => person.id) : []
+            )
         } catch (error) {
           return error
         }

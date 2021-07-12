@@ -1,4 +1,5 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql')
+const { GraphQLDateTime } = require('graphql-iso-date')
 
 const tablenames = require('../../../constants/tablenames')
 
@@ -38,8 +39,8 @@ const PatientType = new GraphQLObjectType({
     },
     code: { type: GraphQLString },
     status: { type: GraphQLString },
+    created_at: { type: GraphQLDateTime },
   }),
-  id: { type: GraphQLID },
 })
 
 module.exports = PatientType

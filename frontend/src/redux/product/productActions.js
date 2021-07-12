@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { urlAPI } from '../../constants'
 
-export const PRODUCTS_REQUEST = 'PRODUCT_REQUEST'
-export const PRODUCTS_SUCCESS = 'PRODUCT_SUCCESS'
-export const PRODUCTS_FAILURE = 'PRODUCT_FAILURE'
+export const PRODUCTS_REQUEST = 'PRODUCTS_REQUEST'
+export const PRODUCTS_SUCCESS = 'PRODUCTS_SUCCESS'
+export const PRODUCTS_FAILURE = 'PRODUCTS_FAILURE'
 export const PRODUCT_SET = 'PRODUCT_SET'
 
 export const productsRequest = () => ({

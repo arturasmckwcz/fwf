@@ -12,17 +12,26 @@ import {
 
 import Select from '../common/Select'
 
-import { menuSelect, infoSet, doctorSet, productSet } from '../../redux'
+import {
+  menuSelect,
+  infoSet,
+  doctorSet,
+  productSet,
+  lysateSet,
+} from '../../redux'
 
 import PickDoctor from '../pick/PickDoctor'
 import PickFile from '../pick/PickFile'
 import PickProduct from '../pick/PickProduct'
+import PickLysate from '../pick/PickLysate'
 
 const NewPrescriptionContainer = ({
   doctor,
   doctorSet,
   product,
   productSet,
+  lysate,
+  lysateSet,
   menuSelect,
   infoSet,
   token,
@@ -66,6 +75,7 @@ const NewPrescriptionContainer = ({
       </ProductPickWrapp>
       <LysatePickWrapp>
         <h3>Lysate</h3>
+        <PickLysate />
       </LysatePickWrapp>
       <DocumentWrap>
         <h3>Documents</h3>
@@ -104,10 +114,10 @@ const NewPrescriptionContainer = ({
         </p>
         <p>
           Lysate:{' '}
-          {true && (
+          {lysate && (
             <>
-              <span>Placeholder</span>
-              <span onClick={() => {}}>[X]</span>
+              <span>{lysate.name}</span>
+              <span onClick={() => lysateSet({})}>[X]</span>
             </>
           )}
         </p>
@@ -127,12 +137,14 @@ const mapStateToProps = state => ({
   token: state.user.user.token,
   doctor: state.doctor.obj,
   product: state.product.obj,
+  lysate: state.lysate.obj,
 })
 const mapDispatchToProps = dispatch => ({
   menuSelect: menu => dispatch(menuSelect(menu)),
   infoSet: message => dispatch(infoSet(message)),
   doctorSet: doctor => dispatch(doctorSet(doctor)),
   productSet: product => dispatch(productSet(product)),
+  lysateSet: lysate => dispatch(lysateSet(lysate)),
 })
 export default connect(
   mapStateToProps,
@@ -171,7 +183,7 @@ const LysatePickWrapp = styled.div`
    {
     width: 49%;
     max-width: 40rem;
-    height: 15%;
+    height: 20%;
   }
 `
 const DocumentWrap = styled.div`
@@ -187,7 +199,7 @@ const InfoPrescriptionWrap = styled.div`
    {
     width: 49%;
     max-width: 40rem;
-    height: 43%;
+    height: 44%;
     & > p {
       padding-left: 0.2rem;
     }
