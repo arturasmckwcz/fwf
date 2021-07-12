@@ -10,6 +10,7 @@ const LoginType = require('./LoginType')
 const LysateType = require('./LysateType')
 const ParameterType = require('./ParameterType')
 const PatientType = require('./PatientType')
+const PatientSearchType = require('./PatientSearchType')
 const PermissionType = require('./PermissionType')
 const PersonType = require('./PersonType')
 const PersonSearchType = require('./PersonSearchType')
@@ -34,6 +35,7 @@ module.exports = {
   LysateType,
   ParameterType,
   PatientType,
+  PatientSearchType,
   PermissionType,
   PersonType,
   PersonSearchType,

@@ -41,13 +41,12 @@ exports.seed = async knex => {
         .insert({ first: item.first, last: item.last })
         .returning('id')
     )
-    const clinic_id =
-      clinics[clinics.findIndex(clinic => matchName(clinic.name, item.clinic))]
-        ?.id
+    const clinic =
+      clinics[clinics.findIndex(clnc => matchName(clnc.name, item.clinic))]
 
     await knex(tablenames.doctor).insert({
       person_id,
-      clinic_id: clinic_id ? parseInt(clinic_id) : undefined,
+      clinic_id: clinic ? parseInt(clinic.id) : undefined,
     })
   }
 
@@ -222,14 +221,15 @@ exports.seed = async knex => {
         })
         .returning('id')
     )
-    const clinic_id =
-      clinics[clinics.findIndex(item => matchName(clinic, item.name, 0.4))]?.id
+    const clinicToMatch =
+      clinics[clinics.findIndex(item => matchName(clinic, item.name, 0.4))]
+    
 
     await knex(tablenames.patient).insert({
       person_id,
       code,
       status: status === 'O' || status === 'X' ? status : 'undefined',
-      clinic_id: clinic_id ? parseInt(clinic_id) : undefined,
+      clinic_id: clinicToMatch ? parseInt(clinicToMatch.id) : undefined,
       user_id: parseInt(adminUser),
     })
   }

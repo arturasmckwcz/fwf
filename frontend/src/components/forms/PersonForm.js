@@ -7,6 +7,8 @@ import { createPerson } from '../../lib/api/person'
 import { genders, menus, messageColors } from '../../constants'
 import { InputWrapper, Input, ButtonWrapper } from '../common/Styling'
 
+import Select from '../common/Select'
+
 const emptyPerson = {
   first: '',
   last: '',
@@ -19,8 +21,11 @@ const emptyPerson = {
 
 const PersonForm = ({ personSet, infoSet, menuSelect, token }) => {
   const [person, setPerson] = useState(emptyPerson)
+
   const handleChange = e =>
     setPerson({ ...person, [e.target.name]: e.target.value })
+
+  const handleGenderChange = gender => setPerson({ ...person, gender })
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -63,14 +68,12 @@ const PersonForm = ({ personSet, infoSet, menuSelect, token }) => {
             value={person.last ? person.last : ''}
             onChange={handleChange}
           />
-          <select name='gender' value={person.gender} onChange={handleChange}>
-            <option value=''>GENDER</option>
-            {genders.map(gender => (
-              <option key={gender} value={gender}>
-                {gender}
-              </option>
-            ))}
-          </select>
+          <Select
+            name='GENDER'
+            list={genders}
+            value={person.gender}
+            handleChange={handleGenderChange}
+          />
           <Input
             name='age'
             placeholder='Age'

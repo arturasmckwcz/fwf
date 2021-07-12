@@ -29,13 +29,13 @@ export const personsFetch = ({ name, token }) => dispatch => {
         authorization: `Bearer ${token}`,
       },
       data: {
-        query: `{personsByName(name:"${
+        query: `{personsUnassignedByName(name:"${
           name !== ' ' ? name : ''
-        }"){id,name,gender,age,patient}}`,
+        }"){id,name,gender,age}}`,
       },
     })
       .then(result =>
-        dispatch(personsSuccess(result.data.data.personsByName || []))
+        dispatch(personsSuccess(result.data.data.personsUnassignedByName || []))
       )
       .catch(error => dispatch(personsFailure(error)))
   } else dispatch(personsSuccess([]))

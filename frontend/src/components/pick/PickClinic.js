@@ -11,9 +11,8 @@ const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    const cleanUp = timedOutFetch(clinicsFetch, { name, token })
-    return cleanUp
-  }, [name, token, clinicsFetch])
+    if (clinics.length === 0) clinicsFetch({ name: ' ', token })
+  }, [])
 
   return (
     <div style={{ height: '100%' }}>
@@ -25,9 +24,12 @@ const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
           onChange={e => setName(e.target.value)}
         />
       </InputWrapper>
-      <ListWrapper>
-        {clinics &&
-          clinics.map(clinic => (
+      <ListWrapper height='80%'>
+        {clinics
+          .filter(clinic =>
+            clinic.name.toLowerCase().includes(name.toLowerCase())
+          )
+          .map(clinic => (
             <li key={`clinic${clinic.id}`} onClick={() => clinicSet(clinic)}>
               {clinic.name}
             </li>

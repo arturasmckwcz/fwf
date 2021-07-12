@@ -96,7 +96,7 @@ export const TableWrapper = styled.table`
 `
 export const ListWrapper = styled.ul`
    {
-    height: 70%;
+    height: ${props => props.height};
     overflow-y: scroll;
     margin-top: 0;
     padding-left: 0px;

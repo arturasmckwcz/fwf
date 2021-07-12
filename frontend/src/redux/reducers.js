@@ -7,6 +7,7 @@ import list from './list/listReducer'
 import person from './person/personReducer'
 import doctor from './doctor/doctorReducer'
 import clinic from './clinic/clinicReducer'
+import product from './product/productReducer'
 import file from './file/fileReducer'
 
 export default combineReducers({
@@ -17,5 +18,6 @@ export default combineReducers({
   person,
   doctor,
   clinic,
+  product,
   file,
 })

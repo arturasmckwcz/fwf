@@ -2,9 +2,9 @@ import axios from 'axios'
 import { urlAPI } from '../../constants'
 
 export const addDocuments = (id, table_id, files, token) => {
-  return files.map(file => {
+  return files.forEach(file => {
     const fileReader = new FileReader()
-    fileReader.onload = () => {
+    fileReader.onload = () =>
       axios({
         url: urlAPI,
         method: 'POST',
@@ -24,7 +24,6 @@ export const addDocuments = (id, table_id, files, token) => {
             }`,
         },
       }).catch(console.error)
-    }
     fileReader.readAsDataURL(file)
   })
 }

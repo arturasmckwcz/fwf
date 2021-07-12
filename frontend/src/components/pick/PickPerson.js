@@ -11,6 +11,7 @@ const PickClinic = ({ persons, personsFetch, personSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
+    // TODO: need to rethink how many persons to fetch
     const cleanUp = timedOutFetch(personsFetch, { name, token })
     return cleanUp
   }, [name, token, personsFetch])
@@ -25,15 +26,12 @@ const PickClinic = ({ persons, personsFetch, personSet, token }) => {
           onChange={e => setName(e.target.value)}
         />
       </InputWrapper>
-      <ListWrapper>
-        {persons &&
-          persons
-            .filter(person => !person.patient)
-            .map(person => (
-              <li key={`person${person.id}`} onClick={() => personSet(person)}>
-                {person.name}, {person.age}yrs, {person.gender}
-              </li>
-            ))}
+      <ListWrapper height='73%'>
+        {persons.map(person => (
+          <li key={`person${person.id}`} onClick={() => personSet(person)}>
+            {person.name}, {person.age}yrs, {person.gender}
+          </li>
+        ))}
       </ListWrapper>
     </div>
   )

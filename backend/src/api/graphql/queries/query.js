@@ -6,6 +6,7 @@ const {
   GraphQLList,
   GraphQLInt,
 } = require('graphql')
+const { GraphQLDateTime } = require('graphql-iso-date')
 
 const tablenames = require('../../../constants/tablenames')
 // get permissions list from enums as an object
@@ -31,6 +32,7 @@ const {
   ProductType,
   PersonType,
   PersonSearchType,
+  PatientSearchType,
   ClinicType,
   DoctorType,
   DocumentLookupType,
@@ -47,8 +49,6 @@ const redis = require('redis')
 const JwtRedis = require('jwt-redis').default
 const redisClient = redis.createClient()
 const jwt = new JwtRedis(redisClient)
-
-// const { login, logout } = require('./userQuery')
 
 module.exports = new GraphQLObjectType({
   name: 'RootQuery',
@@ -141,7 +141,7 @@ module.exports = new GraphQLObjectType({
         }
       },
     },
-    personsByName: {
+    personsUnassignedByName: {
       type: new GraphQLList(PersonSearchType),
       args: {
         name: { type: GraphQLString },
@@ -161,12 +161,31 @@ module.exports = new GraphQLObjectType({
             .orWhere('last', 'ilike', `%${args.name}%`)
             .andWhere('deleted_at', null)
             .returning(['id', 'first', 'last', 'gender', 'age'])
-          return persons.map(person => ({
-            ...person,
-            name: `${person.first} ${person.last}`,
-            first: undefined,
-            last: undefined,
-          }))
+          const result = await Promise.all(
+            persons.map(async person => {
+              const { id } = person
+              const patient = await Patient.query()
+                .where('deleted_at', null)
+                .andWhere('person_id', id)
+              const doctor = await Doctor.query()
+                .where('deleted_at', null)
+                .andWhere('person_id', id)
+              const user = await User.query()
+                .where('deleted_at', null)
+                .andWhere('person_id', id)
+              return {
+                ...person,
+                name: `${person.first} ${person.last}`,
+                first: undefined,
+                last: undefined,
+                isnot_assigned:
+                  patient.length === 0 &&
+                  doctor.length === 0 &&
+                  user.length === 0,
+              }
+            })
+          )
+          return result.filter(person => person.isnot_assigned)
         } catch (error) {
           return error
         }
@@ -234,6 +253,28 @@ module.exports = new GraphQLObjectType({
     },
     patients: {
       type: new GraphQLList(PatientType),
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.patient,
+            permissions.read
+          ))
+        )
+          throw new Error('Unauthorised!')
+        try {
+          return await Patient.query().where('deleted_at', null)
+        } catch (error) {
+          return error
+        }
+      },
+    },
+    patientsByName: {
+      type: new GraphQLList(PatientSearchType),
+      args: {
+        name: { type: GraphQLString },
+        date_from: { type: GraphQLDateTime },
+      },
       async resolve(parent, args, req) {
         if (
           !(await checkPermission(

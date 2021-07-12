@@ -112,7 +112,7 @@ exports.up = async knex => {
       .enu('blood_source', enums.sources)
       .defaultTo(enums.sources[0])
       .notNullable()
-    table.dateTime('issue_date')
+    table.dateTime('issue_date').defaultTo(knex.fn.now())
     addReference(table, tablenames.doctor)
     addReference(table, tablenames.patient)
     addReference(table, tablenames.lysate)

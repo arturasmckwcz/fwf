@@ -3,7 +3,11 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import reducer from './reducers'
 
-const composeEnhancers = composeWithDevTools({ trace: true })
+const composeEnhancers = composeWithDevTools({
+  trace: true,
+  realtime: true,
+  port: 5000,
+})
 
 const store =
   process.env.REACT_APP_RUN_ENVIROMENT === 'development'

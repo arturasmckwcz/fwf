@@ -18,18 +18,30 @@ export const doctorsFailure = error => ({
   payload: error,
 })
 
-export const doctorsFetch = () => dispatch => {
+export const doctorsFetch = ({ token }) => dispatch => {
   dispatch(doctorsRequest())
 
   axios({
     url: urlAPI,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
     data: {
-      query: `{doctors{id,person{first,last},clinic{name}}}`,
+      query: `{doctors{id,person{id,first,last},clinic{id,name}}}`,
     },
   })
-    .then(result => dispatch(doctorsSuccess(result.data.data.doctors)))
+    .then(result =>
+      dispatch(
+        doctorsSuccess(
+          result.data.data.doctors.map(doctor => ({
+            ...doctor,
+            name: `${doctor.person.first} ${doctor.person.last}`,
+          }))
+        )
+      )
+    )
     .catch(error => dispatch(doctorsFailure(error)))
 }
 

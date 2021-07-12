@@ -6,6 +6,7 @@ import PickClinic from '../pick/PickClinic'
 import PickPerson from '../pick/PickPerson'
 import PickFile from '../pick/PickFile'
 import PersonForm from '../forms/PersonForm'
+import Select from '../common/Select'
 
 import { statuses, menus, tables, messageColors } from '../../constants'
 
@@ -79,18 +80,12 @@ const NewPatientContainer = ({
       <ScalarsWrap>
         <h3>Patient status</h3>
         <InputWrapper>
-          <select
-            name='status'
+          <Select
+            name='STATUS'
+            list={statuses}
             value={status}
-            onChange={e => setStatus(e.target.value)}
-          >
-            <option value=''>STATUS</option>
-            {statuses.map(status => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
+            handleChange={setStatus}
+          />
         </InputWrapper>
       </ScalarsWrap>
       <DocumentWrap>
