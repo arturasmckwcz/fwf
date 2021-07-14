@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { menus, messageColors, bloodSources } from '../../constants'
+import { createPrescription } from '../../lib/api/prescription'
+import { addDocuments } from '../../lib/api/document'
+
+import { menus, tables, messageColors, bloodSources } from '../../constants'
 
 import {
   ContainerWrapper,
@@ -16,11 +19,13 @@ import {
   menuSelect,
   infoSet,
   doctorSet,
+  patientSet,
   productSet,
   lysateSet,
 } from '../../redux'
 
 import PickDoctor from '../pick/PickDoctor'
+import PickPatient from '../pick/PickPatient'
 import PickFile from '../pick/PickFile'
 import PickProduct from '../pick/PickProduct'
 import PickLysate from '../pick/PickLysate'
@@ -28,6 +33,8 @@ import PickLysate from '../pick/PickLysate'
 const NewPrescriptionContainer = ({
   doctor,
   doctorSet,
+  patient,
+  patientSet,
   product,
   productSet,
   lysate,
@@ -40,9 +47,40 @@ const NewPrescriptionContainer = ({
   const [issueDate, setIssueDate] = useState('')
   const [files, setFiles] = useState([])
 
-  const handleSubmit = e => e.preventDefault()
-
-  useEffect(() => {}, [])
+  const handleSubmit = e => {
+    e.preventDefault()
+    const prescription = {
+      blood_source: bloodSource,
+      issue_date: issueDate,
+      doctor_id: doctor.id,
+      patient_id: patient.id,
+      lysate_id: lysate.id,
+      product_id: product.id,
+    }
+    createPrescription({ prescription, token })
+      .then(res => {
+        if (res.data && !res.data.errors)
+          return res.data.data.addPrescription.id
+        else throw new Error('Something went wrong!')
+      })
+      .then(id => addDocuments(id, tables.prescription, files, token))
+      .then(res => {
+        console.log('NewPrescritionContainer.js:addDocuments:\n', res)
+        menuSelect(menus.MENU_INFO)
+        infoSet({
+          color: messageColors.SUCCESS,
+          message: 'Success! Prescription has been created.',
+        })
+        doctorSet({})
+        patientSet({})
+        productSet({})
+        lysateSet({})
+      })
+      .catch(error => {
+        infoSet({ color: messageColors.ALERT, message: error.message })
+        menuSelect(menus.MENU_INFO)
+      })
+  }
 
   return (
     <ContainerWrapper>
@@ -52,6 +90,7 @@ const NewPrescriptionContainer = ({
       </DoctorPickWrapp>
       <PatientPickWrapp>
         <h3>Patient</h3>
+        <PickPatient />
       </PatientPickWrapp>
       <ScalarsWrap>
         <h3>Blood source and issue date</h3>
@@ -94,10 +133,10 @@ const NewPrescriptionContainer = ({
         </p>
         <p>
           Patient:{' '}
-          {true && (
+          {patient.person && (
             <>
-              <span>Placeholder</span>
-              <span onClick={() => {}}>[X]</span>
+              <span>{`${patient.person.first} ${patient.person.last}`}</span>
+              <span onClick={() => patientSet({})}>[X]</span>
             </>
           )}
         </p>
@@ -136,6 +175,7 @@ const NewPrescriptionContainer = ({
 const mapStateToProps = state => ({
   token: state.user.user.token,
   doctor: state.doctor.obj,
+  patient: state.patient.obj,
   product: state.product.obj,
   lysate: state.lysate.obj,
 })
@@ -143,6 +183,7 @@ const mapDispatchToProps = dispatch => ({
   menuSelect: menu => dispatch(menuSelect(menu)),
   infoSet: message => dispatch(infoSet(message)),
   doctorSet: doctor => dispatch(doctorSet(doctor)),
+  patientSet: patient => dispatch(patientSet(patient)),
   productSet: product => dispatch(productSet(product)),
   lysateSet: lysate => dispatch(lysateSet(lysate)),
 })

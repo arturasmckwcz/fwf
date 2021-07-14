@@ -7,8 +7,8 @@ const {
 
 const { Patient, Person } = require('../../../model')
 
-const PatientSearchType = new GraphQLObjectType({
-  name: 'PatientSearch',
+const PatientSearchByNameType = new GraphQLObjectType({
+  name: 'PatientSearchByName',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -17,4 +17,4 @@ const PatientSearchType = new GraphQLObjectType({
   }),
 })
 
-module.exports = PatientSearchType
+module.exports = PatientSearchByNameType

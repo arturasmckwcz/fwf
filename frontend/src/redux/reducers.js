@@ -10,6 +10,7 @@ import clinic from './clinic/clinicReducer'
 import product from './product/productReducer'
 import lysate from './lysate/lysateReducer'
 import file from './file/fileReducer'
+import patient from './patient/patientReducer'
 
 export default combineReducers({
   user,
@@ -22,4 +23,5 @@ export default combineReducers({
   product,
   lysate,
   file,
+  patient,
 })

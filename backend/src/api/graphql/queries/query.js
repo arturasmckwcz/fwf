@@ -32,7 +32,7 @@ const {
   ProductType,
   PersonType,
   PersonSearchType,
-  PatientSearchType,
+  PatientSearchByNameType,
   ClinicType,
   DoctorType,
   DocumentLookupType,
@@ -59,7 +59,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await jwt.destroy(tokenJti)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -78,7 +79,8 @@ module.exports = new GraphQLObjectType({
             .where('username', username)
             .first()
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
         if (!user) throw new Error('Invalid credentials.')
         const logedIn = await bcrypt.compare(password, user.password)
@@ -98,7 +100,8 @@ module.exports = new GraphQLObjectType({
             name: person ? `${person.first} ${person.last}` : undefined,
           }
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -119,7 +122,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.product])
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -137,7 +141,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Product.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -187,7 +192,8 @@ module.exports = new GraphQLObjectType({
           )
           return result.filter(person => person.isnot_assigned)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -208,7 +214,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById(args.id)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -226,7 +233,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Person.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -247,7 +255,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.patient])
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -265,12 +274,13 @@ module.exports = new GraphQLObjectType({
         try {
           return await Patient.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
     patientsByName: {
-      type: new GraphQLList(PatientType),
+      type: new GraphQLList(PatientType /*PatientSearchByNameType*/),
       args: {
         name: { type: GraphQLString },
         date_from: { type: GraphQLString /*GraphQLDateTime*/ },
@@ -309,7 +319,8 @@ module.exports = new GraphQLObjectType({
               persons.length ? persons.map(person => person.id) : []
             )
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -330,7 +341,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.clinic])
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -351,7 +363,8 @@ module.exports = new GraphQLObjectType({
             .where('name', 'ilike', `%${args.name}%`)
             .where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -372,7 +385,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById(args.id)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -390,7 +404,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Doctor.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -411,7 +426,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.lysate])
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -429,7 +445,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Lysate.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -450,7 +467,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById([args.id, tablenames.location])
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -472,7 +490,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Location.query().where(args).where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -493,7 +512,8 @@ module.exports = new GraphQLObjectType({
             .where('deleted_at', null)
             .findById(args.id)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -511,7 +531,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Filesystem.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -537,7 +558,8 @@ module.exports = new GraphQLObjectType({
             .where({ table_id, [`${table_id}_id`]: owner_id })
             .where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -558,7 +580,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await User.query().where('deleted_at', null).findById(args.id)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -576,7 +599,8 @@ module.exports = new GraphQLObjectType({
         try {
           return User.query().where('deleted_at', null)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },

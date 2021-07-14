@@ -14,12 +14,13 @@ const permissions = require('../../../lib/arrayconvert')(
 )
 
 const checkPermission = require('../../../lib/checkPermission')
-const { getPatientCode } = require('../../../lib/codes')
+const { getPrescriptionCode } = require('../../../lib/codes')
 
 const {
   Product,
   Person,
   Patient,
+  Prescription,
   Filesystem,
   Document,
 } = require('../../../model')
@@ -28,6 +29,7 @@ const {
   ProductType,
   PersonType,
   PatientType,
+  PrescriptionType,
   FilesystemType,
   DocumentType,
 } = require('../types')
@@ -58,7 +60,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Person.query().insertAndFetch(args)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -87,7 +90,8 @@ module.exports = new GraphQLObjectType({
             code: getPatientCode(),
           })
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -109,7 +113,50 @@ module.exports = new GraphQLObjectType({
         try {
           return await Product.query().insertAndFetch(args)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
+        }
+      },
+    },
+    addPrescription: {
+      type: PrescriptionType,
+      args: {
+        blood_source: { type: GraphQLString },
+        issue_date: { type: GraphQLString },
+        doctor_id: { type: GraphQLID },
+        patient_id: { type: GraphQLID },
+        lysate_id: { type: GraphQLID },
+        product_id: { type: GraphQLID },
+      },
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.prescription,
+            permissions.create
+          ))
+        )
+          throw new Error('Unauthorised!')
+        try {
+          let date = new Date(
+            args.issue_date.substring(0, 4),
+            args.issue_date.substring(5, 7),
+            args.issue_date.substring(8, 10)
+          )
+          date = date.toISOString().slice(0, -1) + '+00'
+          return await Prescription.query().insertAndFetch({
+            ...args,
+            issue_date: date,
+            doctor_id: parseInt(args.doctor_id),
+            patient_id: parseInt(args.patient_id),
+            lysate_id: parseInt(args.lysate_id),
+            product_id: parseInt(args.product_id),
+            user_id: req.userId,
+            code: getPrescriptionCode(),
+          })
+        } catch (error) {
+          console.error(error)
+          throw error
         }
       },
     },
@@ -132,7 +179,8 @@ module.exports = new GraphQLObjectType({
         try {
           return await Filesystem.query().insertAndFetch(args)
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -158,7 +206,8 @@ module.exports = new GraphQLObjectType({
             [`${table_id}_id`]: owner_id,
           })
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },
@@ -207,7 +256,8 @@ module.exports = new GraphQLObjectType({
             user_id: req.userId,
           })
         } catch (error) {
-          return error
+          console.error(error)
+          throw error
         }
       },
     },

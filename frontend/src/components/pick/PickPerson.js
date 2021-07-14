@@ -7,7 +7,7 @@ import { personsFetch, personSet } from '../../redux'
 
 import timedOutFetch from '../../lib/timedOutFetch'
 
-const PickClinic = ({ persons, personsFetch, personSet, token }) => {
+const PickPerson = ({ persons, personsFetch, personSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
@@ -45,4 +45,4 @@ const mapDispatchToProps = dispatch => ({
   personsFetch: obj => dispatch(personsFetch(obj)),
   personSet: person => dispatch(personSet(person)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(PickClinic)
+export default connect(mapStateToProps, mapDispatchToProps)(PickPerson)

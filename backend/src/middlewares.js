@@ -64,7 +64,7 @@ const loggerReq = (req, res, next) => {
   console.log('loggerReq:BEGIN')
   Object.keys(req.body).map(key =>
     console.log(
-      req.body[key].substring(0, req.body.lenth < 100 ? req.body.lenth : 100)
+      req.body[key].substring(0, req.body.lenth < 500 ? req.body.lenth : 500)
     )
   )
   console.log('loggerReq:END')
