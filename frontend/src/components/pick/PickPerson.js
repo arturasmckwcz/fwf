@@ -5,14 +5,23 @@ import { Input, InputWrapper, ListWrapper } from '../common/Styling'
 
 import { personsFetch, personSet } from '../../redux'
 
-import timedOutFetch from '../../lib/timedOutFetch'
+import { timedOutFetch } from '../../lib/utils'
 
-const PickPerson = ({ persons, personsFetch, personSet, token }) => {
+const PickPerson = ({
+  persons,
+  personsFetch,
+  personSet,
+  isAssigned,
+  token,
+}) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
     // TODO: need to rethink how many persons to fetch
-    const cleanUp = timedOutFetch(personsFetch, { name, token })
+    const cleanUp = timedOutFetch(personsFetch, {
+      obj: { name, isAssigned },
+      token,
+    })
     return cleanUp
   }, [name, token, personsFetch])
 

@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { urlAPI } from '../../constants'
+import { getDoctors } from '../../lib/api'
 
 export const DOCTORS_REQUEST = 'DOCTORS_REQUEST'
 export const DOCTORS_SUCCESS = 'DOCTORS_SUCCESS'
@@ -21,17 +20,7 @@ export const doctorsFailure = error => ({
 export const doctorsFetch = ({ token }) => dispatch => {
   dispatch(doctorsRequest())
 
-  axios({
-    url: urlAPI,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`,
-    },
-    data: {
-      query: `{doctors{id,person{id,first,last},clinic{id,name}}}`,
-    },
-  })
+  getDoctors({ token })
     .then(result =>
       dispatch(
         doctorsSuccess(

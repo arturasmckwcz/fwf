@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { urlAPI } from '../../constants'
+import { getProducts } from '../../lib/api'
 
 export const PRODUCTS_REQUEST = 'PRODUCTS_REQUEST'
 export const PRODUCTS_SUCCESS = 'PRODUCTS_SUCCESS'
@@ -20,17 +19,7 @@ export const productsFailure = error => ({
 
 export const productsFetch = ({ token }) => dispatch => {
   dispatch(productsRequest())
-  axios({
-    url: urlAPI,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`,
-    },
-    data: {
-      query: `{products{id,name}}`,
-    },
-  })
+  getProducts({ token })
     .then(result => dispatch(productsSuccess(result.data.data.products)))
     .catch(error => dispatch(productsFailure(error)))
 }

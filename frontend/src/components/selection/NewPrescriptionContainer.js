@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { createPrescription } from '../../lib/api/prescription'
-import { addDocuments } from '../../lib/api/document'
+import { createPrescription, addDocuments } from '../../lib/api/'
 
 import { menus, tables, messageColors, bloodSources } from '../../constants'
 
@@ -11,6 +10,7 @@ import {
   ContainerWrapper,
   InputWrapper,
   ButtonWrapper,
+  Input,
 } from '../common/Styling'
 
 import Select from '../common/Select'
@@ -39,13 +39,13 @@ const NewPrescriptionContainer = ({
   productSet,
   lysate,
   lysateSet,
+  files,
   menuSelect,
   infoSet,
   token,
 }) => {
   const [bloodSource, setBloodSource] = useState('')
   const [issueDate, setIssueDate] = useState('')
-  const [files, setFiles] = useState([])
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -59,13 +59,18 @@ const NewPrescriptionContainer = ({
     }
     createPrescription({ prescription, token })
       .then(res => {
+        console.log(
+          'NewPrescriptionContainer.js:handleSub:res: ',
+          res.data,
+          res.data.errors,
+          res.data.data.addPrescription.id
+        )
         if (res.data && !res.data.errors)
           return res.data.data.addPrescription.id
         else throw new Error('Something went wrong!')
       })
       .then(id => addDocuments(id, tables.prescription, files, token))
-      .then(res => {
-        console.log('NewPrescritionContainer.js:addDocuments:\n', res)
+      .then(() => {
         menuSelect(menus.MENU_INFO)
         infoSet({
           color: messageColors.SUCCESS,
@@ -101,9 +106,10 @@ const NewPrescriptionContainer = ({
             value={bloodSource}
             handleChange={setBloodSource}
           />
-          <input
+          <Input
             type='date'
             value={issueDate}
+            placeholder='Issue date'
             onChange={e => setIssueDate(e.target.value)}
           />
         </InputWrapper>
@@ -118,7 +124,7 @@ const NewPrescriptionContainer = ({
       </LysatePickWrapp>
       <DocumentWrap>
         <h3>Documents</h3>
-        <PickFile files={files} setFiles={setFiles} obj={{}} />
+        <PickFile obj={null} />
       </DocumentWrap>
       <InfoPrescriptionWrap>
         <h3>Prescription</h3>
@@ -178,6 +184,7 @@ const mapStateToProps = state => ({
   patient: state.patient.obj,
   product: state.product.obj,
   lysate: state.lysate.obj,
+  files: state.file.list,
 })
 const mapDispatchToProps = dispatch => ({
   menuSelect: menu => dispatch(menuSelect(menu)),

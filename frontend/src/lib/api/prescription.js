@@ -30,6 +30,6 @@ export const createPrescription = async ({ prescription, token }) => {
       },
     })
   } catch (error) {
-    return error
+    throw error
   }
 }

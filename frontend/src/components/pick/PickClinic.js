@@ -5,13 +5,11 @@ import { Input, InputWrapper, ListWrapper } from '../common/Styling'
 
 import { clinicsFetch, clinicSet } from '../../redux'
 
-import timedOutFetch from '../../lib/timedOutFetch'
-
 const PickClinic = ({ clinics, clinicsFetch, clinicSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    if (clinics.length === 0) clinicsFetch({ name: ' ', token })
+    if (clinics.length === 0) clinicsFetch({ token })
   }, [])
 
   return (

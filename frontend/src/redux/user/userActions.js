@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { urlAPI } from '../../constants'
+import { userLogin, userLogout } from '../../lib/api'
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS'
 export const USER_LOGIN_ERROR = 'USER_LOGIN_ERROR'
@@ -15,14 +14,7 @@ export const userLoginError = error => ({
 })
 
 export const login = ({ username, password }) => dispatch => {
-  axios({
-    url: urlAPI,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: {
-      query: `{login(username:"${username}",password:"${password}"){token,name}}`,
-    },
-  })
+  userLogin({ username, password })
     .then(result =>
       result.data.data.login
         ? dispatch(userSet(result.data.data.login))
@@ -32,17 +24,7 @@ export const login = ({ username, password }) => dispatch => {
 }
 
 export const logout = ({ token }) => dispatch => {
-  axios({
-    url: urlAPI,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`,
-    },
-    data: {
-      query: `{logout}`,
-    },
-  })
+  userLogout({ token })
     .then(result => {
       dispatch(userSet(null))
       dispatch(userLoginError(''))

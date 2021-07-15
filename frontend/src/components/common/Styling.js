@@ -67,6 +67,14 @@ export const InputWrapper = styled.div`
       background-color: ${styling.color.background};
       color: ${styling.color.text};
     }
+    & > input[type='date'] {
+      text-align: right;
+    }
+    & > input[type='date']:before {
+      color: ${styling.color.text};
+      content: attr(placeholder) !important;
+      margin-right: 0.2rem;
+    }
   }
 `
 export const Input = styled.input`

@@ -6,21 +6,21 @@ import PickClinic from '../pick/PickClinic'
 import PickPerson from '../pick/PickPerson'
 import PickFile from '../pick/PickFile'
 import PersonForm from '../forms/PersonForm'
-import Select from '../common/Select'
 
-import { statuses, menus, tables, messageColors } from '../../constants'
+import { menus, tables, messageColors } from '../../constants'
 
-import { createPatient, addDocuments } from '../../lib/api/'
+import { createSource, addDocuments } from '../../lib/api/'
 
 import {
   ContainerWrapper,
   ButtonWrapper,
   InputWrapper,
+  Input,
 } from '../common/Styling'
 
 import { personSet, clinicSet, menuSelect, infoSet } from '../../redux'
 
-const NewPatientContainer = ({
+const NewSourceContainer = ({
   person,
   clinic,
   personSet,
@@ -30,23 +30,29 @@ const NewPatientContainer = ({
   files,
   token,
 }) => {
-  const [status, setStatus] = useState('')
+  const [drawDate, setDrawDate] = useState('')
+  const [arriveDate, setArriveDate] = useState('')
   const [showNewPerson, setShowNewPerson] = useState(true)
 
   const handleSubmit = e => {
     e.preventDefault()
-    const patient = { person_id: person.id, clinic_id: clinic.id, status }
-    createPatient({ patient, token })
+    const source = {
+      draw_date: drawDate,
+      arrive_date: arriveDate,
+      person_id: person.id,
+      clinic_id: clinic.id,
+    }
+    createSource({ source, token })
       .then(res => {
-        if (res.data && !res.data.errors) return res.data.data.addPatient.id
+        if (res.data && !res.data.errors) return res.data.data.addSource.id
         else throw new Error('Something went wrong!')
       })
-      .then(id => addDocuments(id, tables.patient, files, token))
+      .then(id => addDocuments(id, tables.source, files, token))
       .then(() => {
         menuSelect(menus.MENU_INFO)
         infoSet({
           color: messageColors.SUCCESS,
-          message: 'Success! Patient has been created.',
+          message: 'Success! Source material has been created.',
         })
         personSet({})
         clinicSet({})
@@ -69,20 +75,26 @@ const NewPatientContainer = ({
             {showNewPerson ? 'Pick a person' : 'New person'}
           </button>
         </ButtonWrapper>
-        {showNewPerson ? <PersonForm /> : <PickPerson isAssigned={false} />}
+        {showNewPerson ? <PersonForm /> : <PickPerson isAssigned={true} />}
       </PersonInputWrap>
       <ClinicPickWrap>
         <h3>Clinic</h3>
         <PickClinic />
       </ClinicPickWrap>
       <ScalarsWrap>
-        <h3>Patient status</h3>
+        <h3>Arrival and draw dates</h3>
         <InputWrapper>
-          <Select
-            name='STATUS'
-            list={statuses}
-            value={status}
-            handleChange={setStatus}
+          <Input
+            type='date'
+            value={drawDate}
+            placeholder='Draw date'
+            onChange={e => setDrawDate(e.target.value)}
+          />
+          <Input
+            type='date'
+            value={arriveDate}
+            placeholder='Arrival date'
+            onChange={e => setArriveDate(e.target.value)}
           />
         </InputWrapper>
       </ScalarsWrap>
@@ -90,8 +102,8 @@ const NewPatientContainer = ({
         <h3>Documents</h3>
         <PickFile obj={person} />
       </DocumentWrap>
-      <InfoPatientWrap>
-        <h3>Patient</h3>
+      <InfoSourceWrap>
+        <h3>Source material</h3>
         <p>
           Person:{' '}
           {person.name && (
@@ -112,7 +124,8 @@ const NewPatientContainer = ({
             </>
           )}
         </p>
-        <p>Status: {status}</p>
+        <p>Arrival date: {arriveDate}</p>
+        <p>Draw date: {drawDate}</p>
         <ButtonWrapper>
           <button type='button' onClick={handleSubmit}>
             <strong style={{ color: messageColors.SUCCESS }}>
@@ -120,7 +133,7 @@ const NewPatientContainer = ({
             </strong>
           </button>
         </ButtonWrapper>
-      </InfoPatientWrap>
+      </InfoSourceWrap>
     </ContainerWrapper>
   )
 }
@@ -137,7 +150,7 @@ const mapDispatchToProps = dispatch => ({
   menuSelect: menu => dispatch(menuSelect(menu)),
   infoSet: message => dispatch(infoSet(message)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(NewPatientContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(NewSourceContainer)
 
 const PersonInputWrap = styled.div`
    {
@@ -170,11 +183,11 @@ const DocumentWrap = styled.div`
   }
 `
 // TODO: need a better idea where to put this extra styling
-const InfoPatientWrap = styled.div`
+const InfoSourceWrap = styled.div`
    {
     width: 49%;
     max-width: 40rem;
-    height: 30%;
+    height: 32%;
     & > p {
       padding-left: 0.2rem;
     }

@@ -59,4 +59,13 @@ export const bloodSources = ['autologous', 'allogeneic']
 
 export const urlAPI = process.env.REACT_APP_API_URL
 
-export const tables = { patient: 'patient' }
+export const tables = {
+  patient: 'patient',
+  prescription: 'prescription',
+  source: 'source',
+  product: 'product',
+  production: 'production',
+  clinic: 'clinic',
+  lysate: 'lysate',
+  dose: 'dose',
+}

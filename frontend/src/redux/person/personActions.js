@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { urlAPI } from '../../constants'
+import { getPersonsByName } from '../../lib/api'
 
 export const PERSONS_REQUEST = 'PERSONS_REQUEST'
 export const PERSONS_SUCCESS = 'PERSONS_SUCCESS'
@@ -18,24 +17,13 @@ export const personsFailure = error => ({
   payload: error,
 })
 
-export const personsFetch = ({ name, token }) => dispatch => {
+export const personsFetch = ({ obj, token }) => dispatch => {
+  const { name } = obj
   if (name) {
     dispatch(personsRequest())
-    axios({
-      url: urlAPI,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
-      },
-      data: {
-        query: `{personsUnassignedByName(name:"${
-          name !== ' ' ? name : ''
-        }"){id,name,gender,age}}`,
-      },
-    })
+    getPersonsByName({ obj, token })
       .then(result =>
-        dispatch(personsSuccess(result.data.data.personsUnassignedByName || []))
+        dispatch(personsSuccess(result.data.data.personsByName || []))
       )
       .catch(error => dispatch(personsFailure(error)))
   } else dispatch(personsSuccess([]))

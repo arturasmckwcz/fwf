@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { urlAPI } from '../../constants'
+import { getLysates } from '../../lib/api'
 
 export const LYSATES_REQUEST = 'LYSATES_REQUEST'
 export const LYSATES_SUCCESS = 'LYSATES_SUCCESS'
@@ -20,17 +19,7 @@ export const lysatesFailure = error => ({
 
 export const lysatesFetch = ({ token }) => dispatch => {
   dispatch(lysatesRequest())
-  axios({
-    url: urlAPI,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`,
-    },
-    data: {
-      query: `{lysates{id,name}}`,
-    },
-  })
+  getLysates({ token })
     .then(result => dispatch(lysatesSuccess(result.data.data.lysates)))
     .catch(error => dispatch(lysatesFailure(error)))
 }

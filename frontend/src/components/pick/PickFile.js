@@ -16,9 +16,11 @@ const PickFile = ({ files, setFiles, obj, inputRef }) => {
   }, [obj])
   return (
     <div style={{ height: '100%' }}>
-      <p style={{ paddingLeft: '0.2rem' }}>
-        Documents for {obj.id && obj.name}
-      </p>
+      {obj && (
+        <p style={{ paddingLeft: '0.2rem' }}>
+          Documents for {obj.id && obj.name}
+        </p>
+      )}
       <FileInput />
       <ListWrapper>
         {files.map(file => (

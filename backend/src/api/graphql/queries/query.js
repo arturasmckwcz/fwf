@@ -146,10 +146,11 @@ module.exports = new GraphQLObjectType({
         }
       },
     },
-    personsUnassignedByName: {
+    personsByName: {
       type: new GraphQLList(PersonSearchType),
       args: {
         name: { type: GraphQLString },
+        is_assigned: { type: GraphQLBoolean },
       },
       async resolve(parent, args, req) {
         if (
@@ -161,11 +162,19 @@ module.exports = new GraphQLObjectType({
         )
           throw new Error('Unauthorised!')
         try {
+          console.log('mutation.js:personsByName:args: ', args)
           const persons = await Person.query()
             .where('first', 'ilike', `%${args.name}%`)
             .orWhere('last', 'ilike', `%${args.name}%`)
             .andWhere('deleted_at', null)
             .returning(['id', 'first', 'last', 'gender', 'age'])
+          if (args.is_assigned)
+            return persons.map(person => ({
+              ...person,
+              name: `${person.first} ${person.last}`,
+              first: undefined,
+              last: undefined,
+            }))
           const result = await Promise.all(
             persons.map(async person => {
               const { id } = person
@@ -348,7 +357,6 @@ module.exports = new GraphQLObjectType({
     },
     clinics: {
       type: new GraphQLList(ClinicType),
-      args: { name: { type: GraphQLString } },
       async resolve(parent, args, req) {
         if (
           !(await checkPermission(
@@ -359,9 +367,7 @@ module.exports = new GraphQLObjectType({
         )
           throw new Error('Unauthorised!')
         try {
-          return await Clinic.query()
-            .where('name', 'ilike', `%${args.name}%`)
-            .where('deleted_at', null)
+          return await Clinic.query().where('deleted_at', null)
         } catch (error) {
           console.error(error)
           throw error

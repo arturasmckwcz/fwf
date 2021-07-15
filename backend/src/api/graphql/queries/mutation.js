@@ -14,7 +14,12 @@ const permissions = require('../../../lib/arrayconvert')(
 )
 
 const checkPermission = require('../../../lib/checkPermission')
-const { getPrescriptionCode } = require('../../../lib/codes')
+const {
+  getSourceCode,
+  getPatientCode,
+  getPrescriptionCode,
+} = require('../../../lib/codes')
+const getTimestamp = require('../../../lib/getTimestamp')
 
 const {
   Product,
@@ -23,6 +28,7 @@ const {
   Prescription,
   Filesystem,
   Document,
+  Source,
 } = require('../../../model')
 
 const {
@@ -32,6 +38,7 @@ const {
   PrescriptionType,
   FilesystemType,
   DocumentType,
+  SourceType,
 } = require('../types')
 
 module.exports = new GraphQLObjectType({
@@ -138,19 +145,20 @@ module.exports = new GraphQLObjectType({
         )
           throw new Error('Unauthorised!')
         try {
-          let date = new Date(
-            args.issue_date.substring(0, 4),
-            args.issue_date.substring(5, 7),
-            args.issue_date.substring(8, 10)
-          )
-          date = date.toISOString().slice(0, -1) + '+00'
+          const {
+            issue_date,
+            doctor_id,
+            patient_id,
+            lysate_id,
+            product_id,
+          } = args
           return await Prescription.query().insertAndFetch({
             ...args,
-            issue_date: date,
-            doctor_id: parseInt(args.doctor_id),
-            patient_id: parseInt(args.patient_id),
-            lysate_id: parseInt(args.lysate_id),
-            product_id: parseInt(args.product_id),
+            issue_date: getTimestamp(issue_date),
+            doctor_id: parseInt(doctor_id),
+            patient_id: parseInt(patient_id),
+            lysate_id: parseInt(lysate_id),
+            product_id: parseInt(product_id),
             user_id: req.userId,
             code: getPrescriptionCode(),
           })
@@ -158,6 +166,34 @@ module.exports = new GraphQLObjectType({
           console.error(error)
           throw error
         }
+      },
+    },
+    addSource: {
+      type: SourceType,
+      args: {
+        draw_date: { type: GraphQLString },
+        arrive_date: { type: GraphQLString },
+        person_id: { type: GraphQLID },
+        clinic_id: { type: GraphQLID },
+      },
+      async resolve(parent, args, req) {
+        if (
+          !(await checkPermission(
+            req.userId,
+            tablenames.source,
+            permissions.create
+          ))
+        )
+          throw new Error('Unauthorised!')
+        const { draw_date, arrive_date, person_id, clinic_id } = args
+        return await Source.query().insertAndFetch({
+          draw_date: getTimestamp(draw_date),
+          arrive_date: getTimestamp(arrive_date),
+          person_id: parseInt(person_id),
+          clinic_id: parseInt(clinic_id),
+          user_id: req.userId,
+          code: getSourceCode(),
+        })
       },
     },
     addFile: {

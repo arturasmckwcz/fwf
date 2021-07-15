@@ -5,13 +5,13 @@ import { Input, InputWrapper, ListWrapper } from '../common/Styling'
 
 import { patientsFetch, patientSet } from '../../redux'
 
-import timedOutFetch from '../../lib/timedOutFetch'
+import { timedOutFetch } from '../../lib/utils'
 
 const PickPatient = ({ patients, patientsFetch, patientSet, token }) => {
   const [name, setName] = useState('')
 
   useEffect(() => {
-    const cleanUp = timedOutFetch(patientsFetch, { name, token })
+    const cleanUp = timedOutFetch(patientsFetch, { obj: { name }, token })
     return cleanUp
   }, [name, token, patientsFetch])
 

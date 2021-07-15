@@ -1,6 +1,4 @@
-import axios from 'axios'
-import { urlAPI } from '../../constants'
-import dateToTimestamp from '../../lib/dateToTimestamp'
+import { getLatestPatientsByName } from '../../lib/api'
 
 export const PATIENTS_REQUEST = 'PATIENTS_REQUEST'
 export const PATIENTS_SUCCESS = 'PATIENTS_SUCCESS'
@@ -19,28 +17,10 @@ export const patientsFailure = error => ({
   payload: error,
 })
 
-export const patientsFetch = ({ name, date, token }) => dispatch => {
-  if (name) {
+export const patientsFetch = ({ obj, token }) => dispatch => {
+  if (obj.name) {
     dispatch(patientsRequest())
-    if (!date) {
-      date = new Date()
-      date.setDate(date.getDate() - 3)
-    }
-    axios({
-      url: urlAPI,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
-      },
-      data: {
-        query: `{patientsByName(name:"${
-          name !== ' ' ? name : ''
-        }",date_from:"${dateToTimestamp(
-          date
-        )}"){id,person{first,last,gender,age}}}`,
-      },
-    })
+    getLatestPatientsByName({ obj, token })
       .then(result =>
         dispatch(patientsSuccess(result.data.data.patientsByName || []))
       )

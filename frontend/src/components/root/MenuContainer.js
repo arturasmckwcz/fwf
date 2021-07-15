@@ -26,9 +26,7 @@ const MenuContainer = ({ user, logout, menuSelect }) => {
             <MenuItem onClick={() => menuSelect(menus.MENU_NEW_PRODUCTION)}>
               New Production
             </MenuItem>
-            {/* <span></span> */}
             <MenuItem onClick={() => logout(user)}>Logout</MenuItem>
-            {/* <span></span> */}
           </MenuWrapper>
           <User>{user.name}</User>
         </>

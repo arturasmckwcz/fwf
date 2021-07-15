@@ -164,6 +164,7 @@ exports.seed = async knex => {
     tablenames.patient,
     tablenames.filesystem,
     tablenames.document,
+    tablenames.prescription,
   ]
 
   // convert arr of strings to arr of objs
@@ -223,7 +224,6 @@ exports.seed = async knex => {
     )
     const clinicToMatch =
       clinics[clinics.findIndex(item => matchName(clinic, item.name, 0.4))]
-    
 
     await knex(tablenames.patient).insert({
       person_id,
